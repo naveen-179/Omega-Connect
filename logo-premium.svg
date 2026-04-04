@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+    <defs>
+        <linearGradient id="blueGrad" x1="0" y1="0" x2="200" y2="300">
+            <stop offset="0%" stop-color="#60A5FA"/>
+            <stop offset="100%" stop-color="#3B82F6"/>
+        </linearGradient>
+        <linearGradient id="pinkGrad" x1="400" y1="0" x2="200" y2="300">
+            <stop offset="0%" stop-color="#F472B6"/>
+            <stop offset="100%" stop-color="#EC4899"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Left chat bubble (Blue) with face silhouette -->
+    <path d="M 200 40 
+             C 120 40 50 90 50 160 
+             C 50 200 70 235 105 255 
+             L 85 295 
+             L 135 265 
+             C 155 270 175 275 200 275 
+             L 200 40 Z" 
+          fill="url(#blueGrad)"/>
+    
+    <!-- Left face profile cutout -->
+    <ellipse cx="150" cy="120" rx="35" ry="45" fill="#1a1f3a"/>
+    <ellipse cx="150" cy="180" rx="25" ry="35" fill="#1a1f3a"/>
+    <path d="M 125 110 Q 140 95 155 110 L 155 190 Q 140 205 125 190 Z" fill="#1a1f3a"/>
+
+    <!-- Right chat bubble (Pink) with face silhouette -->
+    <path d="M 200 40 
+             C 280 40 350 90 350 160 
+             C 350 200 330 235 295 255 
+             L 315 295 
+             L 265 265 
+             C 245 270 225 275 200 275 
+             L 200 40 Z" 
+          fill="url(#pinkGrad)"/>
+    
+    <!-- Right face profile cutout -->
+    <ellipse cx="250" cy="120" rx="35" ry="45" fill="#1a1f3a"/>
+    <ellipse cx="250" cy="180" rx="25" ry="35" fill="#1a1f3a"/>
+    <path d="M 275 110 Q 260 95 245 110 L 245 190 Q 260 205 275 190 Z" fill="#1a1f3a"/>
+</svg>

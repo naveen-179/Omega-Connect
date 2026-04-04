@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://omegaconnect.web.app/sitemap.xml

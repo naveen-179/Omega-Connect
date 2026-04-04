@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description"
+        content="Talk to strangers anonymously on Omega Connect. No signup required. Connect instantly with random people worldwide for free anonymous chat.">
+    <meta name="keywords"
+        content="anonymous chat, talk to strangers, random chat, stranger chat, free chat, online chat, meet strangers, chat app, omegle alternative, anonymous messaging">
+    <meta name="author" content="Omega Connect">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="google3614b5d15a23bdec">
+    <link rel="canonical" href="https://omegaconnect.web.app/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://omegaconnect.web.app/">
+    <meta property="og:title" content="Omega Connect - Anonymous Chat with Strangers">
+    <meta property="og:description"
+        content="Talk to strangers anonymously. No signup required. Connect instantly with random people worldwide.">
+    <meta property="og:site_name" content="Omega Connect">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Omega Connect - Anonymous Chat with Strangers">
+    <meta name="twitter:description"
+        content="Talk to strangers anonymously. No signup required. Connect instantly with random people worldwide.">
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Omega Connect",
+        "url": "https://omega-8aedf.web.app/",
+        "description": "Talk to strangers anonymously. No signup required. Connect instantly with random people worldwide.",
+        "applicationCategory": "SocialNetworkingApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Omega Connect - Anonymous Chat with Strangers | Talk to Strangers Free</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link rel="apple-touch-icon" href="logo.svg">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css?v=68">
+</head>
+
+<body>
+    <!-- Confirm Modal (inline hidden to prevent FOUC) -->
+    <div id="confirm-modal" class="modal" style="display:none;">
+        <div class="modal-content confirm-modal-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3 id="confirm-title">Confirm Action</h3>
+            <p id="confirm-message">Are you sure?</p>
+            <div class="confirm-buttons">
+                <button class="btn-secondary" id="confirm-cancel">Cancel</button>
+                <button class="btn-primary" id="confirm-ok">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ambient Performance Background -->
+    <div class="ambient-lite">
+        <span class="glow g1"></span>
+        <span class="glow g2"></span>
+        <span class="glow g3"></span>
+    </div>
+
+    <!-- Landing Page with Neural Particle System -->
+    <div id="landing-page" class="page active">
+        <!-- Animated Gradient Background -->
+        <div class="bg-gradient-animated"></div>
+
+        <!-- Floating Blobs -->
+        <div class="bg-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+            <div class="blob blob-4"></div>
+        </div>
+
+        <!-- Stars, Hearts, and Sparkles Background -->
+        <div class="bg-icons" aria-hidden="true">
+            <!-- Stars -->
+            <div class="bg-icon star" style="top: 10%; left: 8%;">✨</div>
+            <div class="bg-icon star" style="top: 20%; right: 12%;">✨</div>
+            <div class="bg-icon star" style="top: 45%; left: 15%;">✨</div>
+            <div class="bg-icon star" style="top: 70%; right: 20%;">✨</div>
+            <div class="bg-icon star" style="top: 85%; left: 25%;">✨</div>
+
+            <!-- Hearts -->
+            <div class="bg-icon heart" style="top: 25%; left: 20%;">💜</div>
+            <div class="bg-icon heart" style="top: 50%; right: 15%;">❤️</div>
+            <div class="bg-icon heart" style="top: 75%; left: 12%;">💜</div>
+            <div class="bg-icon heart" style="top: 30%; right: 25%;">❤️</div>
+
+            <!-- Sparkles -->
+            <div class="bg-icon sparkle" style="top: 12%; left: 35%;">+</div>
+            <div class="bg-icon sparkle" style="top: 48%; left: 8%;">+</div>
+            <div class="bg-icon sparkle" style="top: 68%; right: 28%;">+</div>
+        </div>
+
+        <!-- Vignette Overlay -->
+        <div class="bg-vignette"></div>
+
+        <div class="container">
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
+                <span class="theme-icon">🌙</span>
+            </button>
+
+            <!-- Hero Section -->
+            <!-- Hero Section -->
+            <header class="hero">
+                <div class="logo">
+                    <img src="logo-transparent.png" alt="Omega Connect Logo" class="logo-img">
+                    <span class="logo-text">Omega Connect</span>
+                </div>
+                <h1 class="cinematic-title">Someone's out there.<br><span class="hero-accent">Say hi.</span></h1>
+                <p class="cinematic-subtitle">No signup. No tracking. Just random stranger to talk to.</p>
+            </header>
+
+            <main class="landing-content">
+                <!-- Premium Glassmorphism Card for Main Actions -->
+                <div class="hero-card">
+                    <div class="card-reflection"></div>
+                    <!-- I am section -->
+                    <div class="i-am-section">
+                        <h3>I am <span class="optional">(optional)</span></h3>
+                        <div class="gender-identity-pills">
+                            <button type="button" class="gender-identity-pill" data-gender="male">👨 Male</button>
+                            <button type="button" class="gender-identity-pill" data-gender="female">👩 Female</button>
+                            <button type="button" class="gender-identity-pill" data-gender="other">🧑 Other</button>
+                        </div>
+                    </div>
+
+                    <!-- Looking for section -->
+                    <div class="looking-for-section">
+                        <h3>Looking for <span class="optional">(optional)</span></h3>
+                        <div class="gender-preference-pills">
+                            <button type="button" class="gender-pill" data-pref="male">Male</button>
+                            <button type="button" class="gender-pill" data-pref="female">Female</button>
+                            <button type="button" class="gender-pill active" data-pref="anyone">Anyone</button>
+                        </div>
+                    </div>
+
+                    <!-- Age Gate -->
+                    <div class="age-gate">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="age-confirm">
+                            <span class="checkmark"></span>
+                            <span class="label-text">I confirm I am 18 years or older</span>
+                        </label>
+                    </div>
+
+                    <button id="start-chat-btn" class="btn-primary" disabled>
+                        <span>Start Chatting</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </div>
+
+                <div class="quick-actions">
+                    <button id="reconnectBtn" class="reconnect-btn hidden">
+                        Reconnect to previous chat
+                    </button>
+                </div>
+
+                <p class="divider-text">or customize your match</p>
+
+                <!-- Interests Selection -->
+                <div class="interests-section reveal">
+                    <h3>What are you into? <span class="optional">(optional)</span></h3>
+                    <p class="interest-hint">Select up to 5 interests — or skip for random matches</p>
+                    <div class="interests-grid" id="interests-grid">
+                        <button type="button" class="interest-chip" data-interest="music">
+                            <span class="chip-icon">🎵</span>
+                            <span class="chip-label">Music</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="gaming">
+                            <span class="chip-icon">🎮</span>
+                            <span class="chip-label">Gaming</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="movies">
+                            <span class="chip-icon">🎬</span>
+                            <span class="chip-label">Movies</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="sports">
+                            <span class="chip-icon">⚽</span>
+                            <span class="chip-label">Sports</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="tech">
+                            <span class="chip-icon">💻</span>
+                            <span class="chip-label">Tech</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="art">
+                            <span class="chip-icon">🎨</span>
+                            <span class="chip-label">Art</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="books">
+                            <span class="chip-icon">📚</span>
+                            <span class="chip-label">Books</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="travel">
+                            <span class="chip-icon">✈️</span>
+                            <span class="chip-label">Travel</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="food">
+                            <span class="chip-icon">🍕</span>
+                            <span class="chip-label">Food</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="fitness">
+                            <span class="chip-icon">💪</span>
+                            <span class="chip-label">Fitness</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="anime">
+                            <span class="chip-icon">🎌</span>
+                            <span class="chip-label">Anime</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="memes">
+                            <span class="chip-icon">😂</span>
+                            <span class="chip-label">Memes</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="science">
+                            <span class="chip-icon">🔬</span>
+                            <span class="chip-label">Science</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="photography">
+                            <span class="chip-icon">📷</span>
+                            <span class="chip-label">Photo</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="fashion">
+                            <span class="chip-icon">👗</span>
+                            <span class="chip-label">Fashion</span>
+                        </button>
+                        <button type="button" class="interest-chip" data-interest="pets">
+                            <span class="chip-icon">🐕</span>
+                            <span class="chip-label">Pets</span>
+                        </button>
+                    </div>
+                    <p class="interest-counter" id="interest-counter">0 / 5 selected</p>
+                </div>
+
+                <!-- Advanced filters removed for cleaner UI -->
+
+                <p class="disclaimer reveal">
+                    🔒 Your privacy is protected. Chats are not stored permanently.<br>
+                    <strong>18+ only. Be respectful.</strong>
+                </p>
+
+                <!-- Stats removed for cleaner, more trustworthy UI -->
+
+                <!-- Settings -->
+                <div class="settings-section reveal">
+                    <button class="settings-btn" id="settings-btn">⚙️ Settings</button>
+                </div>
+            </main>
+
+
+
+            <footer class="landing-footer reveal">
+                <p>&copy; 2025 Omega Connect. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#" onclick="showModal('terms')">Terms & Conditions</a>
+                    <a href="#" onclick="showModal('privacy')">Privacy Policy</a>
+                    <a href="#" onclick="showModal('safety')">Safety Tips</a>
+
+                    <a href="#" onclick="showModal('feedback')" class="feedback-link">💬 Feedback</a>
+                </div>
+                <div class="contact-section">
+                    <h4>Contact Us</h4>
+                    <p>Have questions, feedback, or concerns? Reach out to us.</p>
+                    <button class="contact-reveal-btn" id="reveal-email-btn" onclick="revealEmail(this)">
+                        <span>📧 Email</span>
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Waiting Page -->
+    <div id="waiting-page" class="page">
+        <div class="container waiting-container">
+            <div class="waiting-content">
+                <div class="loader">
+                    <div class="loader-ring"></div>
+                    <div class="loader-ring"></div>
+                    <div class="loader-ring"></div>
+                </div>
+                <h2>Finding someone to talk to…</h2>
+                <p id="matching-status">Someone who shares your vibe is out there</p>
+                <p class="waiting-time">Waiting: <span id="wait-time">0</span>s</p>
+                <div class="matching-interests" id="matching-interests"></div>
+                <button id="cancel-search-btn" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topic Rooms Selection Page -->
+    <div id="topic-rooms-page" class="page">
+        <div class="container">
+            <div class="topic-rooms-container">
+                <button class="back-btn" onclick="showPage('landing-page')">←</button>
+
+                <div class="topic-rooms-header">
+                    <h1>Choose a Topic</h1>
+                    <p>Connect with strangers who share your interests</p>
+                </div>
+
+                <div class="topic-rooms-grid" id="topic-rooms-grid">
+                    <!-- Topic cards will be dynamically generated here -->
+                </div>
+
+                <div class="random-option">
+                    <button class="btn-secondary" onclick="startRandomChat()">
+                        🎲 Random Chat (Classic Mode)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Chat Page -->
+    <div id="chat-page" class="chat-app page">
+        <!-- HEADER -->
+        <header class="chat-top">
+            <button class="back-btn" id="leave-chat-btn">←</button>
+
+            <div class="chat-user">
+                <div class="avatar" id="partner-avatar">🙂</div>
+                <div>
+                    <div class="name" id="partner-name">Stranger</div>
+                    <div id="topic-badge" class="topic-badge" style="display: none;"></div>
+                    <div class="status" id="partner-status">Connected</div>
+                </div>
+            </div>
+
+            <button class="next-btn" id="next-btn">Next →</button>
+        </header>
+
+        <!-- WARNING BANNER (for strikes) -->
+        <div id="warning-banner" class="warning-banner" style="display: none;"></div>
+
+        <!-- CHAT MESSAGES -->
+        <main class="chat-card">
+            <!-- Connection Info Bar -->
+            <div class="connection-bar" id="connection-bar">
+                <span class="connection-time">Connected for: <span id="chat-duration">0:00</span></span>
+                <span class="message-count">Messages: <span id="message-count">0</span></span>
+            </div>
+            <!-- Ad removed from chat screen for cleaner experience -->
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="system-msg">
+                    <span>👋</span>
+                    <p>You're now chatting with a stranger. Say hi!</p>
+                </div>
+
+                <!-- New Creative Typing Indicator -->
+                <div id="typingIndicator" class="typing-indicator hidden">
+                    <div class="typing-particles">
+                        <span class="particle"></span>
+                        <span class="particle"></span>
+                        <span class="particle"></span>
+                    </div>
+                    <div class="typing-text">
+                        <span>t</span><span>y</span><span>p</span><span>i</span><span>n</span><span>g</span><span>.</span><span>.</span><span>.</span>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- REPLY PREVIEW BAR -->
+        <div id="reply-preview" class="reply-preview"></div>
+
+        <!-- INPUT DOCK -->
+        <footer class="chat-dock">
+            <!-- Smart Replies -->
+            <div id="smartReplies" class="smart-replies hidden"></div>
+
+            <!-- Tools Row -->
+            <div class="dock-tools">
+                <button id="emojiBtn">😊</button>
+                <button id="gameBtn">🎮</button>
+                <button id="questionBtn" title="Get conversation starter">🎲</button>
+                <button id="drawBtn">🎨</button>
+            </div>
+
+            <!-- Input Row -->
+            <div class="dock-input">
+                <input type="text" id="message-input" placeholder="Type a message…" maxlength="1000"
+                    autocomplete="off" />
+                <button class="send" id="send-btn">➤</button>
+            </div>
+        </footer>
+
+        <!-- Old emoji and GIF pickers removed - using new clean implementations at bottom of page -->
+
+        <!-- Drawing Canvas Modal -->
+        <div id="drawing-modal" class="modal">
+            <div class="modal-content drawing-modal-content" id="drawing-modal-draggable">
+                <h3 style="cursor: move;">🎨 Draw Something</h3>
+                <canvas id="drawing-canvas" width="280" height="180"></canvas>
+                <div class="drawing-tools">
+                    <button class="btn-secondary" id="clear-canvas-btn">Clear</button>
+                    <button class="btn-primary" id="send-drawing-btn">Send Drawing</button>
+                </div>
+                <button class="btn-text" onclick="closeModal('drawing-modal')" style="margin-top: 8px;">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Truth or Dare Modal -->
+        <div id="game-modal" class="modal">
+            <div class="modal-content game-modal-content">
+                <h3>🎲 Truth or Dare</h3>
+                <p>Pick your challenge!</p>
+                <div class="game-buttons">
+                    <button class="btn-truth" id="truth-btn">🤔 Truth</button>
+                    <button class="btn-dare" id="dare-btn">🔥 Dare</button>
+                </div>
+                <div class="game-result" id="game-result"></div>
+                <div class="game-actions">
+                    <button class="btn-primary" id="send-game-btn" style="display:none;">Send to Chat</button>
+                    <button class="btn-text" onclick="closeModal('game-modal')">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Disconnected Modal -->
+    <!-- Leave Chat Confirmation Modal -->
+    <div id="leave-chat-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">🚪</div>
+            <h3>Leave Chat?</h3>
+            <p>Choose an action before leaving:</p>
+            <div class="modal-buttons leave-options">
+                <button class="btn-danger" onclick="showModal('report'); closeModal('leave-chat-modal');">🚨 Report
+                    User</button>
+                <button class="btn-warning" onclick="showModal('block'); closeModal('leave-chat-modal');">🚫 Block
+                    User</button>
+                <button class="btn-primary" onclick="confirmLeaveChat()">👋 Just Leave</button>
+                <button class="btn-secondary" onclick="closeModal('leave-chat-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="disconnected-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">👋</div>
+            <h3>Stranger Disconnected</h3>
+            <p>The other person has left the chat.</p>
+            <div class="chat-summary" id="chat-summary">
+                <p>Chat duration: <span id="summary-duration">0:00</span></p>
+                <p>Messages exchanged: <span id="summary-messages">0</span></p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="findNewChat()">Find New Chat</button>
+                <button class="btn-secondary" onclick="goHome()">Go Home</button>
+            </div>
+            <div class="save-chat-option">
+                <button class="btn-text" onclick="saveChat()">💾 Save Chat Transcript</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">🚨</div>
+            <h3>Report User</h3>
+            <p>Why are you reporting this user?</p>
+            <div class="report-options">
+                <button class="report-option" data-reason="harassment">Harassment</button>
+                <button class="report-option" data-reason="spam">Spam</button>
+                <button class="report-option" data-reason="inappropriate">Inappropriate Content</button>
+                <button class="report-option" data-reason="underage">Appears Underage</button>
+                <button class="report-option" data-reason="threats">Threats/Violence</button>
+                <button class="report-option" data-reason="other">Other</button>
+            </div>
+            <button class="btn-secondary modal-close" onclick="closeModal('report-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Block Modal -->
+    <div id="block-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">🚫</div>
+            <h3>Block This User?</h3>
+            <p>You will be disconnected and matched with someone else.</p>
+            <div class="modal-buttons">
+                <button class="btn-danger" onclick="blockUser()">Block & Disconnect</button>
+                <button class="btn-secondary" onclick="closeModal('block-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Chat Confirmation -->
+    <div id="exitModal" class="exit-modal hidden">
+        <div class="exit-card">
+            <h3>Leave this chat?</h3>
+            <p>You’re currently connected. Do you want to exit or stay?</p>
+
+            <div class="exit-actions">
+                <button id="stayBtn" class="stay-btn">Stay</button>
+                <button id="exitBtn" class="exit-btn">Exit chat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safe Disconnect Modal (when safe word is used) -->
+    <div id="safe-disconnect-modal" class="modal">
+        <div class="modal-content">
+            <h2>✅ You're Safe</h2>
+            <p>You've been disconnected safely.</p>
+            <p>Your partner has been reported automatically.</p>
+            <button class="btn-primary" onclick="location.reload()">Return to Home</button>
+        </div>
+    </div>
+
+    <!-- Chat Rating Modal -->
+    <div id="rating-modal" class="modal">
+        <div class="modal-content rating-modal">
+            <h2>⭐ How was your chat?</h2>
+            <p class="rating-subtitle">Your feedback helps us improve matching</p>
+
+            <!-- Star Rating -->
+            <div class="star-rating" id="star-rating">
+                <span class="star" data-rating="1">⭐</span>
+                <span class="star" data-rating="2">⭐</span>
+                <span class="star" data-rating="3">⭐</span>
+                <span class="star" data-rating="4">⭐</span>
+                <span class="star" data-rating="5">⭐</span>
+            </div>
+
+            <!-- Quick Tags -->
+            <div class="menu-grid">
+                <button class="menu-btn" id="achievements-btn">🏆 Achievements</button>
+                <button class="menu-btn" id="feedback-btn">💬 Feedback</button>
+                <button class="settings-btn" id="settings-btn">⚙️ Settings</button>
+            </div>
+            <div class="rating-tags">
+                <button class="tag-btn" data-tag="friendly">😊 Friendly</button>
+                <button class="tag-btn" data-tag="fun">🎭 Fun</button>
+                <button class="tag-btn" data-tag="interesting">🧠 Interesting</button>
+                <button class="tag-btn" data-tag="respectful">🤝 Respectful</button>
+                <button class="tag-btn" data-tag="boring">😴 Boring</button>
+                <button class="tag-btn" data-tag="weird">🤔 Weird</button>
+            </div>
+
+            <!-- Optional Text Feedback -->
+            <textarea id="rating-feedback" placeholder="Tell us more (optional)..." maxlength="200"></textarea>
+
+            <!-- Action Buttons -->
+            <div class="rating-actions">
+                <button class="btn-secondary" onclick="skipRating()">Skip</button>
+                <button class="btn-primary" onclick="submitRating()" id="submit-rating-btn">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content modal-scroll">
+            <h3>⚙️ Settings</h3>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <label>Sound Notifications</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sound-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Desktop Notifications</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notif-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <!-- Typing Indicator Setting Removed -->
+                <div class="setting-item">
+                    <label>Message Sound</label>
+                    <select id="sound-select">
+                        <option value="pop">Pop</option>
+                        <option value="ding">Ding</option>
+                        <option value="chime">Chime</option>
+                        <option value="bubble">Bubble</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Chat Background</label>
+                    <div class="bg-options" id="bg-options">
+                        <button class="bg-option active" data-bg="default"></button>
+                        <button class="bg-option" data-bg="gradient1"></button>
+                        <button class="bg-option" data-bg="gradient2"></button>
+                        <button class="bg-option" data-bg="gradient3"></button>
+                        <button class="bg-option" data-bg="pattern1"></button>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label>Font Size</label>
+                    <input type="range" id="font-size" min="12" max="20" value="16">
+                </div>
+                <div class="setting-item">
+                    <label>Enter to Send</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="enter-send" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <button class="btn-secondary" onclick="closeModal('settings-modal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Gift Modal -->
+    <div id="gift-modal" class="modal">
+        <div class="modal-content">
+            <h3>🎁 Send a Virtual Gift</h3>
+            <p>Brighten their day with a gift!</p>
+            <div class="gift-grid" id="gift-grid">
+                <button class="gift-item" data-gift="🌹">🌹<span>Rose</span></button>
+                <button class="gift-item" data-gift="☕">☕<span>Coffee</span></button>
+                <button class="gift-item" data-gift="🍕">🍕<span>Pizza</span></button>
+                <button class="gift-item" data-gift="🎂">🎂<span>Cake</span></button>
+                <button class="gift-item" data-gift="💎">💎<span>Diamond</span></button>
+                <button class="gift-item" data-gift="🧸">🧸<span>Teddy</span></button>
+                <button class="gift-item" data-gift="🎸">🎸<span>Guitar</span></button>
+                <button class="gift-item" data-gift="🌟">🌟<span>Star</span></button>
+            </div>
+            <button class="btn-secondary" onclick="closeModal('gift-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="modal">
+        <div class="modal-content">
+            <h3>🎮 Play a Game</h3>
+            <p>Challenge your chat partner!</p>
+            <div class="game-grid">
+                <button class="game-item" onclick="startGame('truth')">
+                    <span class="game-icon">🎯</span>
+                    <span class="game-name">Truth or Dare</span>
+                </button>
+                <button class="game-item" onclick="startGame('wouldyou')">
+                    <span class="game-icon">🤔</span>
+                    <span class="game-name">Would You Rather</span>
+                </button>
+                <button class="game-item" onclick="startGame('trivia')">
+                    <span class="game-icon">🧠</span>
+                    <span class="game-name">Trivia Quiz</span>
+                </button>
+                <button class="game-item" onclick="startGame('emoji')">
+                    <span class="game-icon">😄</span>
+                    <span class="game-name">Emoji Guess</span>
+                </button>
+                <button class="game-item" onclick="startGame('story')">
+                    <span class="game-icon">📖</span>
+                    <span class="game-name">Story Builder</span>
+                </button>
+                <button class="game-item" onclick="startGame('rps')">
+                    <span class="game-icon">✊</span>
+                    <span class="game-name">Rock Paper Scissors</span>
+                </button>
+            </div>
+            <button class="btn-secondary" onclick="closeModal('game-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div id="terms-modal" class="modal">
+        <div class="modal-content modal-scroll">
+            <h3>Terms & Conditions</h3>
+            <div class="modal-text legal-text">
+                <p class="legal-updated">Last updated: February 15, 2025</p>
+
+                <h4>1. Acceptance of Terms</h4>
+                <p>By accessing or using Omega Connect ("the Platform"), you agree to be bound by these Terms &
+                    Conditions. If you do not agree, you must not use the Platform.</p>
+
+                <h4>2. Eligibility</h4>
+                <p>You must be at least <strong>18 years of age</strong> to use this Platform. By using Omega Connect,
+                    you represent and warrant that you meet this requirement.</p>
+
+                <h4>3. User Conduct</h4>
+                <p>You agree to the following rules while using the Platform:</p>
+                <ul>
+                    <li>Do not share personal information (full name, address, phone number, etc.)</li>
+                    <li>Do not engage in harassment, bullying, hate speech, or threats</li>
+                    <li>Do not distribute sexually explicit, violent, or illegal content</li>
+                    <li>Do not use automated bots, scripts, or third-party tools to interact with the Platform</li>
+                    <li>Do not impersonate another individual or entity</li>
+                    <li>Report any violations you encounter to help keep the community safe</li>
+                </ul>
+
+                <h4>4. Content Disclaimer</h4>
+                <p>Omega Connect does not monitor, verify, or endorse any content shared between users. All
+                    conversations are between anonymous strangers, and the Platform is not responsible for any content
+                    exchanged during chats.</p>
+
+                <h4>5. Account Termination</h4>
+                <p>We reserve the right to suspend or permanently ban any user who violates these Terms without prior
+                    notice. Repeated or severe violations may result in an IP-level ban.</p>
+
+                <h4>6. Limitation of Liability</h4>
+                <p>Omega Connect is provided "as is" without warranties of any kind. We are not liable for any damages,
+                    losses, or harm arising from your use of the Platform or interactions with other users.</p>
+
+                <h4>7. Changes to Terms</h4>
+                <p>We may update these Terms at any time. Continued use of the Platform after changes constitutes
+                    acceptance of the revised Terms.</p>
+
+                <h4>8. Governing Law</h4>
+                <p>These Terms shall be governed by and construed in accordance with the laws of India.</p>
+            </div>
+            <button class="btn-secondary" onclick="closeModal('terms-modal')">Close</button>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="modal">
+        <div class="modal-content modal-scroll">
+            <h3>Privacy Policy</h3>
+            <div class="modal-text legal-text">
+                <p class="legal-updated">Last updated: February 15, 2025</p>
+
+                <h4>1. Overview</h4>
+                <p>Omega Connect ("we", "us", "our") is committed to protecting your privacy. This Privacy Policy
+                    explains what information we collect, how we use it, and your rights regarding your data.</p>
+
+                <h4>2. Information We Collect</h4>
+                <p>We are designed to be a privacy-first platform. Here is what we do and do not collect:</p>
+                <ul>
+                    <li><strong>No personal data</strong> — We do not require registration, email, or phone number</li>
+                    <li><strong>No IP tracking</strong> — We do not log or store your IP address</li>
+                    <li><strong>No cookies for tracking</strong> — We only use essential cookies for functionality</li>
+                    <li><strong>Anonymous identifiers</strong> — Temporary session IDs are generated and discarded after
+                        use</li>
+                    <li><strong>Chat data</strong> — Messages are temporary and deleted from our servers after the chat
+                        session ends</li>
+                </ul>
+
+                <h4>3. Local Storage</h4>
+                <p>We may store minimal preferences (theme, interests) in your browser's local storage. This data never
+                    leaves your device and can be cleared at any time through your browser settings.</p>
+
+                <h4>4. Third-Party Services</h4>
+                <p>We use Firebase (Google) for real-time communication. Firebase may process data in accordance with <a
+                        href="https://firebase.google.com/support/privacy" target="_blank"
+                        style="color: #818cf8;">Google's Privacy Policy</a>.</p>
+
+                <h4>5. Data Retention</h4>
+                <p>Chat messages and session data are automatically deleted when a chat session ends. We do not maintain
+                    any archives or backups of user conversations.</p>
+
+                <h4>6. Children's Privacy</h4>
+                <p>Omega Connect is strictly for users aged 18 and above. We do not knowingly collect information from
+                    anyone under the age of 18.</p>
+
+                <h4>7. Your Rights</h4>
+                <p>Since we do not collect personally identifiable information, there is minimal data to manage. If you
+                    have any concerns, please contact us.</p>
+
+                <h4>8. Changes to This Policy</h4>
+                <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with
+                    an updated revision date.</p>
+
+                <h4>9. Contact</h4>
+                <p>If you have questions about this Privacy Policy, please reach out via the Contact Us section on our
+                    homepage.</p>
+            </div>
+            <button class="btn-secondary" onclick="closeModal('privacy-modal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Safety Modal -->
+    <div id="safety-modal" class="modal">
+        <div class="modal-content modal-scroll">
+            <h3>Safety Tips</h3>
+            <div class="modal-text">
+                <ul>
+                    <li>Never share personal information (name, address, phone)</li>
+                    <li>Don't click on suspicious links</li>
+                    <li>Report inappropriate behavior immediately</li>
+                    <li>Use the block feature if uncomfortable</li>
+                    <li>Remember: strangers are strangers</li>
+                    <li>Trust your instincts - if something feels wrong, disconnect</li>
+                    <li>Never send money or financial information</li>
+                    <li>Don't agree to meet in person</li>
+                </ul>
+            </div>
+            <button class="btn-secondary" onclick="closeModal('safety-modal')">Close</button>
+        </div>
+    </div>
+
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <h3>💬 Send Feedback</h3>
+            <p>We'd love to hear from you! Your feedback helps us improve.</p>
+            <form id="feedback-form" onsubmit="handleFeedback(event)">
+                <select id="feedback-type"
+                    style="width: 100%; padding: 10px; margin-bottom: 12px; background: var(--bg-primary); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-primary);">
+                    <option value="bug">🐛 Bug Report</option>
+                    <option value="feature">💡 Feature Request</option>
+                    <option value="feedback">💬 General Feedback</option>
+                    <option value="other">📝 Other</option>
+                </select>
+                <textarea id="feedback-message" placeholder="Tell us what you think..." maxlength="500" required
+                    style="width: 100%; min-height: 120px; padding: 12px; background: var(--bg-primary); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-primary); resize: vertical; font-family: inherit;"></textarea>
+                <p style="font-size: 0.8rem; color: #888; margin-top: 8px; text-align: right;" id="feedback-count">0 /
+                    500</p>
+                <div class="modal-buttons" style="margin-top: 15px;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('feedback-modal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Send Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confession Sent Modal -->
+    <div id="confession-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">🎭</div>
+            <h3>Confession Mode</h3>
+            <p>Your next message will be sent anonymously with hidden identity.</p>
+            <textarea id="confession-input" placeholder="Type your confession..." maxlength="500"></textarea>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="sendConfession()">Send Anonymously</button>
+                <button class="btn-secondary" onclick="closeModal('confession-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievement-popup">
+        <div class="achievement-content">
+            <span class="achievement-icon" id="achievement-icon">🏆</span>
+            <div class="achievement-text">
+                <span class="achievement-title" id="achievement-title">Achievement Unlocked!</span>
+                <span class="achievement-desc" id="achievement-desc">Description</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="warning-toast" class="toast">
+        <span class="toast-icon">⚠️</span>
+        <span class="toast-message" id="toast-message">Warning message</span>
+    </div>
+
+    <!-- Gift animation removed to prevent floating popup -->
+
+    <!-- Sound Effects (Base64 encoded short sounds) -->
+    <audio id="sound-pop" preload="auto"></audio>
+    <audio id="sound-ding" preload="auto"></audio>
+    <audio id="sound-connect" preload="auto"></audio>
+    <audio id="sound-disconnect" preload="auto"></audio>
+
+    <!-- NEW CLEAN UI ELEMENTS -->
+    <!-- Emoji Picker -->
+    <div id="emojiPicker" class="emoji-picker hidden"></div>
+
+    <!-- GIF feature disabled and removed -->
+
+    <!-- Drawing Canvas -->
+    <!-- Drawing Canvas with Controls -->
+    <div id="drawingContainer" class="drawing-container hidden">
+        <div>
+            <div class="drawing-header">
+                <span>🎨 Draw Something</span>
+                <button id="cancelDrawBtn" class="drawing-cancel-btn">✕</button>
+            </div>
+            <canvas id="drawCanvas" class="draw-canvas"></canvas>
+            <div class="drawing-controls">
+                <button id="clearDrawBtn" class="drawing-btn drawing-btn-secondary">Clear</button>
+                <button id="sendDrawBtn" class="drawing-btn drawing-btn-primary">Send Drawing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <!-- Three.js Library for Particle System -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="particle-system.js"></script>
+    <script src="script.js?v=110"></script>
+    <script src="animations.js?v=1"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => { });
+        }
+    </script>
+</body>
+
+</html>

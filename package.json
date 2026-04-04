@@ -1,0 +1,11 @@
+{
+  "name": "strangertalk",
+  "version": "1.0.0",
+  "description": "StrangerTalk - Anonymous Chat Application",
+  "scripts": {
+    "dev": "npx -y live-server --port=3000 --no-browser",
+    "start": "npx -y serve -l 3000"
+  },
+  "keywords": ["chat", "anonymous", "pwa"],
+  "license": "MIT"
+}
