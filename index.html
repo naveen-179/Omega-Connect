@@ -59,13 +59,13 @@
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="apple-touch-icon" href="logo.svg">
 
-    <!-- Google Fonts: Outfit & Inter -->
+    <!-- Google Fonts: Sora & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css?v=69">
+    <link rel="stylesheet" href="style.css?v=70">
 </head>
 
 <body>
@@ -89,7 +89,7 @@
         <span class="glow g3"></span>
     </div>
 
-    <!-- Landing Page with Neural Particle System -->
+    <!-- Landing Page — Premium Redesign -->
     <div id="landing-page" class="page active">
         <!-- Animated Gradient Background -->
         <div class="bg-gradient-animated"></div>
@@ -99,174 +99,154 @@
             <div class="blob blob-1"></div>
             <div class="blob blob-2"></div>
             <div class="blob blob-3"></div>
-            <div class="blob blob-4"></div>
         </div>
 
-        <!-- Stars, Hearts, and Sparkles Background -->
-        <div class="bg-icons" aria-hidden="true">
-            <!-- Stars -->
-            <div class="bg-icon star" style="top: 10%; left: 8%;">✨</div>
-            <div class="bg-icon star" style="top: 20%; right: 12%;">✨</div>
-            <div class="bg-icon star" style="top: 45%; left: 15%;">✨</div>
-            <div class="bg-icon star" style="top: 70%; right: 20%;">✨</div>
-            <div class="bg-icon star" style="top: 85%; left: 25%;">✨</div>
-
-            <!-- Hearts -->
-            <div class="bg-icon heart" style="top: 25%; left: 20%;">💜</div>
-            <div class="bg-icon heart" style="top: 50%; right: 15%;">❤️</div>
-            <div class="bg-icon heart" style="top: 75%; left: 12%;">💜</div>
-            <div class="bg-icon heart" style="top: 30%; right: 25%;">❤️</div>
-
-            <!-- Sparkles -->
-            <div class="bg-icon sparkle" style="top: 12%; left: 35%;">+</div>
-            <div class="bg-icon sparkle" style="top: 48%; left: 8%;">+</div>
-            <div class="bg-icon sparkle" style="top: 68%; right: 28%;">+</div>
-        </div>
-
-        <main class="landing-content">
-                <!-- Premium Glassmorphism Card for Main Actions -->
-                <div class="hero-card">
-                    <div class="card-reflection"></div>
-                    <button id="start-chat-btn" class="btn-primary">
-                        <span>Start Chatting</span>
-                        <span class="btn-icon">→</span>
-                    </button>
-                    <p style="text-align: center; font-size: 0.8rem; color: #64748B; margin-top: 10px;">
-                        🔒 No signup. No tracking. Chats disappear forever.
-                    </p>
-                </div>
-        <div class="container">
-            <!-- Theme Toggle -->
-            <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
-                <span class="theme-icon">🌙</span>
-            </button>
-
-            <!-- Hero Section -->
-            <header class="hero">
+        <!-- ===== HERO SECTION ===== -->
+        <section class="landing-hero">
+            <nav class="landing-nav">
                 <div class="logo">
                     <img src="logo-transparent.png" alt="Omega Connect Logo" class="logo-img">
                     <span class="logo-text">Omega Connect</span>
                 </div>
-                <h1 class="cinematic-title">Lightning Fast.<br><span class="hero-accent">100% Anonymous.</span></h1>
-                <p class="cinematic-subtitle">Your next best friend, or a total stranger. Find out.</p>
-            </header>
+                <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </nav>
 
-                <div class="quick-actions">
-                    <button id="reconnectBtn" class="reconnect-btn hidden">
-                        Reconnect to previous chat
+            <div class="hero-content">
+                <div class="hero-badge reveal">
+                    <span class="badge-dot"></span>
+                    <span>Live Now — Thousands Chatting</span>
+                </div>
+                <h1 class="cinematic-title">Meet the World.<br><span class="hero-accent">Anonymously.</span></h1>
+                <p class="cinematic-subtitle">Lightning fast. Zero tracking. Your next conversation is one click away.</p>
+
+                <div class="hero-cta-group">
+                    <button id="start-chat-btn" class="btn-hero-primary">
+                        <span>⚡ Start Chatting</span>
+                        <span class="btn-arrow">→</span>
                     </button>
+                    <p class="hero-trust-line">🔒 No signup required • Chats disappear forever</p>
                 </div>
+            </div>
 
-                <p class="divider-text">or customize your match</p>
+            <div class="quick-actions">
+                <button id="reconnectBtn" class="reconnect-btn hidden">
+                    Reconnect to previous chat
+                </button>
+            </div>
+        </section>
 
-                <!-- Interests Selection -->
-                <div class="interests-section reveal">
-                    <h3>What are you into? <span class="optional">(optional)</span></h3>
-                    <p class="interest-hint">Select up to 5 interests — or skip for random matches</p>
-                    <div class="interests-grid" id="interests-grid">
-                        <button type="button" class="interest-chip" data-interest="music">
-                            <span class="chip-icon">🎵</span>
-                            <span class="chip-label">Music</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="gaming">
-                            <span class="chip-icon">🎮</span>
-                            <span class="chip-label">Gaming</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="movies">
-                            <span class="chip-icon">🎬</span>
-                            <span class="chip-label">Movies</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="sports">
-                            <span class="chip-icon">⚽</span>
-                            <span class="chip-label">Sports</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="tech">
-                            <span class="chip-icon">💻</span>
-                            <span class="chip-label">Tech</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="art">
-                            <span class="chip-icon">🎨</span>
-                            <span class="chip-label">Art</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="books">
-                            <span class="chip-icon">📚</span>
-                            <span class="chip-label">Books</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="travel">
-                            <span class="chip-icon">✈️</span>
-                            <span class="chip-label">Travel</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="food">
-                            <span class="chip-icon">🍕</span>
-                            <span class="chip-label">Food</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="fitness">
-                            <span class="chip-icon">💪</span>
-                            <span class="chip-label">Fitness</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="anime">
-                            <span class="chip-icon">🎌</span>
-                            <span class="chip-label">Anime</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="memes">
-                            <span class="chip-icon">😂</span>
-                            <span class="chip-label">Memes</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="science">
-                            <span class="chip-icon">🔬</span>
-                            <span class="chip-label">Science</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="photography">
-                            <span class="chip-icon">📷</span>
-                            <span class="chip-label">Photo</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="fashion">
-                            <span class="chip-icon">👗</span>
-                            <span class="chip-label">Fashion</span>
-                        </button>
-                        <button type="button" class="interest-chip" data-interest="pets">
-                            <span class="chip-icon">🐕</span>
-                            <span class="chip-label">Pets</span>
-                        </button>
+        <!-- ===== FEATURES SECTION ===== -->
+        <section class="landing-features reveal">
+            <div class="section-inner">
+                <h2 class="section-title">Why Omega Connect?</h2>
+                <p class="section-subtitle">Built for real conversations with real privacy.</p>
+
+                <div class="features-grid">
+                    <div class="feature-card reveal-child">
+                        <div class="feature-icon">🥷</div>
+                        <h3>Total Anonymity</h3>
+                        <p>No accounts. No names. No trace. Reveal only what you choose — nothing more.</p>
                     </div>
-                    <p class="interest-counter" id="interest-counter">0 / 5 selected</p>
+                    <div class="feature-card reveal-child">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Instant Match</h3>
+                        <p>Our smart algorithm connects you with someone new in under one second. Zero waiting.</p>
+                    </div>
+                    <div class="feature-card reveal-child">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>Safe & Moderated</h3>
+                        <p>AI-powered content filtering and one-click reporting keeps every conversation clean.</p>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Advanced filters removed for cleaner UI -->
+        <!-- ===== HOW IT WORKS ===== -->
+        <section class="landing-steps reveal">
+            <div class="section-inner">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Three steps. That's it.</p>
 
-                <p class="disclaimer reveal">
-                    🔒 Your privacy is protected. Chats are not stored permanently.<br>
-                    <strong>18+ only. Be respectful.</strong>
-                </p>
-
-                <!-- Stats removed for cleaner, more trustworthy UI -->
-
-                <!-- Settings -->
-                <div class="settings-section reveal">
-                    <button class="settings-btn" id="settings-btn">⚙️ Settings</button>
+                <div class="steps-row">
+                    <div class="step-item reveal-child">
+                        <div class="step-number">1</div>
+                        <h3>Click Start</h3>
+                        <p>Hit the button. No forms, no signups, no friction.</p>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-item reveal-child">
+                        <div class="step-number">2</div>
+                        <h3>Get Matched</h3>
+                        <p>Our algorithm pairs you with a stranger in real-time.</p>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-item reveal-child">
+                        <div class="step-number">3</div>
+                        <h3>Start Talking</h3>
+                        <p>Chat, share, laugh. When you're done, it all vanishes.</p>
+                    </div>
                 </div>
-            </main>
+            </div>
+        </section>
 
+        <!-- ===== SOCIAL PROOF / STATS ===== -->
+        <section class="landing-stats reveal">
+            <div class="section-inner">
+                <div class="stats-grid">
+                    <div class="stat-card reveal-child">
+                        <span class="stat-value">10K+</span>
+                        <span class="stat-label-new">Daily Conversations</span>
+                    </div>
+                    <div class="stat-card reveal-child">
+                        <span class="stat-value">&lt;1s</span>
+                        <span class="stat-label-new">Average Match Time</span>
+                    </div>
+                    <div class="stat-card reveal-child">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label-new">Data Stored</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- ===== FINAL CTA ===== -->
+        <section class="landing-final-cta reveal">
+            <div class="section-inner">
+                <h2 class="final-cta-title">Your Next Conversation<br><span class="hero-accent">Awaits.</span></h2>
+                <p class="final-cta-subtitle">Jump in. It takes less than a second.</p>
+                <button class="btn-hero-primary final-cta-btn" onclick="document.getElementById('start-chat-btn').click()">
+                    <span>🚀 Start Now</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+            </div>
+        </section>
 
-            <footer class="landing-footer reveal">
-                <p>&copy; 2025 Omega Connect. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#" onclick="showModal('terms')">Terms & Conditions</a>
-                    <a href="#" onclick="showModal('privacy')">Privacy Policy</a>
-                    <a href="#" onclick="showModal('safety')">Safety Tips</a>
-
+        <!-- ===== FOOTER ===== -->
+        <footer class="landing-footer-new reveal">
+            <div class="section-inner">
+                <div class="footer-top">
+                    <div class="logo">
+                        <img src="logo-transparent.png" alt="Omega Connect" class="logo-img" style="width: 32px;">
+                        <span class="logo-text" style="font-size: 1rem;">Omega Connect</span>
+                    </div>
+                    <p class="footer-tagline">Anonymous conversations, worldwide.</p>
+                </div>
+                <div class="footer-links-new">
+                    <a href="#" onclick="showModal('terms')">Terms</a>
+                    <a href="#" onclick="showModal('privacy')">Privacy</a>
+                    <a href="#" onclick="showModal('safety')">Safety</a>
                     <a href="#" onclick="showModal('feedback')" class="feedback-link">💬 Feedback</a>
                 </div>
                 <div class="contact-section">
-                    <h4>Contact Us</h4>
-                    <p>Have questions, feedback, or concerns? Reach out to us.</p>
                     <button class="contact-reveal-btn" id="reveal-email-btn" onclick="revealEmail(this)">
-                        <span>📧 Email</span>
+                        <span>📧 Contact Us</span>
                     </button>
                 </div>
-            </footer>
-        </div>
+                <p class="footer-copyright">&copy; 2025 Omega Connect. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
 
     <!-- Waiting Page -->
@@ -505,10 +485,10 @@
 
     <!-- Onboarding Setup Modal -->
     <div id="onboarding-modal" class="modal">
-        <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-content" style="max-width: 480px;">
             <div class="modal-header" style="text-align: center; margin-bottom: 24px;">
-                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 8px;">Who do you want to meet?</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Set your preferences to start exploring.</p>
+                <h3 style="font-family: 'Sora', sans-serif; font-size: 1.5rem; margin-bottom: 8px;">Set Up Your Match</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Optional — skip anything you like.</p>
             </div>
             
             <div class="i-am-section">
@@ -527,6 +507,31 @@
                     <button type="button" class="gender-pill" data-pref="female">Female</button>
                     <button type="button" class="gender-pill active" data-pref="anyone">Anyone</button>
                 </div>
+            </div>
+
+            <!-- Interests Selection (moved from landing page) -->
+            <div class="interests-section" style="margin-bottom: 20px;">
+                <h3>Interests <span class="optional">(optional)</span></h3>
+                <p class="interest-hint">Select up to 5 for better matches</p>
+                <div class="interests-grid" id="interests-grid">
+                    <button type="button" class="interest-chip" data-interest="music"><span class="chip-icon">🎵</span><span class="chip-label">Music</span></button>
+                    <button type="button" class="interest-chip" data-interest="gaming"><span class="chip-icon">🎮</span><span class="chip-label">Gaming</span></button>
+                    <button type="button" class="interest-chip" data-interest="movies"><span class="chip-icon">🎬</span><span class="chip-label">Movies</span></button>
+                    <button type="button" class="interest-chip" data-interest="sports"><span class="chip-icon">⚽</span><span class="chip-label">Sports</span></button>
+                    <button type="button" class="interest-chip" data-interest="tech"><span class="chip-icon">💻</span><span class="chip-label">Tech</span></button>
+                    <button type="button" class="interest-chip" data-interest="art"><span class="chip-icon">🎨</span><span class="chip-label">Art</span></button>
+                    <button type="button" class="interest-chip" data-interest="books"><span class="chip-icon">📚</span><span class="chip-label">Books</span></button>
+                    <button type="button" class="interest-chip" data-interest="travel"><span class="chip-icon">✈️</span><span class="chip-label">Travel</span></button>
+                    <button type="button" class="interest-chip" data-interest="food"><span class="chip-icon">🍕</span><span class="chip-label">Food</span></button>
+                    <button type="button" class="interest-chip" data-interest="fitness"><span class="chip-icon">💪</span><span class="chip-label">Fitness</span></button>
+                    <button type="button" class="interest-chip" data-interest="anime"><span class="chip-icon">🎌</span><span class="chip-label">Anime</span></button>
+                    <button type="button" class="interest-chip" data-interest="memes"><span class="chip-icon">😂</span><span class="chip-label">Memes</span></button>
+                    <button type="button" class="interest-chip" data-interest="science"><span class="chip-icon">🔬</span><span class="chip-label">Science</span></button>
+                    <button type="button" class="interest-chip" data-interest="photography"><span class="chip-icon">📷</span><span class="chip-label">Photo</span></button>
+                    <button type="button" class="interest-chip" data-interest="fashion"><span class="chip-icon">👗</span><span class="chip-label">Fashion</span></button>
+                    <button type="button" class="interest-chip" data-interest="pets"><span class="chip-icon">🐕</span><span class="chip-label">Pets</span></button>
+                </div>
+                <p class="interest-counter" id="interest-counter">0 / 5 selected</p>
             </div>
 
             <div class="age-gate" style="margin-bottom: 24px;">
