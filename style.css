@@ -407,12 +407,17 @@ body::after {
 .blob {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    /* Reduced from 80px for better scroll performance */
-    opacity: 0.25;
+    filter: blur(80px);
+    opacity: 0.15;
     will-change: transform;
     transform: translateZ(0);
-    /* Force GPU acceleration for smooth scrolling */
+}
+
+/* Mobile optimizations for performance */
+@media (max-width: 768px) {
+    .blob {
+        display: none; /* Disabling heavy filters on mobile for huge performance win */
+    }
 }
 
 .blob-1 {
@@ -763,10 +768,11 @@ body::after {
 
 /* Cinematic Typography — Staggered Entrance */
 .cinematic-title {
+    font-family: 'Outfit', sans-serif;
     font-size: clamp(2.5rem, 7vw, 4rem);
     font-weight: 800;
     line-height: 1.15;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     margin-bottom: 20px;
     color: rgba(255, 255, 255, 0.95);
     animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
@@ -1268,19 +1274,24 @@ body.light-theme .interest-hint {
 
 /* Hero Card — 3D Tilt + Light Reflection */
 .hero-card {
-    background: transparent;
-    padding: 0;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 30px;
     width: 100%;
-    max-width: 500px;
+    max-width: 480px;
     margin: 0 auto 30px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
     position: relative;
     z-index: 20;
     transform-style: preserve-3d;
     transition: transform 0.1s linear, box-shadow 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Light reflection overlay for 3D card */

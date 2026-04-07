@@ -59,8 +59,13 @@
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="apple-touch-icon" href="logo.svg">
 
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css?v=68">
+    <link rel="stylesheet" href="style.css?v=69">
 </head>
 
 <body>
@@ -118,9 +123,18 @@
             <div class="bg-icon sparkle" style="top: 68%; right: 28%;">+</div>
         </div>
 
-        <!-- Vignette Overlay -->
-        <div class="bg-vignette"></div>
-
+        <main class="landing-content">
+                <!-- Premium Glassmorphism Card for Main Actions -->
+                <div class="hero-card">
+                    <div class="card-reflection"></div>
+                    <button id="start-chat-btn" class="btn-primary">
+                        <span>Start Chatting</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                    <p style="text-align: center; font-size: 0.8rem; color: #64748B; margin-top: 10px;">
+                        🔒 No signup. No tracking. Chats disappear forever.
+                    </p>
+                </div>
         <div class="container">
             <!-- Theme Toggle -->
             <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
@@ -128,54 +142,14 @@
             </button>
 
             <!-- Hero Section -->
-            <!-- Hero Section -->
             <header class="hero">
                 <div class="logo">
                     <img src="logo-transparent.png" alt="Omega Connect Logo" class="logo-img">
                     <span class="logo-text">Omega Connect</span>
                 </div>
-                <h1 class="cinematic-title">Someone's out there.<br><span class="hero-accent">Say hi.</span></h1>
-                <p class="cinematic-subtitle">No signup. No tracking. Just random stranger to talk to.</p>
+                <h1 class="cinematic-title">Lightning Fast.<br><span class="hero-accent">100% Anonymous.</span></h1>
+                <p class="cinematic-subtitle">Your next best friend, or a total stranger. Find out.</p>
             </header>
-
-            <main class="landing-content">
-                <!-- Premium Glassmorphism Card for Main Actions -->
-                <div class="hero-card">
-                    <div class="card-reflection"></div>
-                    <!-- I am section -->
-                    <div class="i-am-section">
-                        <h3>I am <span class="optional">(optional)</span></h3>
-                        <div class="gender-identity-pills">
-                            <button type="button" class="gender-identity-pill" data-gender="male">👨 Male</button>
-                            <button type="button" class="gender-identity-pill" data-gender="female">👩 Female</button>
-                            <button type="button" class="gender-identity-pill" data-gender="other">🧑 Other</button>
-                        </div>
-                    </div>
-
-                    <!-- Looking for section -->
-                    <div class="looking-for-section">
-                        <h3>Looking for <span class="optional">(optional)</span></h3>
-                        <div class="gender-preference-pills">
-                            <button type="button" class="gender-pill" data-pref="male">Male</button>
-                            <button type="button" class="gender-pill" data-pref="female">Female</button>
-                            <button type="button" class="gender-pill active" data-pref="anyone">Anyone</button>
-                        </div>
-                    </div>
-
-                    <!-- Age Gate -->
-                    <div class="age-gate">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="age-confirm">
-                            <span class="checkmark"></span>
-                            <span class="label-text">I confirm I am 18 years or older</span>
-                        </label>
-                    </div>
-
-                    <button id="start-chat-btn" class="btn-primary" disabled>
-                        <span>Start Chatting</span>
-                        <span class="btn-icon">→</span>
-                    </button>
-                </div>
 
                 <div class="quick-actions">
                     <button id="reconnectBtn" class="reconnect-btn hidden">
@@ -525,6 +499,50 @@
             <div class="exit-actions">
                 <button id="stayBtn" class="stay-btn">Stay</button>
                 <button id="exitBtn" class="exit-btn">Exit chat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Setup Modal -->
+    <div id="onboarding-modal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header" style="text-align: center; margin-bottom: 24px;">
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 8px;">Who do you want to meet?</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Set your preferences to start exploring.</p>
+            </div>
+            
+            <div class="i-am-section">
+                <h3>I am <span class="optional">(optional)</span></h3>
+                <div class="gender-identity-pills">
+                    <button type="button" class="gender-identity-pill" data-gender="male">👨 Male</button>
+                    <button type="button" class="gender-identity-pill" data-gender="female">👩 Female</button>
+                    <button type="button" class="gender-identity-pill" data-gender="other">🧑 Other</button>
+                </div>
+            </div>
+
+            <div class="looking-for-section">
+                <h3>Looking for <span class="optional">(optional)</span></h3>
+                <div class="gender-preference-pills">
+                    <button type="button" class="gender-pill" data-pref="male">Male</button>
+                    <button type="button" class="gender-pill" data-pref="female">Female</button>
+                    <button type="button" class="gender-pill active" data-pref="anyone">Anyone</button>
+                </div>
+            </div>
+
+            <div class="age-gate" style="margin-bottom: 24px;">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="age-confirm">
+                    <span class="checkmark"></span>
+                    <span class="label-text">I confirm I am 18 years or older</span>
+                </label>
+            </div>
+
+            <div class="modal-buttons" style="flex-direction: column;">
+                <button class="btn-primary w-100" id="onboarding-continue-btn" disabled>
+                    <span>Connect Now</span>
+                    <span class="btn-icon">⚡</span>
+                </button>
+                <button class="btn-text" onclick="closeModal('onboarding-modal')" style="margin-top: 12px; width: 100%;">Cancel</button>
             </div>
         </div>
     </div>

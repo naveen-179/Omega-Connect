@@ -3438,51 +3438,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Age confirmation
-    const ageConfirm = document.getElementById('age-confirm');
+    // Start Button (Main CTA) -> Opens Onboarding Modal
     const startBtn = document.getElementById('start-chat-btn');
+    if (startBtn) {
+        startBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const onboardingModal = document.getElementById('onboarding-modal');
+            if (onboardingModal) {
+                onboardingModal.style.display = 'flex';
+                onboardingModal.classList.add('active'); // Wait for CSS transition
+            }
+        });
+    }
 
-    if (ageConfirm && startBtn) {
-        // Checkbox change handler
+    // Onboarding Modal -> Age Confirm & Continue
+    const ageConfirm = document.getElementById('age-confirm');
+    const continueBtn = document.getElementById('onboarding-continue-btn');
+
+    if (ageConfirm && continueBtn) {
+        // Toggle the Connect Now button based on age gate
         ageConfirm.addEventListener('change', () => {
-            startBtn.disabled = !ageConfirm.checked;
-            console.log('Age confirm changed:', ageConfirm.checked, 'Button disabled:', startBtn.disabled);
+            continueBtn.disabled = !ageConfirm.checked;
         });
 
-        // Mobile: handle touch on the checkbox container label
+        // Mobile touch logic to help with checkbox bugs
         const checkboxLabel = ageConfirm.closest('label');
         if (checkboxLabel) {
             checkboxLabel.addEventListener('touchend', (e) => {
-                // Let the native label behavior toggle the checkbox
-                // Just ensure the change event fires
                 setTimeout(() => {
-                    startBtn.disabled = !ageConfirm.checked;
-                    console.log('Touch: Age confirm:', ageConfirm.checked, 'Button disabled:', startBtn.disabled);
+                    continueBtn.disabled = !ageConfirm.checked;
                 }, 50);
             });
         }
 
-        // Start button click - go directly to searching
-        startBtn.addEventListener('click', () => {
-            console.log('Start btn clicked, ageConfirm.checked:', ageConfirm.checked);
+        // Finalize setup and connect
+        continueBtn.addEventListener('click', () => {
             if (ageConfirm.checked) {
+                const onboardingModal = document.getElementById('onboarding-modal');
+                if (onboardingModal) {
+                    onboardingModal.style.display = 'none';
+                    onboardingModal.classList.remove('active');
+                }
                 initChat();
             }
         });
-
-        // Mobile touch support for start button
-        startBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            console.log('Start btn touched, ageConfirm.checked:', ageConfirm.checked);
-            if (ageConfirm.checked) {
-                initChat();
-            }
-        });
-    } else {
-        console.error('Age confirm or start button not found!', { ageConfirm, startBtn });
     }
-
-    // Settings
     const settingsBtn = document.getElementById('settings-btn');
     console.log('Settings button found:', settingsBtn);
     if (settingsBtn) {
