@@ -3242,3 +3242,13 @@ a:focus-visible {
   0%, 100% { transform: translateX(0); opacity: 0.8; }
   50% { transform: translateX(-8px); opacity: 0.4; }
 }
+
+i.ti {
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+

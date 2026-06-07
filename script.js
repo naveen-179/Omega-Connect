@@ -1150,7 +1150,7 @@ function resetState() {
     const parentEmoji = document.getElementById('vibe-parent-emoji');
     const parentName = document.getElementById('vibe-parent-name');
     const parentDesc = document.getElementById('vibe-parent-desc');
-    if (parentEmoji) parentEmoji.textContent = '✨';
+    if (parentEmoji) parentEmoji.innerHTML = '<i class="ti ti-sparkles" style="font-size: 18px;"></i>';
     if (parentName) parentName.textContent = 'Vibe Rooms';
     if (parentDesc) parentDesc.textContent = 'Gaming, Midnight Lounge, Anime';
     document.querySelectorAll('.sub-room-card').forEach(c => c.classList.remove('active'));
@@ -3688,15 +3688,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const parentDesc = document.getElementById('vibe-parent-desc');
             
             if (chosenRoom === 'gaming') {
-                if (parentEmoji) parentEmoji.textContent = '🎮';
+                if (parentEmoji) parentEmoji.innerHTML = '<i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i>';
                 if (parentName) parentName.textContent = 'Gaming Hub';
                 if (parentDesc) parentDesc.textContent = 'Vibe Room (Tap to change)';
             } else if (chosenRoom === 'lounge') {
-                if (parentEmoji) parentEmoji.textContent = '🌌';
+                if (parentEmoji) parentEmoji.innerHTML = '<i class="ti ti-stars" style="font-size: 18px;"></i>';
                 if (parentName) parentName.textContent = 'Midnight Lounge';
                 if (parentDesc) parentDesc.textContent = 'Vibe Room (Tap to change)';
             } else if (chosenRoom === 'anime') {
-                if (parentEmoji) parentEmoji.textContent = '🌸';
+                if (parentEmoji) parentEmoji.innerHTML = '<i class="ti ti-flower" style="font-size: 18px;"></i>';
                 if (parentName) parentName.textContent = 'Otaku Cafe';
                 if (parentDesc) parentDesc.textContent = 'Vibe Room (Tap to change)';
             }
@@ -3998,7 +3998,7 @@ function initAuthSystem() {
                 localStorage.setItem('omega_avatar', state.avatar);
                 
                 if (authBtnText) authBtnText.textContent = state.username;
-                if (authBtnIcon) authBtnIcon.textContent = '✅';
+                if (authBtnIcon) authBtnIcon.innerHTML = '<i class="ti ti-circle-check" style="font-size: 18px;"></i>';
             } catch (err) {
                 console.error("Error syncing profile:", err);
             }
@@ -4007,7 +4007,7 @@ function initAuthSystem() {
         } else {
             authState.isLoggedIn = false;
             if (authBtnText) authBtnText.textContent = 'Sign In';
-            if (authBtnIcon) authBtnIcon.textContent = '👤';
+            if (authBtnIcon) authBtnIcon.innerHTML = '<i class="ti ti-user" style="font-size: 18px;"></i>';
             
             let savedUserId = localStorage.getItem('omega_user_id');
             if (!savedUserId || savedUserId.length > 20) {

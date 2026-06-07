@@ -54,6 +54,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@700;800&display=swap" rel="stylesheet">
 
     <!-- Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="style.css?v=414">
 </head>
 
@@ -62,7 +63,7 @@
     <!-- ==================== CONFIRM MODAL (reusable) ==================== -->
     <div id="confirm-modal" class="modal">
         <div class="modal-content confirm-modal-content">
-            <div class="confirm-icon">⚠️</div>
+            <div class="confirm-icon"><i class="ti ti-alert-triangle" style="font-size: 18px;"></i></div>
             <h3 id="confirm-title">Confirm Action</h3>
             <p id="confirm-message">Are you sure?</p>
             <div class="confirm-buttons">
@@ -88,7 +89,7 @@
                 </div>
                 <div class="auth-section">
                     <button id="auth-modal-btn" class="auth-btn" onclick="openAuthModal()">
-                        <span id="auth-btn-icon">👤</span>
+                        <span id="auth-btn-icon"><i class="ti ti-user" style="font-size: 18px;"></i></span>
                         <span id="auth-btn-text">Sign In</span>
                     </button>
                 </div>
@@ -96,7 +97,7 @@
 
             <!-- Hero -->
             <section class="hero">
-                <div class="hero-badge">✨ Anonymous · Real · Instant</div>
+                <div class="hero-badge"><i class="ti ti-sparkles" style="font-size: 18px;"></i> Anonymous · Real · Instant</div>
 
                 <h1 class="hero-title">
                     Someone's out there.<br>
@@ -110,31 +111,31 @@
 
                     <!-- Recent Connections -->
                     <div id="recent-connections" class="setup-section" style="display: none;">
-                        <p class="setup-label">⚡ Reconnect with recent matches</p>
+                        <p class="setup-label"><i class="ti ti-bolt" style="font-size: 18px;"></i> Reconnect with recent matches</p>
                         <div id="recent-connections-list" class="recent-list"></div>
                     </div>
                     <div id="recent-connections-divider" class="setup-divider" style="display: none;"></div>
 
                     <!-- Vibe Rooms -->
                     <div class="setup-section">
-                        <p class="setup-label">💬 Choose a Vibe Room</p>
+                        <p class="setup-label"><i class="ti ti-message-circle" style="font-size: 18px;"></i> Choose a Vibe Room</p>
                         <div class="rooms-grid">
                             <div class="room-card active" data-room="general">
-                                <div class="room-emoji">🌐</div>
+                                <div class="room-emoji"><i class="ti ti-world" style="font-size: 18px;"></i></div>
                                 <div class="room-info">
                                     <div class="room-name">Global Chat</div>
                                     <div class="room-desc">Meet anyone, talk about anything</div>
                                 </div>
                             </div>
                             <div class="room-card" data-room="study">
-                                <div class="room-emoji">📚</div>
+                                <div class="room-emoji"><i class="ti ti-book" style="font-size: 18px;"></i></div>
                                 <div class="room-info">
                                     <div class="room-name">Study Room</div>
                                     <div class="room-desc">Focus, share goals & learn together</div>
                                 </div>
                             </div>
                             <div class="room-card" id="vibe-room-selector-card">
-                                <div class="room-emoji" id="vibe-parent-emoji">✨</div>
+                                <div class="room-emoji" id="vibe-parent-emoji"><i class="ti ti-sparkles" style="font-size: 18px;"></i></div>
                                 <div class="room-info">
                                     <div class="room-name" id="vibe-parent-name">Vibe Rooms</div>
                                     <div class="room-desc" id="vibe-parent-desc">Gaming, Midnight Lounge, Anime</div>
@@ -147,18 +148,18 @@
 
                     <!-- Interests -->
                     <div class="setup-section">
-                        <p class="setup-label">🎯 Pick your interests <span class="optional-tag">optional</span></p>
+                        <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
                         <div class="interests-grid">
-                            <button type="button" class="interest-chip" data-interest="music">🎵 Music</button>
-                            <button type="button" class="interest-chip" data-interest="gaming">🎮 Gaming</button>
-                            <button type="button" class="interest-chip" data-interest="movies">🎬 Movies</button>
-                            <button type="button" class="interest-chip" data-interest="sports">⚽ Sports</button>
-                            <button type="button" class="interest-chip" data-interest="tech">💻 Tech</button>
-                            <button type="button" class="interest-chip" data-interest="art">🎨 Art</button>
-                            <button type="button" class="interest-chip" data-interest="travel">✈️ Travel</button>
-                            <button type="button" class="interest-chip" data-interest="anime">🌸 Anime</button>
-                            <button type="button" class="interest-chip" data-interest="food">🍜 Food</button>
-                            <button type="button" class="interest-chip" data-interest="fitness">🏋️ Fitness</button>
+                            <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
+                            <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
+                            <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
+                            <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
+                            <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
+                            <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
+                            <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
+                            <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
+                            <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
+                            <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
                         </div>
                     </div>
 
@@ -166,7 +167,7 @@
 
                     <!-- I Am -->
                     <div class="setup-section">
-                        <p class="setup-label">👤 I am <span class="optional-tag">optional</span></p>
+                        <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
                         <div class="gender-row">
                             <button type="button" class="gender-pill" data-gender="male">Male</button>
                             <button type="button" class="gender-pill" data-gender="female">Female</button>
@@ -176,7 +177,7 @@
 
                     <!-- Looking For -->
                     <div class="setup-section">
-                        <p class="setup-label">🔍 Looking for <span class="optional-tag">optional</span></p>
+                        <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
                         <div class="gender-row">
                             <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
                             <button type="button" class="pref-pill" data-pref="male">Male</button>
@@ -200,19 +201,19 @@
                     </button>
                     
                     <button id="friend-invite-btn" class="friend-invite-btn" type="button" style="margin-top: var(--sp-2);">
-                        <span>🔗 Connect with a Friend</span>
+                        <span><i class="ti ti-link" style="font-size: 18px;"></i> Connect with a Friend</span>
                     </button>
                     
                     <div id="friend-invite-banner" class="friend-invite-banner hidden" style="margin-top: var(--sp-2); text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 500;">
-                        ✨ Private invite active. Confirm age above to join.
+                        <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Confirm age above to join.
                     </div>
                 </div>
 
                 <!-- Trust Strip -->
                 <div class="trust-strip">
-                    <div class="trust-item">🛡️ 100% Anonymous</div>
-                    <div class="trust-item">⚡ Instant Match</div>
-                    <div class="trust-item">🗑️ Zero Data Stored</div>
+                    <div class="trust-item"><i class="ti ti-shield" style="font-size: 18px;"></i> 100% Anonymous</div>
+                    <div class="trust-item"><i class="ti ti-bolt" style="font-size: 18px;"></i> Instant Match</div>
+                    <div class="trust-item"><i class="ti ti-trash" style="font-size: 18px;"></i> Zero Data Stored</div>
                 </div>
             </section>
 
@@ -285,23 +286,23 @@
         <!-- Emoji Panel -->
         <div id="emojiPicker" class="emoji-panel hidden">
             <div class="emoji-tabs">
-                <button class="emoji-tab active" data-cat="smileys">😀</button>
-                <button class="emoji-tab" data-cat="hands">👋</button>
-                <button class="emoji-tab" data-cat="hearts">❤️</button>
-                <button class="emoji-tab" data-cat="animals">🐶</button>
-                <button class="emoji-tab" data-cat="food">🍕</button>
-                <button class="emoji-tab" data-cat="travel">✈️</button>
-                <button class="emoji-tab" data-cat="objects">💡</button>
-                <button class="emoji-tab" data-cat="symbols">⭐</button>
+                <button class="emoji-tab active" data-cat="smileys"><i class="ti ti-mood-smile" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="hands"><i class="ti ti-hand-stop" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="hearts"><i class="ti ti-heart" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="animals"><i class="ti ti-paw" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="food"><i class="ti ti-pizza" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="travel"><i class="ti ti-plane" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="objects"><i class="ti ti-bulb" style="font-size: 18px;"></i></button>
+                <button class="emoji-tab" data-cat="symbols"><i class="ti ti-star" style="font-size: 18px;"></i></button>
             </div>
             <div class="emoji-grid" id="emojiGrid"></div>
         </div>
 
         <!-- Chat Tools -->
         <div class="chat-tools">
-            <button class="tool-chip" id="gameBtn">🎮 Game</button>
-            <button class="tool-chip" id="questionBtn">💬 Question</button>
-            <button class="tool-chip" id="drawBtn">✏️ Draw</button>
+            <button class="tool-chip" id="gameBtn"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Game</button>
+            <button class="tool-chip" id="questionBtn"><i class="ti ti-help" style="font-size: 18px;"></i> Question</button>
+            <button class="tool-chip" id="drawBtn"><i class="ti ti-pencil" style="font-size: 18px;"></i> Draw</button>
             <div id="smartReplies" class="smart-replies"></div>
         </div>
 
@@ -318,7 +319,7 @@
             <!-- Recording Overlay -->
             <div id="voice-recording-overlay" class="voice-recording-overlay hidden">
                 <div class="rec-left">
-                    <span class="rec-dot-pulse">🔴</span>
+                    <span class="rec-dot-pulse"><i class="ti ti-circle-filled" style="font-size: 18px;"></i></span>
                     <span id="voice-timer" class="rec-timer">0:00</span>
                 </div>
                 
@@ -328,7 +329,7 @@
                     
                     <!-- Slide to cancel instructions -->
                     <div id="voice-slide-hint" class="voice-slide-hint">
-                        <span class="slide-arrow">⬅️</span> Slide to cancel
+                        <span class="slide-arrow"><i class="ti ti-arrow-left" style="font-size: 18px;"></i></span> Slide to cancel
                     </div>
                 </div>
                 
@@ -345,8 +346,8 @@
                 </div>
             </div>
 
-            <button class="input-tool-btn" id="emojiBtn">😀</button>
-            <button class="input-tool-btn" id="voiceBtn" title="Record voice note" style="font-size: 1.15rem; margin-right: 2px;">🎙️</button>
+            <button class="input-tool-btn" id="emojiBtn"><i class="ti ti-mood-smile" style="font-size: 18px;"></i></button>
+            <button class="input-tool-btn" id="voiceBtn" title="Record voice note" style="margin-right: 2px;"><i class="ti ti-microphone" style="font-size: 18px;"></i></button>
             <input type="text" id="message-input" class="chat-input"
                 placeholder="Type a message…" maxlength="1000"
                 autocomplete="off" autocorrect="off" spellcheck="true">
@@ -358,7 +359,7 @@
         <!-- Drawing Modal -->
         <div id="drawing-modal" class="modal">
             <div class="modal-content drawing-modal-content">
-                <h3>✏️ Draw Something</h3>
+                <h3><i class="ti ti-pencil" style="font-size: 18px;"></i> Draw Something</h3>
                 <canvas id="drawing-canvas" width="280" height="180"></canvas>
                 <div class="drawing-tools">
                     <button class="btn-secondary" id="clear-canvas-btn">Clear</button>
@@ -373,23 +374,23 @@
             <div class="modal-content game-modal-content">
                 <!-- Selection Screen -->
                 <div id="game-selection-screen">
-                    <h3>🎮 Chat Games</h3>
+                    <h3><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Chat Games</h3>
                     <p style="margin-bottom: var(--sp-3);">Choose a game to play with Stranger:</p>
                     <div class="modal-buttons">
-                        <button class="btn-primary" id="select-td-btn">🎯 Truth or Dare</button>
-                        <button class="btn-primary" id="select-ttt-btn">❌ Tic-Tac-Toe</button>
-                        <button class="btn-primary" id="select-poll-btn">📊 Would You Rather?</button>
+                        <button class="btn-primary" id="select-td-btn"><i class="ti ti-target" style="font-size: 18px;"></i> Truth or Dare</button>
+                        <button class="btn-primary" id="select-ttt-btn"><i class="ti ti-x" style="font-size: 18px;"></i> Tic-Tac-Toe</button>
+                        <button class="btn-primary" id="select-poll-btn"><i class="ti ti-chart-bar" style="font-size: 18px;"></i> Would You Rather?</button>
                         <button class="btn-secondary" style="margin-top: var(--sp-2);" onclick="closeModal('game-modal')">Close</button>
                     </div>
                 </div>
 
                 <!-- Truth or Dare Panel -->
                 <div id="truth-dare-panel" style="display:none;">
-                    <h3>🎯 Truth or Dare</h3>
+                    <h3><i class="ti ti-target" style="font-size: 18px;"></i> Truth or Dare</h3>
                     <p>Pick your challenge!</p>
                     <div class="game-buttons">
-                        <button class="btn-truth" id="truth-btn">💬 Truth</button>
-                        <button class="btn-dare" id="dare-btn">🔥 Dare</button>
+                        <button class="btn-truth" id="truth-btn"><i class="ti ti-message-circle" style="font-size: 18px;"></i> Truth</button>
+                        <button class="btn-dare" id="dare-btn"><i class="ti ti-flame" style="font-size: 18px;"></i> Dare</button>
                     </div>
                     <div class="game-result" id="game-result"></div>
                     <div class="game-actions" style="margin-top: var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-2);">
@@ -400,7 +401,7 @@
 
                 <!-- Tic-Tac-Toe Panel -->
                 <div id="ttt-panel" style="display:none;">
-                    <h3>❌ Tic-Tac-Toe</h3>
+                    <h3><i class="ti ti-x" style="font-size: 18px;"></i> Tic-Tac-Toe</h3>
                     <div class="ttt-status" id="ttt-status">Your turn (X)</div>
                     <div class="ttt-board" id="ttt-board">
                         <button class="ttt-cell" data-index="0"></button>
@@ -421,7 +422,7 @@
 
                 <!-- Would You Rather Panel -->
                 <div id="poll-panel" style="display:none;">
-                    <h3>📊 Would You Rather?</h3>
+                    <h3><i class="ti ti-chart-bar" style="font-size: 18px;"></i> Would You Rather?</h3>
                     <div class="poll-question-container" style="margin: var(--sp-4) 0; padding: var(--sp-3) var(--sp-4); background: rgba(255, 255, 255, 0.04); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08);">
                         <div class="poll-question" id="poll-question-text" style="font-size: 1.1rem; font-weight: 600; line-height: 1.5; color: white; text-align: center;">Loading dilemma...</div>
                     </div>
@@ -456,8 +457,8 @@
             <h3>Leave Chat?</h3>
             <p>Choose an action before leaving:</p>
             <div class="modal-buttons leave-options">
-                <button class="btn-danger" onclick="showModal('report'); closeModal('leave-chat-modal');">🚩 Report User</button>
-                <button class="btn-warning" onclick="showModal('block'); closeModal('leave-chat-modal');">🚫 Block User</button>
+                <button class="btn-danger" onclick="showModal('report'); closeModal('leave-chat-modal');"><i class="ti ti-flag" style="font-size: 18px;"></i> Report User</button>
+                <button class="btn-warning" onclick="showModal('block'); closeModal('leave-chat-modal');"><i class="ti ti-ban" style="font-size: 18px;"></i> Block User</button>
                 <button class="btn-primary" onclick="confirmLeaveChat()">Just Leave</button>
                 <button class="btn-secondary" onclick="closeModal('leave-chat-modal')">Cancel</button>
             </div>
@@ -467,12 +468,12 @@
     <!-- Choose a Vibe Room Sub-Selection Modal -->
     <div id="vibe-rooms-modal" class="modal">
         <div class="modal-content vibe-rooms-modal-content">
-            <h3>✨ Choose a Vibe Room</h3>
+            <h3><i class="ti ti-sparkles" style="font-size: 18px;"></i> Choose a Vibe Room</h3>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: var(--sp-4);">Select a themed room to match with like-minded people:</p>
             
             <div class="sub-rooms-list" style="display: flex; flex-direction: column; gap: var(--sp-3); width: 100%; text-align: left;">
                 <div class="sub-room-card" data-subroom="gaming" style="cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-elevated); transition: all 0.2s ease;">
-                    <div style="font-size: 1.8rem; flex-shrink: 0;">🎮</div>
+                    <div style="font-size: 1.8rem; flex-shrink: 0;"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i></div>
                     <div>
                         <div style="font-weight: 700; color: var(--text-primary);">Gaming Hub</div>
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Find co-op partners & gaming buddies</div>
@@ -480,7 +481,7 @@
                 </div>
                 
                 <div class="sub-room-card" data-subroom="lounge" style="cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-elevated); transition: all 0.2s ease;">
-                    <div style="font-size: 1.8rem; flex-shrink: 0;">🌌</div>
+                    <div style="font-size: 1.8rem; flex-shrink: 0;"><i class="ti ti-stars" style="font-size: 18px;"></i></div>
                     <div>
                         <div style="font-weight: 700; color: var(--text-primary);">Midnight Lounge</div>
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Deep talks & late night vibes</div>
@@ -488,7 +489,7 @@
                 </div>
                 
                 <div class="sub-room-card" data-subroom="anime" style="cursor: pointer; display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-elevated); transition: all 0.2s ease;">
-                    <div style="font-size: 1.8rem; flex-shrink: 0;">🌸</div>
+                    <div style="font-size: 1.8rem; flex-shrink: 0;"><i class="ti ti-flower" style="font-size: 18px;"></i></div>
                     <div>
                         <div style="font-weight: 700; color: var(--text-primary);">Otaku Cafe</div>
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Anime, manga, & pop culture</div>
@@ -555,11 +556,11 @@
         <!-- Filter Drawer -->
         <div id="filter-drawer" class="filter-drawer">
             <button class="filter-chip active" data-filter="none">None</button>
-            <button class="filter-chip" data-filter="vhs">📺 VHS</button>
-            <button class="filter-chip" data-filter="neon">💜 Neon</button>
-            <button class="filter-chip" data-filter="warm">🎬 Warm</button>
-            <button class="filter-chip" data-filter="noir">🕶️ Noir</button>
-            <button class="filter-chip" data-filter="chrome">🌈 Chrome</button>
+            <button class="filter-chip" data-filter="vhs"><i class="ti ti-device-tv" style="font-size: 18px;"></i> VHS</button>
+            <button class="filter-chip" data-filter="neon"><i class="ti ti-heart" style="font-size: 18px;"></i> Neon</button>
+            <button class="filter-chip" data-filter="warm"><i class="ti ti-movie" style="font-size: 18px;"></i> Warm</button>
+            <button class="filter-chip" data-filter="noir"><i class="ti ti-sunglasses" style="font-size: 18px;"></i> Noir</button>
+            <button class="filter-chip" data-filter="chrome"><i class="ti ti-rainbow" style="font-size: 18px;"></i> Chrome</button>
         </div>
 
         <!-- Call Controls -->
@@ -636,7 +637,7 @@
     <!-- Settings -->
     <div id="settings-modal" class="modal">
         <div class="modal-content modal-scroll">
-            <h3>⚙️ Settings</h3>
+            <h3><i class="ti ti-settings" style="font-size: 18px;"></i> Settings</h3>
             <div class="settings-list">
                 <div class="setting-item">
                     <label>Sound Notifications</label>
@@ -673,14 +674,14 @@
     <!-- Feedback -->
     <div id="feedback-modal" class="modal">
         <div class="modal-content">
-            <h3>📬 Feedback</h3>
+            <h3><i class="ti ti-mailbox" style="font-size: 18px;"></i> Feedback</h3>
             <p>We'd love to hear from you!</p>
             <form id="feedback-form" onsubmit="handleFeedback(event)">
                 <select id="feedback-type" class="modal-select">
-                    <option value="bug">🐛 Bug Report</option>
-                    <option value="feature">✨ Feature Request</option>
-                    <option value="feedback">💬 General Feedback</option>
-                    <option value="other">📦 Other</option>
+                    <option value="bug">Bug Report</option>
+                    <option value="feature">Feature Request</option>
+                    <option value="feedback">General Feedback</option>
+                    <option value="other">Other</option>
                 </select>
                 <textarea id="feedback-message" placeholder="Tell us what you think…" maxlength="500" required></textarea>
                 <div class="modal-buttons">
@@ -751,7 +752,7 @@
     <!-- Safety -->
     <div id="safety-modal" class="modal">
         <div class="modal-content modal-scroll">
-            <h3>🛡️ Safety Tips</h3>
+            <h3><i class="ti ti-shield" style="font-size: 18px;"></i> Safety Tips</h3>
             <div class="legal-text">
                 <ul>
                     <li>Never share personal information (name, address, phone)</li>
