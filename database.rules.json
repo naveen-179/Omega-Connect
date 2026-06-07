@@ -15,6 +15,10 @@
                 }
             }
         },
+        "messages": {
+            ".read": true,
+            ".write": true
+        },
         "activeChats": {
             ".read": true,
             ".write": true
@@ -33,6 +37,18 @@
         },
         "feedback": {
             ".read": false,
+            ".write": true
+        },
+        "users": {
+            ".read": true,
+            ".write": true
+        },
+        "reconnectRequests": {
+            ".read": true,
+            ".write": true
+        },
+        "friendRooms": {
+            ".read": true,
             ".write": true
         }
     }
