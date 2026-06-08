@@ -3259,3 +3259,103 @@ i.ti {
 .game-result span {
   color: var(--accent) !important;
 }
+
+/* --- Play Button & Menu --- */
+.play-wrapper {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+}
+
+#playBtn {
+  background: var(--accent-muted);
+  color: var(--accent);
+  border: 1px solid rgba(255, 111, 97, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration) var(--ease);
+}
+
+#playBtn:hover:not(:disabled) {
+  background: rgba(255, 111, 97, 0.25);
+  color: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+#playBtn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+#playBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.play-menu {
+  position: absolute;
+  bottom: calc(100% + var(--sp-2));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 170px;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: playMenuIn 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes playMenuIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.play-menu.hidden {
+  display: none !important;
+}
+
+.play-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2.5) var(--sp-3.5);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration) var(--ease);
+  width: 100%;
+  text-align: left;
+}
+
+.play-menu-item:hover {
+  background: var(--bg-elevated);
+  color: var(--accent);
+}
+
+.play-menu-item i {
+  font-size: 16px;
+  color: var(--text-muted);
+  transition: color var(--duration) var(--ease);
+}
+
+.play-menu-item:hover i {
+  color: var(--accent);
+}
+

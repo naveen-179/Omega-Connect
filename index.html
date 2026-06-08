@@ -348,6 +348,14 @@
 
             <button class="input-tool-btn" id="emojiBtn"><i class="ti ti-mood-smile" style="font-size: 18px;"></i></button>
             <button class="input-tool-btn" id="voiceBtn" title="Record voice note" style="margin-right: 2px;"><i class="ti ti-microphone" style="font-size: 18px;"></i></button>
+            <div class="play-wrapper" style="position: relative;">
+                <button class="input-tool-btn" id="playBtn" title="Play games"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i></button>
+                <div id="playMenu" class="play-menu hidden">
+                    <button class="play-menu-item" id="menuDrawBtn"><i class="ti ti-pencil" style="font-size: 18px;"></i> Draw Together</button>
+                    <button class="play-menu-item" id="menuTdBtn"><i class="ti ti-target" style="font-size: 18px;"></i> Truth or Dare</button>
+                    <button class="play-menu-item" id="menuTttBtn"><i class="ti ti-x" style="font-size: 18px;"></i> Tic-Tac-Toe</button>
+                </div>
+            </div>
             <input type="text" id="message-input" class="chat-input"
                 placeholder="Type a message…" maxlength="1000"
                 autocomplete="off" autocorrect="off" spellcheck="true">

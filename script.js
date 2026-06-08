@@ -277,6 +277,8 @@ function setChatControlsEnabled(enabled) {
     const questionBtn = document.getElementById('questionBtn');
     const drawBtn = document.getElementById('drawBtn');
     const voiceBtn = document.getElementById('voiceBtn');
+    const playBtn = document.getElementById('playBtn');
+    const playMenu = document.getElementById('playMenu');
 
     if (input) {
         input.disabled = !enabled;
@@ -293,6 +295,8 @@ function setChatControlsEnabled(enabled) {
     if (questionBtn) questionBtn.disabled = !enabled;
     if (drawBtn) drawBtn.disabled = !enabled;
     if (voiceBtn) voiceBtn.disabled = !enabled;
+    if (playBtn) playBtn.disabled = !enabled;
+    if (playMenu && !enabled) playMenu.classList.add('hidden');
 }
 
 function scrollToBottom() {
@@ -3814,6 +3818,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (gameBtn) gameBtn.addEventListener('click', openGameModal);
     if (questionBtn) questionBtn.addEventListener('click', showQuestionPicker);
     if (drawBtn) drawBtn.addEventListener('click', () => showModal('drawing'));
+
+    // Play button & menu setup
+    const playBtn = document.getElementById('playBtn');
+    const playMenu = document.getElementById('playMenu');
+    const menuDrawBtn = document.getElementById('menuDrawBtn');
+    const menuTdBtn = document.getElementById('menuTdBtn');
+    const menuTttBtn = document.getElementById('menuTttBtn');
+
+    if (playBtn && playMenu) {
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playMenu.classList.toggle('hidden');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!playMenu.classList.contains('hidden') && !playBtn.contains(e.target) && !playMenu.contains(e.target)) {
+                playMenu.classList.add('hidden');
+            }
+        });
+
+        if (menuDrawBtn) {
+            menuDrawBtn.addEventListener('click', () => {
+                playMenu.classList.add('hidden');
+                showModal('drawing');
+            });
+        }
+
+        if (menuTdBtn) {
+            menuTdBtn.addEventListener('click', () => {
+                playMenu.classList.add('hidden');
+                showModal('game');
+                showTruthDarePanel();
+            });
+        }
+
+        if (menuTttBtn) {
+            menuTttBtn.addEventListener('click', () => {
+                playMenu.classList.add('hidden');
+                showModal('game');
+                handleSelectTtt();
+            });
+        }
+    }
 
     // Truth or Dare
     const truthBtn = document.getElementById('truth-btn');
