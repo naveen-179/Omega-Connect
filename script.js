@@ -2610,9 +2610,47 @@ function savePartnerToHistory(id, name, avatar) {
     history = history.slice(0, 5);
     try {
         localStorage.setItem('omega_recent_chats', JSON.stringify(history));
+        localStorage.setItem('omega_last_match', Date.now().toString());
     } catch(e) {}
     
     renderRecentConnections();
+}
+
+function getRelativeTime(timestamp) {
+    let parsed = parseInt(timestamp, 10);
+    if (isNaN(parsed)) {
+        const dt = Date.parse(timestamp);
+        if (!isNaN(dt)) {
+            parsed = dt;
+        } else {
+            return '';
+        }
+    }
+    
+    const now = Date.now();
+    const diffMs = now - parsed;
+    const diffSec = Math.floor(diffMs / 1000);
+    
+    if (diffSec < 0) return 'just now';
+    if (diffSec < 60) {
+        return 'just now';
+    }
+    
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) {
+        return `${diffMin}m ago`;
+    }
+    
+    const diffHour = Math.floor(diffMin / 60);
+    if (diffHour < 24) {
+        return `${diffHour}h ago`;
+    }
+    
+    const diffDay = Math.floor(diffHour / 24);
+    if (diffDay === 1) {
+        return 'yesterday';
+    }
+    return `${diffDay}d ago`;
 }
 
 function renderRecentConnections() {
@@ -2620,6 +2658,13 @@ function renderRecentConnections() {
     const divider = document.getElementById('recent-connections-divider');
     const list = document.getElementById('recent-connections-list');
     if (!section || !list || !divider) return;
+    
+    const lastMatch = localStorage.getItem('omega_last_match');
+    if (!lastMatch || !lastMatch.trim()) {
+        section.style.display = 'none';
+        divider.style.display = 'none';
+        return;
+    }
     
     let history = [];
     try {
@@ -2635,6 +2680,17 @@ function renderRecentConnections() {
     
     section.style.display = 'block';
     divider.style.display = 'block';
+    
+    const timeLabel = document.getElementById('reconnect-last-time');
+    if (timeLabel) {
+        const relative = getRelativeTime(lastMatch);
+        if (relative) {
+            timeLabel.textContent = `Last chat: ${relative}`;
+            timeLabel.style.display = 'inline';
+        } else {
+            timeLabel.style.display = 'none';
+        }
+    }
     
     list.innerHTML = history.map(item => {
         const avatarHtml = item.partnerAvatar 
