@@ -3454,4 +3454,15 @@ i.ti {
   }
 }
 
+/* --- Radar/Pulse waiting state --- */
+.radar-pulse-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto var(--sp-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 

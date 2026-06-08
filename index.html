@@ -258,7 +258,71 @@
     <!-- ==================== WAITING PAGE ==================== -->
     <div id="waiting-page" class="page">
         <div class="waiting-content">
-            <div class="spinner"></div>
+            <div class="radar-pulse-container">
+                <svg width="160" height="160" viewBox="0 0 160 160" class="radar-pulse-svg">
+                    <defs>
+                        <clipPath id="radar-avatar-clip">
+                            <circle cx="80" cy="80" r="32" />
+                        </clipPath>
+                        <linearGradient id="avatar-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="var(--accent)" />
+                            <stop offset="100%" stop-color="#ff857a" />
+                        </linearGradient>
+                        <style>
+                            .radar-pulse-svg {
+                                overflow: visible;
+                            }
+                            .radar-ring {
+                                fill: none;
+                                stroke: #6366f1;
+                                stroke-dasharray: 4 4;
+                                transform-origin: center;
+                                opacity: 0;
+                            }
+                            .radar-ring-1 {
+                                animation: radar-pulse-anim 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+                                animation-delay: 0s;
+                            }
+                            .radar-ring-2 {
+                                animation: radar-pulse-anim 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+                                animation-delay: 0.6s;
+                            }
+                            .radar-ring-3 {
+                                animation: radar-pulse-anim 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+                                animation-delay: 1.2s;
+                            }
+                            @keyframes radar-pulse-anim {
+                                0% {
+                                    r: 32px;
+                                    opacity: 0.6;
+                                    stroke-width: 1.5px;
+                                    stroke-dashoffset: 0;
+                                }
+                                100% {
+                                    r: 80px;
+                                    opacity: 0;
+                                    stroke-width: 0px;
+                                    stroke-dashoffset: 20;
+                                }
+                            }
+                        </style>
+                    </defs>
+                    
+                    <!-- Concentric Pulse Rings -->
+                    <circle class="radar-ring radar-ring-1" cx="80" cy="80" r="32" />
+                    <circle class="radar-ring radar-ring-2" cx="80" cy="80" r="32" />
+                    <circle class="radar-ring radar-ring-3" cx="80" cy="80" r="32" />
+                    
+                    <!-- Center Avatar (Static Circle) -->
+                    <g clip-path="url(#radar-avatar-clip)">
+                        <circle cx="80" cy="80" r="32" fill="url(#avatar-grad)" />
+                        <circle cx="80" cy="73" r="10" fill="rgba(255, 255, 255, 0.9)" />
+                        <path d="M56 96 C56 86, 66 82, 80 82 C94 82, 104 86, 104 96 Z" fill="rgba(255, 255, 255, 0.9)" />
+                    </g>
+                    <!-- Center Avatar Border -->
+                    <circle cx="80" cy="80" r="32" fill="none" stroke="var(--accent)" stroke-width="2.5" />
+                </svg>
+            </div>
             <h2>Finding someone to talk to…</h2>
             <p id="matching-status">Someone who shares your vibe is out there</p>
             <p class="wait-time">Waiting: <span id="wait-time">0</span>s</p>
