@@ -54,8 +54,9 @@
   --sp-8: 64px;
 
   /* Typography */
-  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-heading: 'Syne', sans-serif;
+  --font-display: 'Syne', sans-serif;
 
   /* Sizing */
   --max-chat: 600px;
@@ -3463,6 +3464,18 @@ i.ti {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, .logo-text, .app-name {
+  font-family: var(--font-heading);
+}
+
+h1, h2, h3 {
+  font-family: 'Syne', sans-serif !important;
 }
 
 
