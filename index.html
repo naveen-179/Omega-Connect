@@ -144,55 +144,56 @@
                         </div>
                     </div>
 
-                    <div class="setup-divider"></div>
-
-                    <!-- Interests -->
-                    <div class="setup-section">
-                        <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
-                        <div class="interests-grid">
-                            <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
-                            <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
-                            <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
-                            <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
-                            <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
-                            <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
-                            <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
-                            <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
-                            <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
-                            <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
-                        </div>
+                    <!-- Collapsible Trigger -->
+                    <div class="setup-section" style="padding-bottom: 0;">
+                        <button type="button" id="toggle-options-btn" class="toggle-options-btn">
+                            <span>Customize Vibe (Interests, Gender)</span>
+                            <i class="ti ti-chevron-down" style="transition: transform 0.2s ease;"></i>
+                        </button>
                     </div>
 
-                    <div class="setup-divider"></div>
+                    <div id="collapsible-options" class="collapsible-options collapsed">
+                        <div class="setup-divider"></div>
 
-                    <!-- I Am -->
-                    <div class="setup-section">
-                        <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
-                        <div class="gender-row">
-                            <button type="button" class="gender-pill" data-gender="male">Male</button>
-                            <button type="button" class="gender-pill" data-gender="female">Female</button>
-                            <button type="button" class="gender-pill" data-gender="other">Other</button>
+                        <!-- Interests -->
+                        <div class="setup-section">
+                            <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
+                            <div class="interests-grid">
+                                <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
+                                <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
+                                <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
+                                <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
+                                <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
+                                <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
+                                <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
+                                <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
+                                <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
+                                <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
+                            </div>
+                        </div>
+
+                        <div class="setup-divider"></div>
+
+                        <!-- I Am -->
+                        <div class="setup-section">
+                            <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
+                            <div class="gender-row">
+                                <button type="button" class="gender-pill" data-gender="male">Male</button>
+                                <button type="button" class="gender-pill" data-gender="female">Female</button>
+                                <button type="button" class="gender-pill" data-gender="other">Other</button>
+                            </div>
+                        </div>
+
+                        <!-- Looking For -->
+                        <div class="setup-section">
+                            <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
+                            <div class="gender-row">
+                                <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
+                                <button type="button" class="pref-pill" data-pref="male">Male</button>
+                                <button type="button" class="pref-pill" data-pref="female">Female</button>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Looking For -->
-                    <div class="setup-section">
-                        <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
-                        <div class="gender-row">
-                            <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
-                            <button type="button" class="pref-pill" data-pref="male">Male</button>
-                            <button type="button" class="pref-pill" data-pref="female">Female</button>
-                        </div>
-                    </div>
-
-                    <div class="setup-divider"></div>
-
-                    <!-- Age Gate -->
-                    <label class="age-checkbox" for="age-confirm">
-                        <input type="checkbox" id="age-confirm">
-                        <span class="checkmark"></span>
-                        <span class="check-label">I confirm I am <strong>18 years or older</strong></span>
-                    </label>
 
                     <!-- CTA -->
                     <button id="start-chat-btn" class="cta-btn" disabled>
@@ -205,7 +206,7 @@
                     </button>
                     
                     <div id="friend-invite-banner" class="friend-invite-banner hidden" style="margin-top: var(--sp-2); text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 500;">
-                        <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Confirm age above to join.
+                        <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Ready to join.
                     </div>
                 </div>
 
@@ -819,6 +820,25 @@
             </div>
 
             <button class="btn-secondary" onclick="closeModal('auth-modal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Age Gate Modal -->
+    <div id="age-gate-modal" class="modal">
+        <div class="modal-content confirm-modal-content">
+            <div class="confirm-icon"><i class="ti ti-shield" style="font-size: 32px; color: var(--accent);"></i></div>
+            <h3>Age Verification</h3>
+            <p>You must be <strong>18 years or older</strong> to use Omega Connect. Please confirm your age to continue.</p>
+            <div style="width: 100%; margin: var(--sp-2) 0; display: flex; justify-content: center;">
+                <label class="age-checkbox" for="age-confirm" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
+                    <input type="checkbox" id="age-confirm">
+                    <span class="checkmark" style="position: relative; top: 0; left: 0;"></span>
+                    <span class="check-label">I confirm I am 18+</span>
+                </label>
+            </div>
+            <div class="confirm-buttons" style="width: 100%;">
+                <button class="btn-primary" id="age-gate-accept-btn" style="width: 100%;" disabled>Enter Site</button>
+            </div>
         </div>
     </div>
 

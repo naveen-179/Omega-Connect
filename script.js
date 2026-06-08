@@ -3641,16 +3641,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Landing Page ---
 
-    // Age gate
+    // Age gate & Verification Modal
     const ageCheckbox = document.getElementById('age-confirm');
     const startBtn = document.getElementById('start-chat-btn');
-    if (ageCheckbox && startBtn) {
+    const ageAcceptBtn = document.getElementById('age-gate-accept-btn');
+
+    if (localStorage.getItem('omega_age_verified') === 'true') {
+        if (ageCheckbox) {
+            ageCheckbox.checked = true;
+            if (startBtn) startBtn.disabled = false;
+        }
+    } else {
+        setTimeout(() => {
+            showModal('age-gate');
+        }, 800);
+    }
+
+    if (ageCheckbox) {
         ageCheckbox.addEventListener('change', () => {
-            startBtn.disabled = !ageCheckbox.checked;
+            if (ageAcceptBtn) ageAcceptBtn.disabled = !ageCheckbox.checked;
+            if (startBtn) startBtn.disabled = !ageCheckbox.checked;
         });
+    }
+
+    if (ageAcceptBtn) {
+        ageAcceptBtn.addEventListener('click', () => {
+            if (ageCheckbox && ageCheckbox.checked) {
+                localStorage.setItem('omega_age_verified', 'true');
+                closeModal('age-gate');
+                if (startBtn) startBtn.disabled = false;
+            }
+        });
+    }
+
+    if (startBtn) {
         startBtn.addEventListener('click', e => {
             e.preventDefault();
-            if (ageCheckbox.checked) initChat();
+            if (ageCheckbox && ageCheckbox.checked) initChat();
+        });
+    }
+
+    // Customize Vibe collapsible setup
+    const toggleBtn = document.getElementById('toggle-options-btn');
+    const collapsibleOptions = document.getElementById('collapsible-options');
+    if (toggleBtn && collapsibleOptions) {
+        toggleBtn.addEventListener('click', () => {
+            const isCollapsed = collapsibleOptions.classList.toggle('collapsed');
+            const icon = toggleBtn.querySelector('i');
+            if (icon) {
+                icon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
         });
     }
 
