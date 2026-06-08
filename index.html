@@ -87,11 +87,12 @@
                     <img src="logo-transparent.png" alt="Omega Connect" class="logo-img">
                     <span class="logo-text">Omega Connect</span>
                 </div>
-                <div class="auth-section">
+                <div class="auth-section" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
                     <button id="auth-modal-btn" class="auth-btn" onclick="openAuthModal()">
                         <span id="auth-btn-icon"><i class="ti ti-user" style="font-size: 18px;"></i></span>
-                        <span id="auth-btn-text">Sign In</span>
+                        <span id="auth-btn-text">Save Profile</span>
                     </button>
+                    <span id="auth-optional-label" style="font-size: 11px; color: var(--text-muted); opacity: 0.8; user-select: none;">optional</span>
                 </div>
             </nav>
 
@@ -783,8 +784,8 @@
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content auth-modal-content">
-            <h3 id="auth-title">Sign In to Omega</h3>
-            <p id="auth-subtitle" class="modal-subtitle" style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: -5px;">Save your profile & connect across devices.</p>
+            <h3 id="auth-title">Save your chat identity</h3>
+            <p id="auth-subtitle" class="modal-subtitle" style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: -5px;">Completely optional — you can always chat anonymously without an account.</p>
             
             <div class="auth-tabs">
                 <button id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">Log In</button>

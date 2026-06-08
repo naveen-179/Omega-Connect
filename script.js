@@ -4143,6 +4143,8 @@ function initAuthSystem() {
                 
                 if (authBtnText) authBtnText.textContent = state.username;
                 if (authBtnIcon) authBtnIcon.innerHTML = '<i class="ti ti-circle-check" style="font-size: 18px;"></i>';
+                const optionalLabel = document.getElementById('auth-optional-label');
+                if (optionalLabel) optionalLabel.style.display = 'none';
             } catch (err) {
                 console.error("Error syncing profile:", err);
             }
@@ -4150,8 +4152,10 @@ function initAuthSystem() {
             initUserPresence();
         } else {
             authState.isLoggedIn = false;
-            if (authBtnText) authBtnText.textContent = 'Sign In';
+            if (authBtnText) authBtnText.textContent = 'Save Profile';
             if (authBtnIcon) authBtnIcon.innerHTML = '<i class="ti ti-user" style="font-size: 18px;"></i>';
+            const optionalLabel = document.getElementById('auth-optional-label');
+            if (optionalLabel) optionalLabel.style.display = 'block';
             
             let savedUserId = localStorage.getItem('omega_user_id');
             if (!savedUserId || savedUserId.length > 20) {
@@ -4188,7 +4192,7 @@ function switchAuthTab(mode) {
         tabLogin?.classList.add('active');
         tabSignup?.classList.remove('active');
         usernameGroup?.classList.add('hidden');
-        if (title) title.textContent = 'Sign In to Omega';
+        if (title) title.textContent = 'Save your chat identity';
         if (submitBtn) submitBtn.querySelector('span').textContent = 'Log In';
     }
 }
@@ -4294,7 +4298,7 @@ function openAuthModal() {
             }
         }
     } else {
-        if (title) title.textContent = 'Sign In to Omega';
+        if (title) title.textContent = 'Save your chat identity';
         if (sub) sub.style.display = '';
         if (tabs) tabs.style.display = '';
         if (form) form.style.display = '';
