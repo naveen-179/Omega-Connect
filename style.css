@@ -3478,4 +3478,47 @@ h1, h2, h3 {
   font-family: 'Syne', sans-serif !important;
 }
 
+/* --- Pulsing Glow Button (.cta-glow) --- */
+.cta-glow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: transform var(--duration) var(--ease), box-shadow 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta-glow:not(:disabled) {
+    animation: cta-pulse-glow 2.5s ease-in-out infinite;
+  }
+  .cta-glow:hover:not(:disabled) {
+    animation-play-state: paused;
+  }
+}
+
+.cta-glow:hover:not(:disabled) {
+  transform: scale(1.04);
+}
+
+.cta-glow:disabled {
+  animation: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@keyframes cta-pulse-glow {
+  0% {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  }
+}
+
 
