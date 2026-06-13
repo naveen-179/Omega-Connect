@@ -190,6 +190,72 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+function getStrangerAvatarData(id) {
+    const gradients = [
+        ['#00e5ff', '#0080ff'],
+        ['#a78bfa', '#6d28d9'],
+        ['#ff6eb4', '#be185d'],
+        ['#00ff88', '#059669'],
+        ['#ffaa00', '#d97706'],
+        ['#ff4d6d', '#be123c'],
+        ['#38bdf8', '#0284c7'],
+        ['#fb923c', '#ea580c']
+    ];
+    
+    let code = 0;
+    if (id && id.length > 0) {
+        code = id.charCodeAt(0);
+    } else {
+        code = Math.floor(Math.random() * 100);
+    }
+    
+    const gradientIndex = code % gradients.length;
+    const gradient = gradients[gradientIndex];
+    
+    const adjectives = ["Mysterious", "Silent", "Cosmic", "Neon", "Phantom"];
+    const adjIndex = code % adjectives.length;
+    const adjective = adjectives[adjIndex];
+    const letter = adjective[0].toUpperCase();
+    
+    return {
+        gradient,
+        letter,
+        adjective
+    };
+}
+
+function hexToRgb(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r}, ${g}, ${b}`;
+}
+
+function updateStrangerAvatarUI(avatarEl, avatarUrl, name, id) {
+    if (!avatarEl) return;
+    if (avatarUrl) {
+        avatarEl.innerHTML = `<img src="${avatarUrl}" alt="${escapeHtml(name || 'Stranger')}" class="avatar-img">`;
+        avatarEl.classList.add('has-img');
+        avatarEl.style.background = '';
+        avatarEl.style.boxShadow = '';
+    } else {
+        const avatarData = getStrangerAvatarData(id);
+        avatarEl.textContent = avatarData.letter;
+        avatarEl.classList.remove('has-img');
+        avatarEl.style.background = `linear-gradient(135deg, ${avatarData.gradient[0]}, ${avatarData.gradient[1]})`;
+        avatarEl.style.boxShadow = `0 0 10px rgba(${hexToRgb(avatarData.gradient[0])}, 0.4)`;
+        avatarEl.style.width = '36px';
+        avatarEl.style.height = '36px';
+        avatarEl.style.borderRadius = '50%';
+        avatarEl.style.display = 'flex';
+        avatarEl.style.alignItems = 'center';
+        avatarEl.style.justifyContent = 'center';
+        avatarEl.style.fontWeight = '700';
+        avatarEl.style.color = '#fff';
+        avatarEl.style.fontSize = '14px';
+    }
+}
+
 function filterBadWords(text) {
     let filtered = text;
     BAD_WORDS.forEach(word => {
@@ -761,13 +827,7 @@ function startChat(commonInterests = []) {
     
     if (nameEl) nameEl.textContent = state.partnerName || 'Stranger';
     if (avatarEl) {
-        if (state.partnerAvatar) {
-            avatarEl.innerHTML = `<img src="${state.partnerAvatar}" alt="${escapeHtml(state.partnerName || 'Stranger')}" class="avatar-img">`;
-            avatarEl.classList.add('has-img');
-        } else {
-            avatarEl.textContent = (state.partnerName || '?')[0].toUpperCase();
-            avatarEl.classList.remove('has-img');
-        }
+        updateStrangerAvatarUI(avatarEl, state.partnerAvatar, state.partnerName, state.partnerId || state.chatId);
     }
     if (statusEl) statusEl.innerHTML = '<span class="status-dot"></span>Online';
 
@@ -2987,13 +3047,7 @@ async function startCall() {
 
     const statusAvatar = document.getElementById('call-status-avatar');
     if (statusAvatar) {
-        if (state.partnerAvatar) {
-            statusAvatar.innerHTML = `<img src="${state.partnerAvatar}" class="avatar-img">`;
-            statusAvatar.classList.add('has-img');
-        } else {
-            statusAvatar.textContent = (state.partnerName || '?')[0].toUpperCase();
-            statusAvatar.classList.remove('has-img');
-        }
+        updateStrangerAvatarUI(statusAvatar, state.partnerAvatar, state.partnerName, state.partnerId || state.chatId);
     }
 
     try {
@@ -3104,13 +3158,7 @@ async function acceptCall() {
 
     const statusAvatar = document.getElementById('call-status-avatar');
     if (statusAvatar) {
-        if (state.partnerAvatar) {
-            statusAvatar.innerHTML = `<img src="${state.partnerAvatar}" class="avatar-img">`;
-            statusAvatar.classList.add('has-img');
-        } else {
-            statusAvatar.textContent = (state.partnerName || '?')[0].toUpperCase();
-            statusAvatar.classList.remove('has-img');
-        }
+        updateStrangerAvatarUI(statusAvatar, state.partnerAvatar, state.partnerName, state.partnerId || state.chatId);
     }
 
     try {
@@ -3471,13 +3519,7 @@ function listenForIncomingCalls() {
                 const avatarEl = document.getElementById('incoming-call-avatar');
                 if (nameEl) nameEl.textContent = state.partnerName || 'Stranger';
                 if (avatarEl) {
-                    if (state.partnerAvatar) {
-                        avatarEl.innerHTML = `<img src="${state.partnerAvatar}" alt="Avatar" class="avatar-img">`;
-                        avatarEl.classList.add('has-img');
-                    } else {
-                        avatarEl.textContent = (state.partnerName || '?')[0].toUpperCase();
-                        avatarEl.classList.remove('has-img');
-                    }
+                    updateStrangerAvatarUI(avatarEl, state.partnerAvatar, state.partnerName, state.partnerId || state.chatId);
                 }
                 showModal('incoming-call');
                 playSound('receive');
