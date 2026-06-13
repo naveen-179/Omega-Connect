@@ -3754,35 +3754,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Landing Page ---
 
-    // Age gate & Verification Modal
+    // Age gate & Verification Modal (Immersive Experience)
     const ageCheckbox = document.getElementById('age-confirm');
     const startBtn = document.getElementById('start-chat-btn');
-    const ageAcceptBtn = document.getElementById('age-gate-accept-btn');
+    const ageGate = document.getElementById('age-gate-modal');
+    const enterBtn = document.getElementById('immersive-enter-btn');
 
     if (localStorage.getItem('omega_age_verified') === 'true') {
-        if (ageCheckbox) {
-            ageCheckbox.checked = true;
-            if (startBtn) startBtn.disabled = false;
-        }
+        if (ageCheckbox) ageCheckbox.checked = true;
+        if (startBtn) startBtn.disabled = false;
+        if (ageGate) ageGate.remove(); // Remove immediately from DOM if verified
     } else {
-        setTimeout(() => {
-            showModal('age-gate');
-        }, 800);
+        if (ageGate) {
+            ageGate.style.display = 'flex';
+            ageGate.classList.add('active');
+        }
     }
 
-    if (ageCheckbox) {
-        ageCheckbox.addEventListener('change', () => {
-            if (ageAcceptBtn) ageAcceptBtn.disabled = !ageCheckbox.checked;
-            if (startBtn) startBtn.disabled = !ageCheckbox.checked;
-        });
-    }
-
-    if (ageAcceptBtn) {
-        ageAcceptBtn.addEventListener('click', () => {
-            if (ageCheckbox && ageCheckbox.checked) {
-                localStorage.setItem('omega_age_verified', 'true');
-                closeModal('age-gate');
-                if (startBtn) startBtn.disabled = false;
+    if (enterBtn) {
+        enterBtn.addEventListener('click', () => {
+            localStorage.setItem('omega_age_verified', 'true');
+            if (ageCheckbox) ageCheckbox.checked = true;
+            if (startBtn) startBtn.disabled = false;
+            
+            if (ageGate) {
+                ageGate.classList.add('fade-out');
+                setTimeout(() => {
+                    ageGate.remove();
+                }, 400);
             }
         });
     }

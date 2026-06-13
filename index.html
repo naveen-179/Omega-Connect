@@ -984,22 +984,26 @@
         </div>
     </div>
 
-    <!-- Age Gate Modal -->
-    <div id="age-gate-modal" class="modal">
-        <div class="modal-content confirm-modal-content">
-            <div class="confirm-icon"><i class="ti ti-shield" style="font-size: 32px; color: var(--accent);"></i></div>
-            <h3>Age Verification</h3>
-            <p>You must be <strong>18 years or older</strong> to use Omega Connect. Please confirm your age to continue.</p>
-            <div style="width: 100%; margin: var(--sp-2) 0; display: flex; justify-content: center;">
-                <label class="age-checkbox" for="age-confirm" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
-                    <input type="checkbox" id="age-confirm">
-                    <span class="checkmark" style="position: relative; top: 0; left: 0;"></span>
-                    <span class="check-label">I confirm I am 18+</span>
-                </label>
+    <!-- Age Gate Immersive Experience -->
+    <div id="age-gate-modal" class="immersive-gate" style="display: none;">
+        <!-- Hidden input to satisfy legacy age-confirm checks -->
+        <input type="checkbox" id="age-confirm" style="display: none;">
+        <div class="immersive-gate-content">
+            <h1 class="immersive-logo">Omega Connect</h1>
+            <p class="immersive-tagline">Video &middot; Chat &middot; Games &middot; Draw &mdash; All Anonymous</p>
+            <div class="immersive-pills">
+                <span class="immersive-pill">🔒 No Signup</span>
+                <span class="immersive-pill">🗑 Auto-Deleted</span>
+                <span class="immersive-pill">👁 Zero Tracking</span>
             </div>
-            <div class="confirm-buttons" style="width: 100%;">
-                <button class="btn-primary" id="age-gate-accept-btn" style="width: 100%;" disabled>Enter Site</button>
-            </div>
+            <p class="immersive-warning">🔞 This platform is for adults only</p>
+            <button id="immersive-enter-btn" class="immersive-cta">I'm 18 or older &mdash; Enter &rarr;</button>
+            <p class="immersive-footer">
+                By entering you agree to our 
+                <a href="#" onclick="showModal('terms');return false">Terms</a> &middot; 
+                <a href="#" onclick="showModal('privacy');return false">Privacy</a> &middot; 
+                <a href="#" onclick="showModal('safety');return false">Safety</a>
+            </p>
         </div>
     </div>
 
