@@ -142,6 +142,73 @@
                     </div>
                 </div>
 
+                <!-- Choose Your Vibe Section -->
+                <div class="vibe-rooms-section">
+                    <h2 class="vibe-rooms-title">Choose Your Vibe</h2>
+                    <div class="vibe-rooms-grid">
+                        <!-- 🎮 Gaming Hub -->
+                        <div class="vibe-card room-card" data-room="gaming" style="--room-color: #00ff88; --room-color-rgb: 0, 255, 136;">
+                            <div class="vibe-card-icon">🎮</div>
+                            <div class="vibe-card-info">
+                                <h3 class="vibe-card-name">Gaming Hub</h3>
+                                <p class="vibe-card-desc">Find co-op partners & gaming buddies</p>
+                            </div>
+                            <div class="vibe-card-bottom">
+                                <span class="vibe-online-counter">● 142 online</span>
+                                <button class="vibe-join-btn">Join &rarr;</button>
+                            </div>
+                        </div>
+                        <!-- 🌙 Midnight Lounge -->
+                        <div class="vibe-card room-card" data-room="lounge" style="--room-color: #a78bfa; --room-color-rgb: 167, 139, 250;">
+                            <div class="vibe-card-icon">🌙</div>
+                            <div class="vibe-card-info">
+                                <h3 class="vibe-card-name">Midnight Lounge</h3>
+                                <p class="vibe-card-desc">Deep talks & late night vibes</p>
+                            </div>
+                            <div class="vibe-card-bottom">
+                                <span class="vibe-online-counter">● 98 online</span>
+                                <button class="vibe-join-btn">Join &rarr;</button>
+                            </div>
+                        </div>
+                        <!-- ⛩️ Otaku Cafe -->
+                        <div class="vibe-card room-card" data-room="anime" style="--room-color: #ff6eb4; --room-color-rgb: 255, 110, 180;">
+                            <div class="vibe-card-icon">⛩️</div>
+                            <div class="vibe-card-info">
+                                <h3 class="vibe-card-name">Otaku Cafe</h3>
+                                <p class="vibe-card-desc">Anime, manga & pop culture</p>
+                            </div>
+                            <div class="vibe-card-bottom">
+                                <span class="vibe-online-counter">● 75 online</span>
+                                <button class="vibe-join-btn">Join &rarr;</button>
+                            </div>
+                        </div>
+                        <!-- 📚 Study Room -->
+                        <div class="vibe-card room-card" data-room="study" style="--room-color: #00e5ff; --room-color-rgb: 0, 229, 255;">
+                            <div class="vibe-card-icon">📚</div>
+                            <div class="vibe-card-info">
+                                <h3 class="vibe-card-name">Study Room</h3>
+                                <p class="vibe-card-desc">Focus, set goals, learn together</p>
+                            </div>
+                            <div class="vibe-card-bottom">
+                                <span class="vibe-online-counter">● 56 online</span>
+                                <button class="vibe-join-btn">Join &rarr;</button>
+                            </div>
+                        </div>
+                        <!-- 🌍 Global Chat -->
+                        <div class="vibe-card room-card active" data-room="general" style="--room-color: #ffaa00; --room-color-rgb: 255, 170, 0;">
+                            <div class="vibe-card-icon">🌍</div>
+                            <div class="vibe-card-info">
+                                <h3 class="vibe-card-name">Global Chat</h3>
+                                <p class="vibe-card-desc">Meet anyone, from anywhere</p>
+                            </div>
+                            <div class="vibe-card-bottom">
+                                <span class="vibe-online-counter">● 318 online</span>
+                                <button class="vibe-join-btn">Join &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Setup Card -->
                 <div class="setup-card">
 
@@ -154,34 +221,6 @@
                         <div id="recent-connections-list" class="recent-list"></div>
                     </div>
                     <div id="recent-connections-divider" class="setup-divider" style="display: none;"></div>
-
-                    <!-- Vibe Rooms -->
-                    <div class="setup-section">
-                        <p class="setup-label"><i class="ti ti-message-circle" style="font-size: 18px;"></i> Choose a Vibe Room</p>
-                        <div class="rooms-grid">
-                            <div class="room-card active" data-room="general">
-                                <div class="room-emoji"><i class="ti ti-world" style="font-size: 18px;"></i></div>
-                                <div class="room-info">
-                                    <div class="room-name">Global Chat</div>
-                                    <div class="room-desc">Meet anyone, talk about anything</div>
-                                </div>
-                            </div>
-                            <div class="room-card" data-room="study">
-                                <div class="room-emoji"><i class="ti ti-book" style="font-size: 18px;"></i></div>
-                                <div class="room-info">
-                                    <div class="room-name">Study Room</div>
-                                    <div class="room-desc">Focus, share goals & learn together</div>
-                                </div>
-                            </div>
-                            <div class="room-card" id="vibe-room-selector-card">
-                                <div class="room-emoji" id="vibe-parent-emoji"><i class="ti ti-sparkles" style="font-size: 18px;"></i></div>
-                                <div class="room-info">
-                                    <div class="room-name" id="vibe-parent-name">Vibe Rooms</div>
-                                    <div class="room-desc" id="vibe-parent-desc">Gaming, Midnight Lounge, Anime</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Collapsible Trigger -->
                     <div class="setup-section" style="padding-bottom: 0;">

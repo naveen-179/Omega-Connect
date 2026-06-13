@@ -2332,48 +2332,140 @@ a:focus-visible {
   }
 }
 
-.room-card {
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: var(--sp-3);
+/* --- Choose Your Vibe Section --- */
+.vibe-rooms-section {
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 40px var(--sp-4);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--sp-3);
+  gap: var(--sp-5);
+  box-sizing: border-box;
+}
+
+.vibe-rooms-title {
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700;
+  font-size: 2.25rem;
+  text-align: center;
+  margin: 0;
+  background: linear-gradient(135deg, #00e5ff, #a78bfa, #ff6eb4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+}
+
+.vibe-rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.vibe-card.room-card {
+  background-color: #0e0e20;
+  background-image: radial-gradient(circle at 15% 20%, rgba(var(--room-color-rgb), 0.06) 0%, transparent 80%);
+  border: 1px solid rgba(var(--room-color-rgb), 0.3);
+  border-radius: 14px;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
   cursor: pointer;
-  transition: all var(--duration) var(--ease);
-  user-select: none;
   position: relative;
   overflow: hidden;
+  min-height: 160px;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  user-select: none;
+  box-sizing: border-box;
 }
 
-.room-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+.vibe-card.room-card.active {
+  border-color: rgba(var(--room-color-rgb), 0.8) !important;
+  box-shadow: 0 0 20px rgba(var(--room-color-rgb), 0.25);
+  background-color: rgba(var(--room-color-rgb), 0.1) !important;
+}
+
+.vibe-card.room-card:hover {
+  border-color: rgba(var(--room-color-rgb), 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(var(--room-color-rgb), 0.15);
+}
+
+.vibe-card-icon {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: var(--sp-1);
+}
+
+.vibe-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.vibe-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #e2e2f0;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.vibe-card-desc {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.vibe-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 10% 20%, rgba(255, 111, 97, 0.08) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity var(--duration) var(--ease);
-  pointer-events: none;
+  margin-top: auto;
+  padding-top: var(--sp-2);
 }
 
-.room-card:hover {
-  border-color: rgba(255, 111, 97, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+.vibe-online-counter {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--room-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.room-card:hover::before {
-  opacity: 1;
+.vibe-join-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.room-card.active {
-  background: var(--accent-muted);
-  border-color: var(--accent);
-  box-shadow: 0 0 15px rgba(255, 111, 97, 0.2);
+.vibe-card.room-card:hover .vibe-join-btn {
+  background: var(--room-color);
+  color: #07070f;
+}
+
+.vibe-card.room-card.active .vibe-join-btn {
+  background: var(--room-color);
+  color: #07070f;
 }
 
 .sub-room-card {
@@ -2390,42 +2482,6 @@ a:focus-visible {
   background: var(--accent-muted) !important;
   border-color: var(--accent) !important;
   box-shadow: 0 0 10px rgba(255, 111, 97, 0.15);
-}
-
-/* Make Global Chat span 2 columns on desktop/tablet */
-@media (min-width: 481px) {
-  .room-card[data-room="general"] {
-    grid-column: span 2;
-  }
-}
-
-.room-emoji {
-  font-size: 1.8rem;
-  flex-shrink: 0;
-  transition: transform var(--duration) var(--ease);
-}
-
-.room-card:hover .room-emoji {
-  transform: scale(1.15) rotate(5deg);
-}
-
-.room-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.room-name {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.room-desc {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  line-height: 1.3;
 }
 
 /* ============================================================
