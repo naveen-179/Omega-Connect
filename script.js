@@ -3060,6 +3060,7 @@ async function startCall() {
         });
 
         db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/status`).onDisconnect().set('ended').catch(() => {});
+        startListeningForPartnerFilters();
 
         const answerRef = db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/answer`);
         state.listeners.callAnswer = answerRef;
@@ -3181,6 +3182,7 @@ async function acceptCall() {
         });
 
         optimizeVideoBitrate(state.peerConnection);
+        startListeningForPartnerFilters();
 
         const offerCandidatesRef = db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/offerCandidates`);
         state.listeners.callOfferCandidates = offerCandidatesRef;
@@ -3242,10 +3244,11 @@ function endCallLocal() {
     if (state.chatId) {
         try {
             db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/status`).onDisconnect().cancel();
+            db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/filters`).remove().catch(() => {});
         } catch(e) {}
     }
 
-    const callListeners = ['callAnswer', 'callAnswerCandidates', 'callOfferCandidates'];
+    const callListeners = ['callAnswer', 'callAnswerCandidates', 'callOfferCandidates', 'callFilters'];
     callListeners.forEach(key => {
         if (state.listeners[key]) {
             state.listeners[key].off();
@@ -3549,6 +3552,27 @@ function initCallSystem() {
     }
 }
 
+function startListeningForPartnerFilters() {
+    if (!state.chatId || !state.partnerId) return;
+
+    if (state.listeners.callFilters) {
+        state.listeners.callFilters.off();
+    }
+
+    const filterRef = db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/filters/${state.partnerId}`);
+    state.listeners.callFilters = filterRef;
+
+    filterRef.on('value', snap => {
+        const filter = snap.val() || 'none';
+        const remoteVideo = document.getElementById('remote-video');
+        if (remoteVideo) {
+            const allFilters = ['filter-none', 'filter-vhs', 'filter-neon', 'filter-warm', 'filter-noir', 'filter-chrome'];
+            allFilters.forEach(f => remoteVideo.classList.remove(f));
+            remoteVideo.classList.add('filter-' + filter);
+        }
+    });
+}
+
 function initCallFilters() {
     const toggleFiltersBtn = document.getElementById('toggle-filters-btn');
     const filterDrawer = document.getElementById('filter-drawer');
@@ -3585,7 +3609,10 @@ function initCallFilters() {
             };
 
             applyFilterToElement(localVideo, 'local-video');
-            applyFilterToElement(remoteVideo, 'remote-video');
+            
+            if (state.chatId && state.userId) {
+                db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/filters/${state.userId}`).set(selectedFilter).catch(e => console.error(e));
+            }
         });
     });
 
