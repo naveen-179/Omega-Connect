@@ -3687,6 +3687,36 @@ function saveChat() {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Feature Showcase scroll animation
+    const showcaseCards = document.querySelectorAll('.showcase-card');
+    if (showcaseCards.length > 0) {
+        showcaseCards.forEach((card, index) => {
+            card.style.transitionDelay = `${index * 100}ms`;
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const showcaseObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Remove transition delay after animation completes so hover effects are instant
+                    setTimeout(() => {
+                        entry.target.style.transitionDelay = '';
+                    }, 1000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        showcaseCards.forEach(card => {
+            showcaseObserver.observe(card);
+        });
+    }
+
     // Parse friend query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const friendParam = urlParams.get('friend');
