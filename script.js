@@ -276,6 +276,7 @@ function setChatControlsEnabled(enabled) {
     const gameBtn = document.getElementById('gameBtn');
     const questionBtn = document.getElementById('questionBtn');
     const drawBtn = document.getElementById('drawBtn');
+    const secretBtn = document.getElementById('secretBtn');
     const voiceBtn = document.getElementById('voiceBtn');
     const playBtn = document.getElementById('playBtn');
     const playMenu = document.getElementById('playMenu');
@@ -294,6 +295,7 @@ function setChatControlsEnabled(enabled) {
     if (gameBtn) gameBtn.disabled = !enabled;
     if (questionBtn) questionBtn.disabled = !enabled;
     if (drawBtn) drawBtn.disabled = !enabled;
+    if (secretBtn) secretBtn.disabled = !enabled;
     if (voiceBtn) voiceBtn.disabled = !enabled;
     if (playBtn) playBtn.disabled = !enabled;
     if (playMenu && !enabled) playMenu.classList.add('hidden');
@@ -3966,10 +3968,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBtn = document.getElementById('gameBtn');
     const questionBtn = document.getElementById('questionBtn');
     const drawBtn = document.getElementById('drawBtn');
+    const secretBtn = document.getElementById('secretBtn');
+    const gameSelectDrawBtn = document.getElementById('game-select-draw-btn');
     
     if (gameBtn) gameBtn.addEventListener('click', openGameModal);
     if (questionBtn) questionBtn.addEventListener('click', showQuestionPicker);
     if (drawBtn) drawBtn.addEventListener('click', () => showModal('drawing'));
+    if (secretBtn) {
+        secretBtn.addEventListener('click', () => {
+            showToast("Secret Messages: Anonymous one-time notes coming soon!");
+        });
+    }
+    if (gameSelectDrawBtn) {
+        gameSelectDrawBtn.addEventListener('click', () => {
+            closeModal('game-modal');
+            showModal('drawing');
+        });
+    }
 
     // Play button & menu setup
     const playBtn = document.getElementById('playBtn');

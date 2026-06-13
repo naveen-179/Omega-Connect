@@ -1272,31 +1272,58 @@ h3 { font-size: 1.2rem; }
 .chat-tools {
   display: flex;
   align-items: center;
-  gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4) 0;
-  background: var(--bg-surface);
-  border-top: 1px solid var(--border);
-  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(11, 11, 28, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 229, 255, 0.08);
+  flex-wrap: nowrap;
+  justify-content: space-around;
 }
 
 .tool-chip {
-  padding: var(--sp-1) var(--sp-3);
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  transition: all var(--duration) var(--ease);
+  flex: 1;
+  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 229, 255, 0.1);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.tool-chip .tool-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.tool-chip .tool-label {
+  font-size: 9px;
+  color: #555;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.15s ease;
 }
 
 .tool-chip:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: rgba(0, 229, 255, 0.3);
+  background: rgba(0, 229, 255, 0.06);
+}
+
+.tool-chip:hover .tool-label {
+  color: #888;
 }
 
 .tool-chip:disabled {
-  opacity: 0.35;
+  opacity: 0.25;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -3835,4 +3862,129 @@ h1, h2, h3 {
 .immersive-footer a:hover {
   color: #777;
   text-decoration: underline;
+}
+
+/* --- Game Picker Modal Redesign --- */
+.game-modal-content {
+  background: rgba(14, 14, 32, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(0, 229, 255, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+  max-width: 500px !important;
+  width: 90% !important;
+}
+
+.game-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #00e5ff, #a78bfa, #ff6eb4);
+  z-index: 2;
+}
+
+.game-picker-title {
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.game-picker-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  margin-top: 0;
+  text-align: left;
+}
+
+.game-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 480px) {
+  .game-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.game-card {
+  background: rgba(var(--accent-rgb), 0.07);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.game-card:hover {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.game-card-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.game-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.game-card-desc {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.game-card-action {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: auto;
+  letter-spacing: 0.05em;
+}
+
+.close-game-picker {
+  width: 100%;
+  padding: 12px !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-primary) !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+}
+
+.close-game-picker:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }

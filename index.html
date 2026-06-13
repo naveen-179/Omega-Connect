@@ -462,9 +462,22 @@
 
         <!-- Chat Tools -->
         <div class="chat-tools">
-            <button class="tool-chip" id="gameBtn"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Game</button>
-            <button class="tool-chip" id="questionBtn"><i class="ti ti-help" style="font-size: 18px;"></i> Question</button>
-            <button class="tool-chip" id="drawBtn"><i class="ti ti-pencil" style="font-size: 18px;"></i> Draw</button>
+            <button class="tool-chip" id="gameBtn">
+                <span class="tool-icon">🎲</span>
+                <span class="tool-label">Games</span>
+            </button>
+            <button class="tool-chip" id="questionBtn">
+                <span class="tool-icon">❓</span>
+                <span class="tool-label">Questions</span>
+            </button>
+            <button class="tool-chip" id="drawBtn">
+                <span class="tool-icon">✏️</span>
+                <span class="tool-label">Draw</span>
+            </button>
+            <button class="tool-chip" id="secretBtn">
+                <span class="tool-icon">🎁</span>
+                <span class="tool-label">Secret</span>
+            </button>
             <div id="smartReplies" class="smart-replies"></div>
         </div>
 
@@ -544,14 +557,39 @@
             <div class="modal-content game-modal-content">
                 <!-- Selection Screen -->
                 <div id="game-selection-screen">
-                    <h3><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Chat Games</h3>
-                    <p style="margin-bottom: var(--sp-3);">Choose a game to play with Stranger:</p>
-                    <div class="modal-buttons">
-                        <button class="btn-primary" id="select-td-btn"><i class="ti ti-target" style="font-size: 18px;"></i> Truth or Dare</button>
-                        <button class="btn-primary" id="select-ttt-btn"><i class="ti ti-x" style="font-size: 18px;"></i> Tic-Tac-Toe</button>
-                        <button class="btn-primary" id="select-poll-btn"><i class="ti ti-chart-bar" style="font-size: 18px;"></i> Would You Rather?</button>
-                        <button class="btn-secondary" style="margin-top: var(--sp-2);" onclick="closeModal('game-modal')">Close</button>
+                    <h3 class="game-picker-title">Chat Games</h3>
+                    <p class="game-picker-subtitle">Choose a game to play with Stranger:</p>
+                    <div class="game-cards-grid">
+                        <!-- Card 1: Truth or Dare -->
+                        <div class="game-card" id="select-td-btn" style="--accent: #ff6eb4; --accent-glow: rgba(255, 110, 180, 0.15); --accent-rgb: 255, 110, 180;">
+                            <div class="game-card-icon">🎭</div>
+                            <h4 class="game-card-name">Truth or Dare</h4>
+                            <p class="game-card-desc">Reveal secrets or face a dare</p>
+                            <div class="game-card-action">PLAY NOW &rarr;</div>
+                        </div>
+                        <!-- Card 2: Tic-Tac-Toe -->
+                        <div class="game-card" id="select-ttt-btn" style="--accent: #00e5ff; --accent-glow: rgba(0, 229, 255, 0.15); --accent-rgb: 0, 229, 255;">
+                            <div class="game-card-icon">❌⭕</div>
+                            <h4 class="game-card-name">Tic-Tac-Toe</h4>
+                            <p class="game-card-desc">Classic 3-in-a-row battle</p>
+                            <div class="game-card-action">PLAY NOW &rarr;</div>
+                        </div>
+                        <!-- Card 3: Would You Rather? -->
+                        <div class="game-card" id="select-poll-btn" style="--accent: #ffaa00; --accent-glow: rgba(255, 170, 0, 0.15); --accent-rgb: 255, 170, 0;">
+                            <div class="game-card-icon">⚖️</div>
+                            <h4 class="game-card-name">Would You Rather?</h4>
+                            <p class="game-card-desc">Impossible choices, real opinions</p>
+                            <div class="game-card-action">PLAY NOW &rarr;</div>
+                        </div>
+                        <!-- Card 4: Draw Together -->
+                        <div class="game-card" id="game-select-draw-btn" style="--accent: #00ff88; --accent-glow: rgba(0, 255, 136, 0.15); --accent-rgb: 0, 255, 136;">
+                            <div class="game-card-icon">✏️</div>
+                            <h4 class="game-card-name">Draw Together</h4>
+                            <p class="game-card-desc">Live collaborative canvas</p>
+                            <div class="game-card-action">PLAY NOW &rarr;</div>
+                        </div>
                     </div>
+                    <button class="btn-secondary close-game-picker" onclick="closeModal('game-modal')">Close</button>
                 </div>
 
                 <!-- Truth or Dare Panel -->
