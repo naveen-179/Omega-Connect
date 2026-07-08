@@ -37,6 +37,26 @@ const CONFIG = {
     }
 };
 
+const ROOM_USER_COUNTS = {
+    gaming: '312',
+    lounge: '189',
+    anime: '244',
+    study: '97',
+    general: '1.2K'
+};
+
+function updateWaitCountUI(isFriend = false) {
+    const countEl = document.getElementById('wait-count');
+    if (!countEl) return;
+    if (isFriend) {
+        countEl.textContent = '';
+    } else {
+        const room = state.selectedRoom || 'general';
+        const count = ROOM_USER_COUNTS[room] || '';
+        countEl.textContent = count ? `${count} ` : '';
+    }
+}
+
 const EMOJIS = {
     smileys: ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😝','😜','🤪','🤨','🧐','🤓','😎','🥸','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤗','🤔','🤭','🤫','🤥','😶','😐','😑','😬','🙄','😯','😧','😮','😲','🥱','😴','🤤','😪','😵','🤐','🥴','🤢','🤮','🤧','😷','🤒','🤕'],
     hands: ['👋','🤚','🖐','✋','🖖','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','✍️','💪','🦾','👂','👃','👀','👅','👄','💋'],
@@ -136,6 +156,7 @@ const state = {
     pollGameActive: false, // Would You Rather state
     initiatedPoll: false,
     pendingReconnectPartnerId: null, // Reconnect state
+    reconnectFromDisconnectModal: false,
     showingInviteFromId: null,       // Track currently showing invite sender
     localStream: null,               // WebRTC local stream
     remoteStream: null,              // WebRTC remote stream
@@ -192,35 +213,43 @@ function escapeHtml(text) {
 
 function getStrangerAvatarData(id) {
     const gradients = [
-        ['#00e5ff', '#0080ff'],
-        ['#a78bfa', '#6d28d9'],
-        ['#ff6eb4', '#be185d'],
-        ['#00ff88', '#059669'],
-        ['#ffaa00', '#d97706'],
-        ['#ff4d6d', '#be123c'],
-        ['#38bdf8', '#0284c7'],
-        ['#fb923c', '#ea580c']
+        ['#00e5ff','#0080ff'],
+        ['#a78bfa','#6d28d9'],
+        ['#ff6eb4','#be185d'],
+        ['#00ff88','#059669'],
+        ['#ffaa00','#d97706'],
+        ['#ff4d6d','#be123c'],
+        ['#38bdf8','#0284c7'],
+        ['#fb923c','#ea580c']
     ];
     
-    let code = 0;
+    const codenames = ['Phantom','Ghost','Neon','Void','Cosmic','Shadow','Pulse','Echo'];
+    
+    let idx = 0;
     if (id && id.length > 0) {
-        code = id.charCodeAt(0);
+        const lastChar = id.slice(-1);
+        const parsed = parseInt(lastChar, 16);
+        if (!isNaN(parsed)) {
+            idx = parsed % 8;
+        } else {
+            let sum = 0;
+            for (let i = 0; i < id.length; i++) {
+                sum += id.charCodeAt(i);
+            }
+            idx = sum % 8;
+        }
     } else {
-        code = Math.floor(Math.random() * 100);
+        idx = Math.floor(Math.random() * 8);
     }
     
-    const gradientIndex = code % gradients.length;
-    const gradient = gradients[gradientIndex];
-    
-    const adjectives = ["Mysterious", "Silent", "Cosmic", "Neon", "Phantom"];
-    const adjIndex = code % adjectives.length;
-    const adjective = adjectives[adjIndex];
-    const letter = adjective[0].toUpperCase();
+    const gradient = gradients[idx];
+    const codename = codenames[idx];
+    const letter = codename[0];
     
     return {
         gradient,
         letter,
-        adjective
+        codename
     };
 }
 
@@ -243,16 +272,17 @@ function updateStrangerAvatarUI(avatarEl, avatarUrl, name, id) {
         avatarEl.textContent = avatarData.letter;
         avatarEl.classList.remove('has-img');
         avatarEl.style.background = `linear-gradient(135deg, ${avatarData.gradient[0]}, ${avatarData.gradient[1]})`;
-        avatarEl.style.boxShadow = `0 0 10px rgba(${hexToRgb(avatarData.gradient[0])}, 0.4)`;
-        avatarEl.style.width = '36px';
-        avatarEl.style.height = '36px';
+        avatarEl.style.boxShadow = `0 0 12px rgba(${hexToRgb(avatarData.gradient[0])}, 0.35)`;
+        const isIncoming = avatarEl.classList.contains('incoming-avatar');
+        avatarEl.style.width = isIncoming ? '72px' : '38px';
+        avatarEl.style.height = isIncoming ? '72px' : '38px';
         avatarEl.style.borderRadius = '50%';
         avatarEl.style.display = 'flex';
         avatarEl.style.alignItems = 'center';
         avatarEl.style.justifyContent = 'center';
+        avatarEl.style.fontSize = isIncoming ? '28px' : '16px';
         avatarEl.style.fontWeight = '700';
-        avatarEl.style.color = '#fff';
-        avatarEl.style.fontSize = '14px';
+        avatarEl.style.color = 'rgba(255, 255, 255, 0.9)';
     }
 }
 
@@ -325,6 +355,26 @@ function showPage(pageId) {
 function showModal(id) {
     const modal = document.getElementById(id + '-modal') || document.getElementById(id);
     if (modal) {
+        if (id === 'leave-chat' || id === 'leave-chat-modal') {
+            const statsBar = document.getElementById('leave-chat-stats');
+            if (state.chatStartTime) {
+                const duration = formatDuration(Date.now() - state.chatStartTime);
+                const leaveDur = document.getElementById('leave-duration');
+                const leaveMsg = document.getElementById('leave-message-count');
+                if (leaveDur) leaveDur.textContent = duration;
+                if (leaveMsg) leaveMsg.textContent = state.messageCount;
+                if (statsBar) statsBar.style.display = 'flex';
+            } else {
+                if (statsBar) statsBar.style.display = 'none';
+            }
+        }
+        if (id === 'drawing' || id === 'drawing-modal') {
+            const brushModeBtn = document.getElementById('draw-mode-brush');
+            if (brushModeBtn) brushModeBtn.click();
+            if (state.chatId && state.isConnected) {
+                db.ref(`activeChats/${state.chatId}/drawActive`).set(state.userId);
+            }
+        }
         modal.style.display = '';
         modal.classList.add('active');
     }
@@ -332,7 +382,17 @@ function showModal(id) {
 
 function closeModal(id) {
     const modal = document.getElementById(id) || document.getElementById(id + '-modal');
-    if (modal) modal.classList.remove('active');
+    if (modal) {
+        modal.classList.remove('active');
+        if (id === 'drawing' || id === 'drawing-modal') {
+            if (state.chatId && state.isConnected) {
+                db.ref(`activeChats/${state.chatId}/drawActive`).transaction(curr => {
+                    if (curr === state.userId) return null;
+                    return curr;
+                });
+            }
+        }
+    }
 }
 
 function setChatControlsEnabled(enabled) {
@@ -342,10 +402,7 @@ function setChatControlsEnabled(enabled) {
     const gameBtn = document.getElementById('gameBtn');
     const questionBtn = document.getElementById('questionBtn');
     const drawBtn = document.getElementById('drawBtn');
-    const secretBtn = document.getElementById('secretBtn');
     const voiceBtn = document.getElementById('voiceBtn');
-    const playBtn = document.getElementById('playBtn');
-    const playMenu = document.getElementById('playMenu');
 
     if (input) {
         input.disabled = !enabled;
@@ -361,10 +418,7 @@ function setChatControlsEnabled(enabled) {
     if (gameBtn) gameBtn.disabled = !enabled;
     if (questionBtn) questionBtn.disabled = !enabled;
     if (drawBtn) drawBtn.disabled = !enabled;
-    if (secretBtn) secretBtn.disabled = !enabled;
     if (voiceBtn) voiceBtn.disabled = !enabled;
-    if (playBtn) playBtn.disabled = !enabled;
-    if (playMenu && !enabled) playMenu.classList.add('hidden');
 }
 
 function scrollToBottom() {
@@ -392,6 +446,12 @@ function getInterestLabel(key) {
 // ============================================
 
 const db = window.db;
+let serverTimeOffset = 0;
+if (db) {
+    db.ref('.info/serverTimeOffset').on('value', snap => {
+        serverTimeOffset = snap.val() || 0;
+    });
+}
 
 function joinQueue() {
     if (!state.userId) return;
@@ -426,9 +486,15 @@ async function getWaitingUsers() {
         const snap = await db.ref(CONFIG.PATHS.QUEUE).once('value');
         if (!snap.exists()) return [];
         const users = [];
+        const serverTime = Date.now() + serverTimeOffset;
         snap.forEach(child => {
-            if (child.key !== state.userId) {
-                users.push({ id: child.key, ...child.val() });
+            const val = child.val();
+            if (child.key !== state.userId && val && !val.matched) {
+                // Heartbeat check: must have been updated in last 15 seconds
+                const age = serverTime - (val.timestamp || 0);
+                if (age < 15000) {
+                    users.push({ id: child.key, ...val });
+                }
             }
         });
         return users;
@@ -635,6 +701,7 @@ function generateFriendLink() {
     }
     const waitTimeEl = document.getElementById('wait-time');
     if (waitTimeEl) waitTimeEl.textContent = '0';
+    updateWaitCountUI(true);
 
     let waitSeconds = 0;
     state.timers.waitTimer = setInterval(() => {
@@ -695,6 +762,7 @@ async function initChat() {
     // Re-select avatar based on preference gender selection if changed
     state.avatar = selectAvatar(state.gender);
     localStorage.setItem('omega_avatar', state.avatar);
+    localStorage.setItem('omega_last_session', 'true');
     
     // Sync with registered profile if logged in
     const currentUser = firebase.auth && firebase.auth().currentUser;
@@ -712,6 +780,7 @@ async function initChat() {
         showPage('waiting-page');
         document.getElementById('matching-status').textContent = 'Connecting to friend...';
         document.getElementById('wait-time').textContent = '0';
+        updateWaitCountUI(true);
 
         let waitSeconds = 0;
         state.timers.waitTimer = setInterval(() => {
@@ -776,8 +845,9 @@ async function initChat() {
 
     // Show waiting page
     showPage('waiting-page');
-    document.getElementById('matching-status').textContent = 'Looking for someone...';
+    document.getElementById('matching-status').textContent = 'Someone who shares your vibe is out there';
     document.getElementById('wait-time').textContent = '0';
+    updateWaitCountUI(false);
 
     // Start wait timer
     let waitSeconds = 0;
@@ -786,6 +856,11 @@ async function initChat() {
         const el = document.getElementById('wait-time');
         if (el) el.textContent = waitSeconds;
         
+        // Update queue timestamp heartbeat every 5 seconds
+        if (waitSeconds % 5 === 0 && state.isSearching) {
+            db.ref(`${CONFIG.PATHS.QUEUE}/${state.userId}/timestamp`).set(firebase.database.ServerValue.TIMESTAMP).catch(() => {});
+        }
+
         // Update status message
         if (waitSeconds % 8 === 0) {
             const statusEl = document.getElementById('matching-status');
@@ -825,11 +900,19 @@ function startChat(commonInterests = []) {
     const avatarEl = document.getElementById('partner-avatar');
     const statusEl = document.getElementById('partner-status');
     
-    if (nameEl) nameEl.textContent = state.partnerName || 'Stranger';
+    const avatarData = getStrangerAvatarData(state.partnerId || state.chatId);
+    if (!state.partnerName || state.partnerName === 'Stranger') {
+        state.partnerName = avatarData.codename;
+    }
+    
+    if (nameEl) nameEl.textContent = state.partnerName;
     if (avatarEl) {
         updateStrangerAvatarUI(avatarEl, state.partnerAvatar, state.partnerName, state.partnerId || state.chatId);
     }
-    if (statusEl) statusEl.innerHTML = '<span class="status-dot"></span>Online';
+    if (statusEl) {
+        statusEl.className = 'user-status online';
+        statusEl.innerHTML = '<span class="status-dot"></span>Online · 0:00';
+    }
 
     // Clear messages area
     const chatMessages = document.getElementById('chatMessages');
@@ -860,7 +943,18 @@ function startChat(commonInterests = []) {
 
     // Start chat duration timer
     state.timers.chatDuration = setInterval(() => {
-        // Duration counter could be shown in UI if needed
+        if (state.chatStartTime && state.isConnected) {
+            const elapsed = Date.now() - state.chatStartTime;
+            const formatted = formatDuration(elapsed);
+            const statusEl = document.getElementById('partner-status');
+            if (statusEl) {
+                const dot = statusEl.querySelector('.status-dot');
+                if (dot && !dot.classList.contains('typing-active')) {
+                    statusEl.className = 'user-status online';
+                    statusEl.innerHTML = `<span class="status-dot"></span>Online · ${formatted}`;
+                }
+            }
+        }
     }, 1000);
     
     // Focus input
@@ -936,13 +1030,16 @@ function listenForPartnerStatus() {
         if (data && data[state.partnerId]) {
             typingEl.classList.remove('hidden');
             if (statusEl && state.isConnected) {
+                statusEl.className = 'user-status typing';
                 statusEl.innerHTML = '<span class="status-dot typing-active"></span>typing...';
             }
             scrollToBottom();
         } else {
             typingEl.classList.add('hidden');
             if (statusEl && state.isConnected) {
-                statusEl.innerHTML = '<span class="status-dot"></span>Online';
+                statusEl.className = 'user-status online';
+                const elapsed = state.chatStartTime ? Date.now() - state.chatStartTime : 0;
+                statusEl.innerHTML = `<span class="status-dot"></span>Online · ${formatDuration(elapsed)}`;
             }
         }
     });
@@ -1138,6 +1235,54 @@ function addSystemMessage(text) {
     scrollToBottom();
 }
 
+function startReconnectCountdown(duration) {
+    if (state.timers.reconnectCountdown) {
+        clearInterval(state.timers.reconnectCountdown);
+        delete state.timers.reconnectCountdown;
+    }
+
+    const banner = document.getElementById('reconnect-banner');
+    const countdownVal = document.getElementById('reconnect-countdown');
+    if (!banner || !countdownVal) return;
+
+    if (duration && duration !== '0:00') {
+        banner.classList.remove('hidden');
+        let secondsLeft = 8;
+        countdownVal.textContent = secondsLeft;
+
+        state.timers.reconnectCountdown = setInterval(() => {
+            secondsLeft--;
+            if (secondsLeft <= 0) {
+                clearInterval(state.timers.reconnectCountdown);
+                delete state.timers.reconnectCountdown;
+                banner.classList.add('hidden');
+            } else {
+                countdownVal.textContent = secondsLeft;
+            }
+        }, 1000);
+    } else {
+        banner.classList.add('hidden');
+    }
+}
+
+function handleReconnectBannerClick() {
+    if (state.timers.reconnectCountdown) {
+        clearInterval(state.timers.reconnectCountdown);
+        delete state.timers.reconnectCountdown;
+    }
+    const banner = document.getElementById('reconnect-banner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
+
+    const partnerIdToReconnect = state.partnerId;
+    if (partnerIdToReconnect) {
+        state.reconnectFromDisconnectModal = true;
+        closeModal('disconnected-modal');
+        requestReconnect(partnerIdToReconnect);
+    }
+}
+
 function handlePartnerDisconnect() {
     if (state.disconnectHandled) return;
     state.disconnectHandled = true;
@@ -1149,9 +1294,12 @@ function handlePartnerDisconnect() {
 
     // Update UI
     const statusEl = document.getElementById('partner-status');
-    if (statusEl) statusEl.innerHTML = '<span class="status-dot off"></span>Disconnected';
+    if (statusEl) {
+        statusEl.className = 'user-status disconnected';
+        statusEl.innerHTML = '<span class="status-dot off"></span>Disconnected';
+    }
 
-    addSystemMessage('Stranger has disconnected.');
+    addSystemMessage(`${escapeHtml(state.partnerName || 'Stranger')} has disconnected.`);
     playSound('disconnect');
 
     // Show disconnected modal
@@ -1165,6 +1313,9 @@ function handlePartnerDisconnect() {
 
     // Cleanup listeners
     cleanupListeners();
+
+    // Start reconnect countdown
+    startReconnectCountdown(duration);
 }
 
 async function disconnectChat() {
@@ -1204,6 +1355,13 @@ function cleanupListeners(all = false) {
 
 function resetState() {
     cleanupListeners();
+    closeModal('drawing');
+    closeModal('game');
+    const canvas = document.getElementById('drawing-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
     CONFIG.PATHS.QUEUE = 'queue';
     state.selectedRoom = 'general';
     const firstRoomCard = document.querySelector('.room-card[data-room="general"]');
@@ -1373,6 +1531,23 @@ function initDrawingCanvas() {
     let lastX = 0;
     let lastY = 0;
 
+    const brushModeBtn = document.getElementById('draw-mode-brush');
+    const eraserModeBtn = document.getElementById('draw-mode-eraser');
+    let isEraser = false;
+
+    if (brushModeBtn && eraserModeBtn) {
+        brushModeBtn.addEventListener('click', () => {
+            isEraser = false;
+            brushModeBtn.classList.add('active');
+            eraserModeBtn.classList.remove('active');
+        });
+        eraserModeBtn.addEventListener('click', () => {
+            isEraser = true;
+            eraserModeBtn.classList.add('active');
+            brushModeBtn.classList.remove('active');
+        });
+    }
+
     function getCoords(e) {
         const rect = canvas.getBoundingClientRect();
         const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
@@ -1393,9 +1568,13 @@ function initDrawingCanvas() {
     function draw(e) {
         if (!drawing) return;
         const c = getCoords(e);
-        ctx.lineWidth = 3;
+        const currentWidth = isEraser ? 16 : 3;
+        const currentStyle = '#e8edf5';
+
+        ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over';
+        ctx.lineWidth = currentWidth;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = '#e8edf5';
+        ctx.strokeStyle = currentStyle;
         ctx.lineTo(c.x, c.y);
         ctx.stroke();
         ctx.beginPath();
@@ -1408,7 +1587,10 @@ function initDrawingCanvas() {
                 fy: lastY,
                 tx: c.x,
                 ty: c.y,
-                sender: state.userId
+                sender: state.userId,
+                color: currentStyle,
+                width: currentWidth,
+                mode: isEraser ? 'erase' : 'draw'
             });
         }
 
@@ -1465,13 +1647,30 @@ function listenForDrawing() {
     drawRef.on('child_added', snap => {
         const val = snap.val();
         if (val && val.sender !== state.userId) {
-            ctx.lineWidth = 3;
+            ctx.save();
+            ctx.globalCompositeOperation = (val.mode === 'erase') ? 'destination-out' : 'source-over';
+            ctx.lineWidth = val.width || 3;
             ctx.lineCap = 'round';
-            ctx.strokeStyle = '#e8edf5';
+            ctx.strokeStyle = val.color || '#e8edf5';
             ctx.beginPath();
             ctx.moveTo(val.fx, val.fy);
             ctx.lineTo(val.tx, val.ty);
             ctx.stroke();
+            ctx.restore();
+        }
+    });
+
+    // Listen for partner opening drawing modal
+    const drawActiveRef = db.ref(`activeChats/${state.chatId}/drawActive`);
+    state.listeners.drawActive = drawActiveRef;
+    drawActiveRef.on('value', snap => {
+        const activeUser = snap.val();
+        if (activeUser && activeUser !== state.userId) {
+            const modal = document.getElementById('drawing-modal') || document.getElementById('drawing');
+            if (modal && !modal.classList.contains('active')) {
+                showModal('drawing');
+                showToast(`${state.partnerName || 'Stranger'} started drawing! ✏️`);
+            }
         }
     });
 }
@@ -2005,10 +2204,10 @@ function renderTttBoard(data) {
     
     if (data.status === 'playing') {
         if (data.turn === mySymbol) {
-            statusEl.textContent = `Your turn (${mySymbol})`;
+            statusEl.textContent = `Your move, ${mySymbol}`;
             statusEl.style.color = 'var(--accent)';
         } else {
-            statusEl.textContent = `Stranger's turn (${partnerSymbol})`;
+            statusEl.textContent = `${state.partnerName || 'Stranger'}'s move, ${partnerSymbol}`;
             statusEl.style.color = 'var(--text-muted)';
         }
     } else if (data.status === 'ended') {
@@ -2019,7 +2218,7 @@ function renderTttBoard(data) {
             statusEl.textContent = "You won! 🎉";
             statusEl.style.color = 'var(--accent)';
         } else {
-            statusEl.textContent = "Stranger won! 😢";
+            statusEl.textContent = `${state.partnerName || 'Stranger'} won! 😢`;
             statusEl.style.color = 'var(--danger)';
         }
     }
@@ -2188,7 +2387,7 @@ function renderPoll(data) {
         pctA.style.display = 'inline-block';
         pctB.style.display = 'inline-block';
 
-        statusEl.innerHTML = `Reveal! You voted <strong>${myVote === 'A' ? 'Option A' : 'Option B'}</strong>.<br>Stranger voted <strong>${partnerVote === 'A' ? 'Option A' : 'Option B'}</strong>.`;
+        statusEl.innerHTML = `Reveal! You voted <strong>${myVote === 'A' ? 'Option A' : 'Option B'}</strong>.<br>${escapeHtml(state.partnerName || 'Stranger')} voted <strong>${partnerVote === 'A' ? 'Option A' : 'Option B'}</strong>.`;
 
         if (state.userId < state.partnerId) {
             nextBtn.style.display = 'inline-block';
@@ -2203,9 +2402,9 @@ function renderPoll(data) {
         nextBtn.style.display = 'none';
 
         if (myVote) {
-            statusEl.textContent = "Waiting for Stranger to vote...";
+            statusEl.textContent = `Waiting for ${state.partnerName || 'Stranger'} to vote…`;
         } else if (partnerVote) {
-            statusEl.textContent = "Stranger has voted! Cast your vote.";
+            statusEl.textContent = `${state.partnerName || 'Stranger'} has voted! Cast your vote.`;
         } else {
             statusEl.textContent = "Cast your vote to see splits!";
         }
@@ -2673,6 +2872,7 @@ function savePartnerToHistory(id, name, avatar) {
     try {
         localStorage.setItem('omega_recent_chats', JSON.stringify(history));
         localStorage.setItem('omega_last_match', Date.now().toString());
+        localStorage.setItem('omega_last_session', 'true');
     } catch(e) {}
     
     renderRecentConnections();
@@ -2716,15 +2916,29 @@ function getRelativeTime(timestamp) {
 }
 
 function renderRecentConnections() {
+    const reconnectLink = document.getElementById('reconnect-link');
     const section = document.getElementById('recent-connections');
     const divider = document.getElementById('recent-connections-divider');
     const list = document.getElementById('recent-connections-list');
-    if (!section || !list || !divider) return;
+    
+    const hasPriorSession = localStorage.getItem('omega_last_session');
+    if (!hasPriorSession) {
+        if (reconnectLink) reconnectLink.style.display = 'none';
+        if (section) section.style.display = 'none';
+        if (divider) divider.style.display = 'none';
+        return;
+    }
+    
+    if (reconnectLink) {
+        reconnectLink.style.display = 'block';
+    }
+    
+    if (!section || !list) return;
     
     const lastMatch = localStorage.getItem('omega_last_match');
     if (!lastMatch || !lastMatch.trim()) {
         section.style.display = 'none';
-        divider.style.display = 'none';
+        if (divider) divider.style.display = 'none';
         return;
     }
     
@@ -2736,12 +2950,13 @@ function renderRecentConnections() {
     
     if (history.length === 0) {
         section.style.display = 'none';
-        divider.style.display = 'none';
+        if (divider) divider.style.display = 'none';
         return;
     }
     
-    section.style.display = 'block';
-    divider.style.display = 'block';
+    if (divider) {
+        divider.style.display = 'block';
+    }
     
     const timeLabel = document.getElementById('reconnect-last-time');
     if (timeLabel) {
@@ -2800,13 +3015,6 @@ function checkRecentUsersOnlineStatus(history) {
 async function requestReconnect(partnerId) {
     if (!state.userId) return;
     
-    // Check if partner is online first
-    const statusSnap = await db.ref(`users/${partnerId}/status`).once('value');
-    if (statusSnap.val() !== 'online') {
-        showToast('Stranger is offline right now.');
-        return;
-    }
-    
     // Fetch partner details from history
     let history = [];
     try {
@@ -2814,12 +3022,25 @@ async function requestReconnect(partnerId) {
         if (stored) history = JSON.parse(stored);
     } catch(e) {}
     const partnerData = history.find(item => item.partnerId === partnerId);
-    if (!partnerData) return;
+    const partnerName = (partnerData && partnerData.partnerName) || 'Stranger';
+    
+    // Check if partner is online first
+    const statusSnap = await db.ref(`users/${partnerId}/status`).once('value');
+    if (statusSnap.val() !== 'online') {
+        showToast(`${partnerName} is offline right now.`);
+        if (state.reconnectFromDisconnectModal) {
+            state.reconnectFromDisconnectModal = false;
+            showModal('disconnected');
+        }
+        return;
+    }
     
     state.pendingReconnectPartnerId = partnerId;
     
     const reconnectChatId = 'reconnect_' + generateId();
     showModal('reconnect-waiting');
+    const placeholders = document.querySelectorAll('.partner-name-placeholder');
+    placeholders.forEach(el => el.textContent = partnerName);
     
     try {
         const requestRef = db.ref(`reconnectRequests/${partnerId}/${state.userId}`);
@@ -2838,6 +3059,10 @@ async function requestReconnect(partnerId) {
         closeModal('reconnect-waiting-modal');
         showToast('Failed to send reconnect request. Please try again.');
         state.pendingReconnectPartnerId = null;
+        if (state.reconnectFromDisconnectModal) {
+            state.reconnectFromDisconnectModal = false;
+            showModal('disconnected');
+        }
         return;
     }
     
@@ -2858,6 +3083,7 @@ async function requestReconnect(partnerId) {
             closeModal('reconnect-waiting-modal');
             responseRef.off();
             delete state.listeners[responseListenerKey];
+            state.reconnectFromDisconnectModal = false;
             
             // Set state and match
             state.chatId = data.chatId;
@@ -2872,11 +3098,11 @@ async function requestReconnect(partnerId) {
             startChat();
         } else if (data.status === 'declined') {
             closeModal('reconnect-waiting-modal');
-            showToast('Stranger declined the reconnect request.');
+            showToast(`${partnerName} declined the reconnect request.`);
             cancelReconnectRequest(partnerId);
         } else if (data.status === 'busy') {
             closeModal('reconnect-waiting-modal');
-            showToast('Stranger is busy right now.');
+            showToast(`${partnerName} is busy right now.`);
             cancelReconnectRequest(partnerId);
         }
     });
@@ -2885,7 +3111,7 @@ async function requestReconnect(partnerId) {
     clearTimeout(state.timers.reconnectTimeout);
     state.timers.reconnectTimeout = setTimeout(() => {
         closeModal('reconnect-waiting-modal');
-        showToast('No response from Stranger.');
+        showToast(`No response from ${partnerName}.`);
         cancelReconnectRequest(partnerId);
     }, 30000);
 }
@@ -2904,6 +3130,11 @@ async function cancelReconnectRequest(partnerId) {
     }
     
     state.pendingReconnectPartnerId = null;
+    
+    if (state.reconnectFromDisconnectModal) {
+        state.reconnectFromDisconnectModal = false;
+        showModal('disconnected');
+    }
 }
 
 function listenForReconnectRequests() {
@@ -3033,6 +3264,55 @@ function showReconnectInvite(senderId, request) {
 // WebRTC Video & Voice Calls Signaling
 // ============================================
 
+async function getSafeUserMedia() {
+    const constraintsList = [
+        {
+            video: {
+                width: { ideal: 1920 },
+                height: { ideal: 1080 },
+                frameRate: { ideal: 30 },
+                facingMode: 'user',
+                resizeMode: 'none'
+            },
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true
+            }
+        },
+        {
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                frameRate: { ideal: 30 },
+                facingMode: 'user'
+            },
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true
+            }
+        },
+        {
+            video: true,
+            audio: true
+        }
+    ];
+
+    for (let i = 0; i < constraintsList.length; i++) {
+        try {
+            console.log(`WebRTC: Attempting getUserMedia with constraints set #${i + 1}`);
+            const stream = await navigator.mediaDevices.getUserMedia(constraintsList[i]);
+            console.log(`WebRTC: Successfully acquired user media with set #${i + 1}`);
+            return stream;
+        } catch (e) {
+            console.warn(`WebRTC: Constraints set #${i + 1} failed:`, e);
+            if (i === constraintsList.length - 1) {
+                throw e;
+            }
+        }
+    }
+}
+
 async function startCall() {
     if (!state.chatId || !state.partnerId) return;
 
@@ -3051,19 +3331,12 @@ async function startCall() {
     }
 
     try {
-        state.localStream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { min: 640, ideal: 1280, max: 1920 },
-                height: { min: 480, ideal: 720, max: 1080 },
-                frameRate: { ideal: 30 }
-            },
-            audio: true
-        });
+        state.localStream = await getSafeUserMedia();
         
         const localVideo = document.getElementById('local-video');
         if (localVideo) localVideo.srcObject = state.localStream;
         
-        if (statusText) statusText.textContent = 'Calling Stranger...';
+        if (statusText) statusText.textContent = `Calling ${state.partnerName || 'Stranger'}...`;
 
         state.peerConnection = new RTCPeerConnection({
             iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
@@ -3073,6 +3346,19 @@ async function startCall() {
             if (state.peerConnection && state.peerConnection.connectionState === 'connected') {
                 console.log('WebRTC offerer: Connected. Re-applying video optimizations...');
                 optimizeVideoBitrate(state.peerConnection);
+                
+                // Start periodic quality reinforcement interval
+                if (state.bitrateInterval) clearInterval(state.bitrateInterval);
+                state.bitrateInterval = setInterval(() => {
+                    if (state.peerConnection && state.peerConnection.connectionState === 'connected') {
+                        optimizeVideoBitrate(state.peerConnection);
+                    } else {
+                        if (state.bitrateInterval) {
+                            clearInterval(state.bitrateInterval);
+                            state.bitrateInterval = null;
+                        }
+                    }
+                }, 3000);
             }
         };
 
@@ -3091,6 +3377,9 @@ async function startCall() {
                 
                 const statusContainer = document.querySelector('.call-status-container');
                 if (statusContainer) statusContainer.style.opacity = '0';
+                
+                // Start Blind Date unblur-on-agreement flow
+                startBlindDateSystem();
             }
         };
 
@@ -3102,6 +3391,7 @@ async function startCall() {
         };
 
         const offer = await state.peerConnection.createOffer();
+        offer.sdp = setSDPBitrate(offer.sdp, 4000);
         await state.peerConnection.setLocalDescription(offer);
 
         const callRef = db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call`);
@@ -3162,14 +3452,7 @@ async function acceptCall() {
     }
 
     try {
-        state.localStream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { min: 640, ideal: 1280, max: 1920 },
-                height: { min: 480, ideal: 720, max: 1080 },
-                frameRate: { ideal: 30 }
-            },
-            audio: true
-        });
+        state.localStream = await getSafeUserMedia();
         
         const localVideo = document.getElementById('local-video');
         if (localVideo) localVideo.srcObject = state.localStream;
@@ -3182,6 +3465,19 @@ async function acceptCall() {
             if (state.peerConnection && state.peerConnection.connectionState === 'connected') {
                 console.log('WebRTC answerer: Connected. Re-applying video optimizations...');
                 optimizeVideoBitrate(state.peerConnection);
+                
+                // Start periodic quality reinforcement interval
+                if (state.bitrateInterval) clearInterval(state.bitrateInterval);
+                state.bitrateInterval = setInterval(() => {
+                    if (state.peerConnection && state.peerConnection.connectionState === 'connected') {
+                        optimizeVideoBitrate(state.peerConnection);
+                    } else {
+                        if (state.bitrateInterval) {
+                            clearInterval(state.bitrateInterval);
+                            state.bitrateInterval = null;
+                        }
+                    }
+                }, 3000);
             }
         };
 
@@ -3200,6 +3496,9 @@ async function acceptCall() {
                 
                 const statusContainer = document.querySelector('.call-status-container');
                 if (statusContainer) statusContainer.style.opacity = '0';
+                
+                // Start Blind Date unblur-on-agreement flow
+                startBlindDateSystem();
             }
         };
 
@@ -3224,6 +3523,7 @@ async function acceptCall() {
         await state.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
 
         const answer = await state.peerConnection.createAnswer();
+        answer.sdp = setSDPBitrate(answer.sdp, 4000);
         await state.peerConnection.setLocalDescription(answer);
 
         await db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/answer`).set({
@@ -3286,6 +3586,21 @@ function endCallLocal() {
         state.remoteStream = null;
     }
 
+    if (state.bitrateInterval) {
+        clearInterval(state.bitrateInterval);
+        state.bitrateInterval = null;
+    }
+
+    if (state.revealInterval) {
+        clearInterval(state.revealInterval);
+        state.revealInterval = null;
+    }
+
+    const revealPanel = document.getElementById('reveal-panel');
+    if (revealPanel) {
+        revealPanel.classList.add('hidden');
+    }
+
     if (state.peerConnection) {
         state.peerConnection.close();
         state.peerConnection = null;
@@ -3298,7 +3613,7 @@ function endCallLocal() {
         } catch(e) {}
     }
 
-    const callListeners = ['callAnswer', 'callAnswerCandidates', 'callOfferCandidates', 'callFilters'];
+    const callListeners = ['callAnswer', 'callAnswerCandidates', 'callOfferCandidates', 'callFilters', 'callReveals'];
     callListeners.forEach(key => {
         if (state.listeners[key]) {
             state.listeners[key].off();
@@ -3330,6 +3645,107 @@ function endCallLocal() {
     updateCallControlsUI();
 }
 
+function startBlindDateSystem() {
+    // 1. Apply blur classes to the video elements
+    const localVideo = document.getElementById('local-video');
+    const remoteVideo = document.getElementById('remote-video');
+    if (localVideo) localVideo.classList.add('video-blurred');
+    if (remoteVideo) remoteVideo.classList.add('video-blurred');
+
+    // 2. Show the reveal panel and reset values
+    const revealPanel = document.getElementById('reveal-panel');
+    const revealBtn = document.getElementById('reveal-action-btn');
+    const localDot = document.getElementById('reveal-status-local');
+    const remoteDot = document.getElementById('reveal-status-remote');
+    const timerText = document.getElementById('reveal-timer-countdown');
+
+    if (revealPanel) revealPanel.classList.remove('hidden');
+    if (revealBtn) {
+        revealBtn.disabled = false;
+        revealBtn.innerHTML = '<span class="reveal-btn-icon">🔓</span> Reveal Camera Feed';
+    }
+    if (localDot) {
+        localDot.classList.remove('ready');
+        localDot.textContent = 'You: Not Ready';
+    }
+    if (remoteDot) {
+        remoteDot.classList.remove('ready');
+        remoteDot.textContent = 'Partner: Not Ready';
+    }
+    if (timerText) timerText.textContent = '60';
+
+    let secondsLeft = 60;
+    if (state.revealInterval) clearInterval(state.revealInterval);
+    state.revealInterval = setInterval(() => {
+        secondsLeft--;
+        if (timerText) timerText.textContent = secondsLeft;
+        
+        if (secondsLeft <= 0) {
+            clearInterval(state.revealInterval);
+            state.revealInterval = null;
+            
+            // Auto hang up since time expired and not both revealed
+            console.log('WebRTC: Reveal time expired. Ending call...');
+            showToast('Reveal time expired! Call ended.');
+            hangupCall();
+        }
+    }, 1000);
+
+    // 3. Register Firebase listener for reveals
+    const revealsRef = db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/reveals`);
+    state.listeners.callReveals = revealsRef;
+    
+    revealsRef.on('value', snap => {
+        const reveals = snap.val() || {};
+        const localRevealed = !!reveals[state.userId];
+        const partnerId = state.partnerId;
+        const partnerRevealed = !!reveals[partnerId];
+
+        // Update UI status dots
+        if (localDot) {
+            localDot.classList.toggle('ready', localRevealed);
+            localDot.textContent = localRevealed ? 'You: Ready' : 'You: Not Ready';
+        }
+        if (remoteDot) {
+            remoteDot.classList.toggle('ready', partnerRevealed);
+            remoteDot.textContent = partnerRevealed ? 'Partner: Ready' : 'Partner: Not Ready';
+        }
+
+        if (localRevealed && revealBtn) {
+            revealBtn.disabled = true;
+            revealBtn.innerHTML = '<span class="reveal-btn-icon">⏳</span> Waiting for partner...';
+        }
+
+        // If both agreed, unblur video and hide panel
+        if (localRevealed && partnerRevealed) {
+            console.log('WebRTC: Both users revealed! Removing blur...');
+            if (localVideo) localVideo.classList.remove('video-blurred');
+            if (remoteVideo) remoteVideo.classList.remove('video-blurred');
+            if (revealPanel) revealPanel.classList.add('hidden');
+            
+            if (state.revealInterval) {
+                clearInterval(state.revealInterval);
+                state.revealInterval = null;
+            }
+            
+            showToast('Match revealed! Enjoy your call! 🎉');
+        }
+    });
+
+    // 4. Bind the reveal action button click event
+    if (revealBtn) {
+        // Clone button to strip existing event listeners cleanly
+        const newRevealBtn = revealBtn.cloneNode(true);
+        revealBtn.parentNode.replaceChild(newRevealBtn, revealBtn);
+        
+        newRevealBtn.addEventListener('click', () => {
+            console.log('WebRTC: User clicked reveal camera feed');
+            db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/reveals/${state.userId}`).set(true)
+                .catch(e => console.error('Error setting reveal state:', e));
+        });
+    }
+}
+
 function optimizeVideoBitrate(pc) {
     if (!pc) return;
     try {
@@ -3343,22 +3759,22 @@ function optimizeVideoBitrate(pc) {
             if (parameters.encodings.length === 0) {
                 parameters.encodings.push({});
             }
-            // Increase to 2.5 Mbps for crystal-clear HD video quality
-            parameters.encodings[0].maxBitrate = 2500000;
+            // Increase to 4.0 Mbps for crystal-clear Ultra HD video quality
+            parameters.encodings[0].maxBitrate = 4000000;
             // Disable downscaling to guarantee 720p/1080p is sent
             parameters.encodings[0].scaleResolutionDownBy = 1.0;
             // Tell the browser to prioritize resolution/clarity over framerate under bad network conditions
             parameters.degradationPreference = 'maintain-resolution';
 
             videoSender.setParameters(parameters)
-                .then(() => console.log('✅ WebRTC: Optimized video bitrate (2.5 Mbps) and degradation preference (maintain-resolution)'))
+                .then(() => console.log('✅ WebRTC: Optimized video bitrate (4.0 Mbps) and degradation preference (maintain-resolution)'))
                 .catch(e => {
                     console.error('Error setting max bitrate parameters:', e);
                     // Fallback without degradationPreference
                     try {
                         const fallbackParams = videoSender.getParameters();
                         if (fallbackParams && fallbackParams.encodings && fallbackParams.encodings.length > 0) {
-                            fallbackParams.encodings[0].maxBitrate = 2500000;
+                            fallbackParams.encodings[0].maxBitrate = 4000000;
                             fallbackParams.encodings[0].scaleResolutionDownBy = 1.0;
                             videoSender.setParameters(fallbackParams).catch(err => console.error('Fallback setParameters failed:', err));
                         }
@@ -3369,6 +3785,91 @@ function optimizeVideoBitrate(pc) {
         }
     } catch(e) {
         console.error('Error optimizing video bitrate:', e);
+    }
+}
+
+function setSDPBitrate(sdp, maxVideoBitrate = 4000) {
+    try {
+        let lines = sdp.split(/\r?\n/);
+        let videoIndex = -1;
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].indexOf('m=video') === 0) {
+                videoIndex = i;
+                break;
+            }
+        }
+        if (videoIndex === -1) {
+            return sdp;
+        }
+        
+        // Find the end of the video section (the next m= line or end of SDP)
+        let nextMediumIndex = lines.length;
+        for (let i = videoIndex + 1; i < lines.length; i++) {
+            if (lines[i].indexOf('m=') === 0) {
+                nextMediumIndex = i;
+                break;
+            }
+        }
+        
+        // 1. Prioritize VP9 Codec (if available in the list of payload types)
+        let vp9Payloads = [];
+        for (let i = videoIndex + 1; i < nextMediumIndex; i++) {
+            if (lines[i].indexOf('a=rtpmap:') === 0) {
+                let match = lines[i].match(/a=rtpmap:(\d+)\s+VP9\/90000/i);
+                if (match) {
+                    vp9Payloads.push(match[1]);
+                }
+            }
+        }
+        if (vp9Payloads.length > 0) {
+            let mLine = lines[videoIndex];
+            let parts = mLine.split(' ');
+            if (parts.length > 3) {
+                let header = parts.slice(0, 3);
+                let payloads = parts.slice(3);
+                let remainingPayloads = payloads.filter(p => !vp9Payloads.includes(p));
+                lines[videoIndex] = header.join(' ') + ' ' + [...vp9Payloads, ...remainingPayloads].join(' ');
+                console.log('✅ WebRTC SDP: Prioritized VP9 codec payloads:', vp9Payloads);
+            }
+        }
+        
+        // 2. Set Bitrates (AS and TIAS attributes)
+        let hasAS = false;
+        let hasTIAS = false;
+        for (let i = videoIndex + 1; i < nextMediumIndex; i++) {
+            if (lines[i].indexOf('b=AS:') === 0) {
+                lines[i] = `b=AS:${maxVideoBitrate}`;
+                hasAS = true;
+            }
+            if (lines[i].indexOf('b=TIAS:') === 0) {
+                lines[i] = `b=TIAS:${maxVideoBitrate * 1000}`;
+                hasTIAS = true;
+            }
+        }
+        
+        // Insert AS/TIAS if not present
+        if (!hasAS) {
+            lines.splice(videoIndex + 1, 0, `b=AS:${maxVideoBitrate}`);
+            nextMediumIndex++;
+        }
+        if (!hasTIAS) {
+            lines.splice(videoIndex + 2, 0, `b=TIAS:${maxVideoBitrate * 1000}`);
+            nextMediumIndex++;
+        }
+        
+        // 3. Inject Chrome/Chromium-specific high quality/bitrate parameters into format parameters (fmtp)
+        for (let i = videoIndex + 1; i < nextMediumIndex; i++) {
+            if (lines[i].indexOf('a=fmtp:') === 0) {
+                if (lines[i].indexOf('x-google-') === -1) {
+                    lines[i] = lines[i] + ';x-google-min-bitrate=1500;x-google-start-bitrate=2500;x-google-max-bitrate=4000';
+                }
+            }
+        }
+        
+        return lines.join('\r\n');
+    } catch (e) {
+        console.error('Error optimizing SDP bitrate and codecs:', e);
+        return sdp;
     }
 }
 
@@ -3410,13 +3911,28 @@ async function flipCamera() {
     state.facingMode = state.facingMode === 'user' ? 'environment' : 'user';
     
     try {
-        const videoConstraints = {
-            facingMode: state.facingMode,
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-        };
-        
-        const newStream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints });
+        let newStream;
+        try {
+            newStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: state.facingMode,
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
+                    frameRate: { ideal: 30 },
+                    resizeMode: 'none'
+                }
+            });
+        } catch(e) {
+            console.warn("High-res camera flip failed, using standard 720p fallback:", e);
+            newStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: state.facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+        }
+
         const newVideoTrack = newStream.getVideoTracks()[0];
         
         // Stop old video track
@@ -3441,6 +3957,8 @@ async function flipCamera() {
             const videoSender = senders.find(sender => sender.track && sender.track.kind === 'video');
             if (videoSender) {
                 await videoSender.replaceTrack(newVideoTrack);
+                // Ensure optimizations are re-applied to the newly replaced track
+                optimizeVideoBitrate(state.peerConnection);
             }
         }
         
@@ -3516,8 +4034,10 @@ function listenForIncomingCalls() {
             const modal = document.getElementById('incoming-call-modal');
             if (modal && !modal.classList.contains('active')) {
                 const nameEl = document.getElementById('incoming-call-name');
+                const callerTitleEl = document.getElementById('incoming-caller-title');
                 const avatarEl = document.getElementById('incoming-call-avatar');
                 if (nameEl) nameEl.textContent = state.partnerName || 'Stranger';
+                if (callerTitleEl) callerTitleEl.textContent = state.partnerName || 'Stranger';
                 if (avatarEl) {
                     updateStrangerAvatarUI(avatarEl, state.partnerAvatar, state.partnerName, state.partnerId || state.chatId);
                 }
@@ -3525,7 +4045,7 @@ function listenForIncomingCalls() {
                 playSound('receive');
             }
         } else if (call.status === 'declined' && call.caller === state.userId) {
-            showToast('Stranger declined the call.');
+            showToast(`${state.partnerName || 'Stranger'} declined the call.`);
             endCallLocal();
         } else if (call.status === 'ended') {
             endCallLocal();
@@ -3761,6 +4281,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Initialize Choose Your Vibe scroll animation
+    const vibeCards = document.querySelectorAll('.vibe-rooms-section .room-card');
+    if (vibeCards.length > 0) {
+        vibeCards.forEach((card, index) => {
+            card.style.transitionDelay = `${index * 80}ms`;
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const vibeObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Remove transition delay after animation completes so hover effects are instant
+                    setTimeout(() => {
+                        entry.target.style.transitionDelay = '';
+                    }, 1000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        vibeCards.forEach(card => {
+            vibeObserver.observe(card);
+        });
+    }
+
     // Parse friend query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const friendParam = urlParams.get('friend');
@@ -3804,7 +4354,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ageGate = document.getElementById('age-gate-modal');
     const enterBtn = document.getElementById('immersive-enter-btn');
 
-    if (localStorage.getItem('omega_age_verified') === 'true') {
+    if (sessionStorage.getItem('ageVerified') === 'true') {
         if (ageCheckbox) ageCheckbox.checked = true;
         if (startBtn) startBtn.disabled = false;
         if (ageGate) ageGate.remove(); // Remove immediately from DOM if verified
@@ -3817,12 +4367,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (enterBtn) {
         enterBtn.addEventListener('click', () => {
-            localStorage.setItem('omega_age_verified', 'true');
+            sessionStorage.setItem('ageVerified', 'true');
             if (ageCheckbox) ageCheckbox.checked = true;
             if (startBtn) startBtn.disabled = false;
             
             if (ageGate) {
-                ageGate.classList.add('fade-out');
+                ageGate.classList.add('exiting');
                 setTimeout(() => {
                     ageGate.remove();
                 }, 400);
@@ -3845,17 +4395,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const isCollapsed = collapsibleOptions.classList.toggle('collapsed');
             const icon = toggleBtn.querySelector('i');
             if (icon) {
-                icon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+                icon.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(90deg)';
             }
         });
     }
 
-    // Vibe Room cards selection (main homepage selector cards)
+    // Vibe Room cards selection (main homepage selector cards) and direct join
     document.querySelectorAll('.room-card[data-room]').forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
             document.querySelectorAll('.room-card').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
             state.selectedRoom = card.dataset.room || 'general';
+
+            // Check if the user clicked the Join button specifically
+            const clickedJoin = e.target.classList.contains('vibe-join-btn') || e.target.closest('.vibe-join-btn');
+            if (clickedJoin) {
+                const ageCheckbox = document.getElementById('age-confirm');
+                if (ageCheckbox && ageCheckbox.checked) {
+                    initChat();
+                } else {
+                    showToast("Please confirm you are 18 or older first!");
+                    const ageLabel = document.querySelector('.age-checkbox');
+                    if (ageLabel) {
+                        ageLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        ageLabel.classList.add('shake-highlight');
+                        setTimeout(() => ageLabel.classList.remove('shake-highlight'), 1000);
+                    }
+                }
+            }
         });
     });
 
@@ -4010,67 +4577,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBtn = document.getElementById('gameBtn');
     const questionBtn = document.getElementById('questionBtn');
     const drawBtn = document.getElementById('drawBtn');
-    const secretBtn = document.getElementById('secretBtn');
-    const gameSelectDrawBtn = document.getElementById('game-select-draw-btn');
     
     if (gameBtn) gameBtn.addEventListener('click', openGameModal);
     if (questionBtn) questionBtn.addEventListener('click', showQuestionPicker);
     if (drawBtn) drawBtn.addEventListener('click', () => showModal('drawing'));
-    if (secretBtn) {
-        secretBtn.addEventListener('click', () => {
-            showToast("Secret Messages: Anonymous one-time notes coming soon!");
-        });
-    }
-    if (gameSelectDrawBtn) {
-        gameSelectDrawBtn.addEventListener('click', () => {
-            closeModal('game-modal');
-            showModal('drawing');
-        });
-    }
 
-    // Play button & menu setup
-    const playBtn = document.getElementById('playBtn');
-    const playMenu = document.getElementById('playMenu');
-    const menuDrawBtn = document.getElementById('menuDrawBtn');
-    const menuTdBtn = document.getElementById('menuTdBtn');
-    const menuTttBtn = document.getElementById('menuTttBtn');
 
-    if (playBtn && playMenu) {
-        playBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            playMenu.classList.toggle('hidden');
-        });
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!playMenu.classList.contains('hidden') && !playBtn.contains(e.target) && !playMenu.contains(e.target)) {
-                playMenu.classList.add('hidden');
-            }
-        });
 
-        if (menuDrawBtn) {
-            menuDrawBtn.addEventListener('click', () => {
-                playMenu.classList.add('hidden');
-                showModal('drawing');
-            });
-        }
-
-        if (menuTdBtn) {
-            menuTdBtn.addEventListener('click', () => {
-                playMenu.classList.add('hidden');
-                showModal('game');
-                showTruthDarePanel();
-            });
-        }
-
-        if (menuTttBtn) {
-            menuTttBtn.addEventListener('click', () => {
-                playMenu.classList.add('hidden');
-                showModal('game');
-                handleSelectTtt();
-            });
-        }
-    }
 
     // Truth or Dare
     const truthBtn = document.getElementById('truth-btn');
@@ -4105,6 +4619,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (optBBtn) optBBtn.addEventListener('click', () => submitPollVote('B'));
     if (nextPollBtn) nextPollBtn.addEventListener('click', startPollGame);
     if (backToGamesPoll) backToGamesPoll.addEventListener('click', showGameSelectionScreen);
+
+    // Draw Together selection inside Chat Games Modal
+    const gameSelectDrawBtn = document.getElementById('game-select-draw-btn');
+    if (gameSelectDrawBtn) {
+        gameSelectDrawBtn.addEventListener('click', () => {
+            closeModal('game');
+            showModal('drawing');
+        });
+    }
 
     // Tic-Tac-Toe board cells
     document.querySelectorAll('.ttt-cell').forEach(cell => {
@@ -4148,7 +4671,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close modals on backdrop
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', e => {
-            if (e.target === modal) modal.classList.remove('active');
+            if (e.target === modal) {
+                if (modal.id === 'drawing-modal' || modal.id === 'drawing') {
+                    closeModal('drawing');
+                } else {
+                    modal.classList.remove('active');
+                }
+            }
         });
     });
 
@@ -4189,6 +4718,17 @@ document.addEventListener('DOMContentLoaded', () => {
     initAuthSystem();
     renderRecentConnections();
     listenForReconnectRequests();
+
+    // Toggle recent connections visibility on clicking reconnect-link
+    const reconnectLink = document.getElementById('reconnect-link');
+    const recentConnections = document.getElementById('recent-connections');
+    if (reconnectLink && recentConnections) {
+        reconnectLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isHidden = recentConnections.style.display === 'none' || !recentConnections.style.display;
+            recentConnections.style.display = isHidden ? 'block' : 'none';
+        });
+    }
 
     // Cancel reconnect button handler
     const cancelReconnectBtn = document.getElementById('cancel-reconnect-btn');
@@ -4447,3 +4987,4 @@ window.cancelSearch = cancelSearch;
 window.handleFeedback = handleFeedback;
 window.clearReply = clearReply;
 window.requestReconnect = requestReconnect;
+window.handleReconnectBannerClick = handleReconnectBannerClick;

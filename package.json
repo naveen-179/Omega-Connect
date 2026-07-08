@@ -6,6 +6,13 @@
     "dev": "npx -y live-server --port=3000 --no-browser",
     "start": "npx -y serve -l 3000"
   },
-  "keywords": ["chat", "anonymous", "pwa"],
-  "license": "MIT"
+  "keywords": [
+    "chat",
+    "anonymous",
+    "pwa"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
 }

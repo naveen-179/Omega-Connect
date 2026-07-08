@@ -55,7 +55,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-    <link rel="stylesheet" href="style.css?v=414">
+    <link rel="stylesheet" href="style.css?v=424">
 </head>
 
 <body>
@@ -87,12 +87,12 @@
                     <img src="logo-transparent.png" alt="Omega Connect" class="logo-img">
                     <span class="logo-text">Omega Connect</span>
                 </div>
-                <div class="auth-section" style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                <div class="auth-section">
                     <button id="auth-modal-btn" class="auth-btn" onclick="openAuthModal()">
                         <span id="auth-btn-icon"><i class="ti ti-user" style="font-size: 18px;"></i></span>
                         <span id="auth-btn-text">Save Profile</span>
+                        <span id="auth-optional-label" class="auth-badge">optional</span>
                     </button>
-                    <span id="auth-optional-label" style="font-size: 11px; color: var(--text-muted); opacity: 0.8; user-select: none;">optional</span>
                 </div>
             </nav>
 
@@ -107,38 +107,91 @@
 
                 <p class="hero-subtitle">No logins, no profiles, no algorithms. Just you and a random person.</p>
 
-                <!-- Feature Showcase Section -->
-                <div class="feature-showcase-section">
-                    <h2 class="showcase-title">Everything you need for a real connection</h2>
-                    <div class="showcase-grid">
-                        <div class="showcase-card" style="--accent-color: #00e5ff; --accent-glow: rgba(0, 229, 255, 0.15);">
-                            <div class="showcase-icon">📹</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">Video Call with Filters</h3>
-                                <p class="showcase-feature-desc">VHS, Neon, Warm, Noir, Chrome filters.</p>
+                <!-- Setup Card -->
+                <div class="setup-card" style="margin-top: var(--sp-4);">
+
+                    <!-- Recent Connections -->
+                    <div id="recent-connections" class="setup-section" style="display: none;">
+                        <p class="setup-label">
+                            <i class="ti ti-bolt" style="font-size: 18px;"></i> Reconnect with recent matches
+                            <span id="reconnect-last-time" style="font-size: 0.7rem; color: var(--text-muted); text-transform: none; letter-spacing: normal; font-weight: normal; margin-left: 8px;"></span>
+                        </p>
+                        <div id="recent-connections-list" class="recent-list"></div>
+                    </div>
+                    <div id="recent-connections-divider" class="setup-divider" style="display: none;"></div>
+
+                    <!-- Collapsible Trigger -->
+                    <div class="setup-section" style="padding-bottom: 0;">
+                        <button type="button" id="toggle-options-btn" class="toggle-options-btn">
+                            <span>Customize Vibe (Interests, Gender)</span>
+                            <i class="ti ti-chevron-down" style="transition: transform 0.2s ease;"></i>
+                        </button>
+                    </div>
+
+                    <div id="collapsible-options" class="collapsible-options collapsed">
+                        <div class="setup-divider"></div>
+
+                        <!-- Interests -->
+                        <div class="setup-section">
+                            <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
+                            <div class="interests-grid">
+                                <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
+                                <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
+                                <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
+                                <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
+                                <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
+                                <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
+                                <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
+                                <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
+                                <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
+                                <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
                             </div>
                         </div>
-                        <div class="showcase-card" style="--accent-color: #a78bfa; --accent-glow: rgba(167, 139, 250, 0.15);">
-                            <div class="showcase-icon">🎲</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">In-Chat Games</h3>
-                                <p class="showcase-feature-desc">Truth or Dare, Tic-Tac-Toe, Would You Rather, Draw Together.</p>
+
+                        <div class="setup-divider"></div>
+
+                        <!-- I Am -->
+                        <div class="setup-section">
+                            <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
+                            <div class="gender-row">
+                                <button type="button" class="gender-pill" data-gender="male">Male</button>
+                                <button type="button" class="gender-pill" data-gender="female">Female</button>
+                                <button type="button" class="gender-pill" data-gender="other">Other</button>
                             </div>
                         </div>
-                        <div class="showcase-card" style="--accent-color: #00ff88; --accent-glow: rgba(0, 255, 136, 0.15);">
-                            <div class="showcase-icon">🎨</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">Draw Together</h3>
-                                <p class="showcase-feature-desc">Live collaborative canvas to sketch in real-time.</p>
+
+                        <!-- Looking For -->
+                        <div class="setup-section">
+                            <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
+                            <div class="gender-row">
+                                <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
+                                <button type="button" class="pref-pill" data-pref="male">Male</button>
+                                <button type="button" class="pref-pill" data-pref="female">Female</button>
                             </div>
                         </div>
-                        <div class="showcase-card" style="--accent-color: #ff6eb4; --accent-glow: rgba(255, 110, 180, 0.15);">
-                            <div class="showcase-icon">💌</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">Secret Messages</h3>
-                                <p class="showcase-feature-desc">Anonymous one-time notes that disappear.</p>
-                            </div>
-                        </div>
+                    </div>
+
+                    <!-- Age Confirmation Checkbox -->
+                    <div style="margin: var(--sp-3) 0 var(--sp-2); display: flex; justify-content: center; width: 100%;">
+                        <label class="age-checkbox">
+                            <input type="checkbox" id="age-confirm" onchange="document.getElementById('start-chat-btn').disabled = !this.checked">
+                            <span class="checkmark"></span>
+                            <span class="check-label">I confirm that I am 18 years or older</span>
+                        </label>
+                    </div>
+
+                    <!-- CTA -->
+                    <button id="start-chat-btn" class="cta-btn cta-glow" disabled>
+                        <span>Start Chatting</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                    
+                    <button id="friend-invite-btn" class="friend-invite-btn" type="button" style="margin-top: var(--sp-2);">
+                        <span><i class="ti ti-link" style="font-size: 18px;"></i> Connect with a Friend</span>
+                    </button>
+                    
+                    <div id="friend-invite-banner" class="friend-invite-banner hidden" style="margin-top: var(--sp-2); text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 500;">
+                        <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Ready to join.
                     </div>
                 </div>
 
@@ -209,109 +262,50 @@
                     </div>
                 </div>
 
-                <!-- Setup Card -->
-                <div class="setup-card">
-
-                    <!-- Recent Connections -->
-                    <div id="recent-connections" class="setup-section" style="display: none;">
-                        <p class="setup-label">
-                            <i class="ti ti-bolt" style="font-size: 18px;"></i> Reconnect with recent matches
-                            <span id="reconnect-last-time" style="font-size: 0.7rem; color: var(--text-muted); text-transform: none; letter-spacing: normal; font-weight: normal; margin-left: 8px;"></span>
-                        </p>
-                        <div id="recent-connections-list" class="recent-list"></div>
-                    </div>
-                    <div id="recent-connections-divider" class="setup-divider" style="display: none;"></div>
-
-                    <!-- Collapsible Trigger -->
-                    <div class="setup-section" style="padding-bottom: 0;">
-                        <button type="button" id="toggle-options-btn" class="toggle-options-btn">
-                            <span>Customize Vibe (Interests, Gender)</span>
-                            <i class="ti ti-chevron-down" style="transition: transform 0.2s ease;"></i>
-                        </button>
-                    </div>
-
-                    <div id="collapsible-options" class="collapsible-options collapsed">
-                        <div class="setup-divider"></div>
-
-                        <!-- Interests -->
-                        <div class="setup-section">
-                            <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
-                            <div class="interests-grid">
-                                <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
-                                <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
-                                <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
-                                <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
-                                <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
-                                <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
-                                <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
-                                <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
-                                <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
-                                <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
+                <!-- Feature Showcase Section -->
+                <div class="feature-showcase-section">
+                    <h2 class="showcase-title">Everything you need for a real connection</h2>
+                    <div class="showcase-grid">
+                        <div class="showcase-card" style="--accent-color: #00e5ff; --accent-glow: rgba(0, 229, 255, 0.15);">
+                            <div class="showcase-icon">📹</div>
+                            <div class="showcase-info">
+                                <h3 class="showcase-feature-name">Video Call with Filters</h3>
+                                <p class="showcase-feature-desc">VHS, Neon, Warm, Noir, Chrome filters.</p>
                             </div>
                         </div>
-
-                        <div class="setup-divider"></div>
-
-                        <!-- I Am -->
-                        <div class="setup-section">
-                            <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
-                            <div class="gender-row">
-                                <button type="button" class="gender-pill" data-gender="male">Male</button>
-                                <button type="button" class="gender-pill" data-gender="female">Female</button>
-                                <button type="button" class="gender-pill" data-gender="other">Other</button>
+                        <div class="showcase-card" style="--accent-color: #a78bfa; --accent-glow: rgba(167, 139, 250, 0.15);">
+                            <div class="showcase-icon">🎲</div>
+                            <div class="showcase-info">
+                                <h3 class="showcase-feature-name">In-Chat Games</h3>
+                                <p class="showcase-feature-desc">Truth or Dare, Tic-Tac-Toe, Would You Rather, Draw Together.</p>
                             </div>
                         </div>
-
-                        <!-- Looking For -->
-                        <div class="setup-section">
-                            <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
-                            <div class="gender-row">
-                                <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
-                                <button type="button" class="pref-pill" data-pref="male">Male</button>
-                                <button type="button" class="pref-pill" data-pref="female">Female</button>
+                        <div class="showcase-card" style="--accent-color: #00ff88; --accent-glow: rgba(0, 255, 136, 0.15);">
+                            <div class="showcase-icon">🎨</div>
+                            <div class="showcase-info">
+                                <h3 class="showcase-feature-name">Draw Together</h3>
+                                <p class="showcase-feature-desc">Live collaborative canvas to sketch in real-time.</p>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- CTA -->
-                    <button id="start-chat-btn" class="cta-btn cta-glow" disabled>
-                        <span>Start Chatting</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                    </button>
-                    
-                    <button id="friend-invite-btn" class="friend-invite-btn" type="button" style="margin-top: var(--sp-2);">
-                        <span><i class="ti ti-link" style="font-size: 18px;"></i> Connect with a Friend</span>
-                    </button>
-                    
-                    <div id="friend-invite-banner" class="friend-invite-banner hidden" style="margin-top: var(--sp-2); text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 500;">
-                        <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Ready to join.
+                        <div class="showcase-card" style="--accent-color: #ff6eb4; --accent-glow: rgba(255, 110, 180, 0.15);">
+                            <div class="showcase-icon">💌</div>
+                            <div class="showcase-info">
+                                <h3 class="showcase-feature-name">Secret Messages</h3>
+                                <p class="showcase-feature-desc">Anonymous one-time notes that disappear.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
+
+                <!-- Setup Card moved to top -->
 
                 <!-- Trust Strip -->
                 <div class="trust-strip">
                     <div class="trust-item"><i class="ti ti-shield" style="font-size: 18px;"></i> No account required</div>
                     <div class="trust-item"><i class="ti ti-bolt" style="font-size: 18px;"></i> Connects in seconds</div>
                     <div class="trust-item"><i class="ti ti-trash" style="font-size: 18px;"></i> Chats deleted on exit</div>
-                </div>
-
-                <!-- Feature Highlights -->
-                <div class="features-highlights">
-                    <div class="feature-highlight-card">
-                        <div class="feature-icon"><i class="ti ti-video"></i></div>
-                        <div class="feature-label">Filtered Video</div>
-                        <div class="feature-desc">Video call with visual filters.</div>
-                    </div>
-                    <div class="feature-highlight-card">
-                        <div class="feature-icon"><i class="ti ti-device-gamepad-2"></i></div>
-                        <div class="feature-label">In-Chat Games</div>
-                        <div class="feature-desc">Play mini-games during your conversations.</div>
-                    </div>
-                    <div class="feature-highlight-card">
-                        <div class="feature-icon"><i class="ti ti-lock"></i></div>
-                        <div class="feature-label">Secret Messages</div>
-                        <div class="feature-desc">Send anonymous secret notes securely.</div>
-                    </div>
                 </div>
             </section>
 
@@ -474,10 +468,6 @@
                 <span class="tool-icon">✏️</span>
                 <span class="tool-label">Draw</span>
             </button>
-            <button class="tool-chip" id="secretBtn">
-                <span class="tool-icon">🎁</span>
-                <span class="tool-label">Secret</span>
-            </button>
             <div id="smartReplies" class="smart-replies"></div>
         </div>
 
@@ -523,14 +513,6 @@
 
             <button class="input-tool-btn" id="emojiBtn"><i class="ti ti-mood-smile" style="font-size: 18px;"></i></button>
             <button class="input-tool-btn" id="voiceBtn" title="Record voice note" style="margin-right: 2px;"><i class="ti ti-microphone" style="font-size: 18px;"></i></button>
-            <div class="play-wrapper" style="position: relative;">
-                <button class="input-tool-btn" id="playBtn" title="Play games"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i></button>
-                <div id="playMenu" class="play-menu hidden">
-                    <button class="play-menu-item" id="menuDrawBtn"><i class="ti ti-pencil" style="font-size: 18px;"></i> Draw Together</button>
-                    <button class="play-menu-item" id="menuTdBtn"><i class="ti ti-target" style="font-size: 18px;"></i> Truth or Dare</button>
-                    <button class="play-menu-item" id="menuTttBtn"><i class="ti ti-x" style="font-size: 18px;"></i> Tic-Tac-Toe</button>
-                </div>
-            </div>
             <input type="text" id="message-input" class="chat-input"
                 placeholder="Type a message…" maxlength="1000"
                 autocomplete="off" autocorrect="off" spellcheck="true">
@@ -543,7 +525,16 @@
         <div id="drawing-modal" class="modal">
             <div class="modal-content drawing-modal-content">
                 <h3><i class="ti ti-pencil" style="font-size: 18px;"></i> Draw Something</h3>
-                <canvas id="drawing-canvas" width="280" height="180"></canvas>
+                <!-- Tool modes: Brush and Eraser -->
+                <div class="drawing-modes">
+                    <button class="mode-btn active" id="draw-mode-brush" title="Brush">
+                        <i class="ti ti-brush"></i> Brush
+                    </button>
+                    <button class="mode-btn" id="draw-mode-eraser" title="Eraser">
+                        <i class="ti ti-eraser"></i> Eraser
+                    </button>
+                </div>
+                <canvas id="drawing-canvas" width="400" height="300"></canvas>
                 <div class="drawing-tools">
                     <button class="btn-secondary" id="clear-canvas-btn">Clear</button>
                     <button class="btn-primary" id="send-drawing-btn">Send Drawing</button>
@@ -753,6 +744,25 @@
         <!-- Local Video Floating Preview -->
         <div class="local-video-container">
             <video id="local-video" class="local-video" autoplay playsinline muted></video>
+        </div>
+
+        <!-- Blind Date / Reveal overlay panel -->
+        <div id="reveal-panel" class="reveal-panel hidden">
+            <div class="reveal-content">
+                <div class="reveal-timer-container">
+                    <span class="reveal-timer-icon">⏳</span>
+                    <span id="reveal-timer-countdown" class="reveal-timer-countdown">60</span>s
+                </div>
+                <h3 class="reveal-title">Blind Date Mode</h3>
+                <p class="reveal-subtitle">Feeds are blurred. You have 60 seconds to agree to reveal your camera feeds.</p>
+                <div class="reveal-status-bar">
+                    <span id="reveal-status-local" class="reveal-status-dot">You: Not Ready</span>
+                    <span id="reveal-status-remote" class="reveal-status-dot">Partner: Not Ready</span>
+                </div>
+                <button id="reveal-action-btn" class="reveal-action-btn">
+                    <span class="reveal-btn-icon">🔓</span> Reveal Camera Feed
+                </button>
+            </div>
         </div>
 
         <!-- Call Status -->
@@ -1023,9 +1033,7 @@
     </div>
 
     <!-- Age Gate Immersive Experience -->
-    <div id="age-gate-modal" class="immersive-gate" style="display: none;">
-        <!-- Hidden input to satisfy legacy age-confirm checks -->
-        <input type="checkbox" id="age-confirm" style="display: none;">
+    <div id="age-gate-modal" class="immersive-gate" style="display: none !important;">
         <div class="immersive-gate-content">
             <h1 class="immersive-logo">Omega Connect</h1>
             <p class="immersive-tagline">Video &middot; Chat &middot; Games &middot; Draw &mdash; All Anonymous</p>
@@ -1057,7 +1065,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="firebase-config.js"></script>
-    <script src="script.js?v=228"></script>
+    <script src="script.js?v=232"></script>
 
     <!-- Service Worker -->
     <script>
