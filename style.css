@@ -242,16 +242,18 @@ h3 { font-size: 1.2rem; }
 }
 
 .logo-img {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
 }
 
 .logo-text {
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
+  text-transform: uppercase;
 }
 
 /* Hero split layout (desktop two-column grid) */
@@ -3871,14 +3873,16 @@ h1, h2, h3 {
 
 .immersive-logo {
   font-family: var(--font-display) !important;
-  font-size: clamp(32px, 5vw, 52px);
+  font-size: clamp(40px, 6vw, 64px);
   font-weight: 900;
+  text-transform: uppercase;
   margin: 0;
-  background: linear-gradient(90deg, #00e5ff, #a78bfa);
+  background: linear-gradient(90deg, #ffffff 30%, #a3aab2 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
 .immersive-tagline {
