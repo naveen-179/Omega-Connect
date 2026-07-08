@@ -51,7 +51,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
@@ -77,7 +77,7 @@
     <!-- ==================== LANDING PAGE ==================== -->
     <div id="landing-page" class="page active">
 
-        <!-- Animated gradient background -->
+        <!-- Solid background -->
         <div class="gradient-bg"></div>
 
         <div class="landing-content">
@@ -96,218 +96,217 @@
                 </div>
             </nav>
 
-            <!-- Hero -->
+            <!-- Hero Split Section -->
             <section class="hero">
-                <div class="hero-badge"><i class="ti ti-sparkles" style="font-size: 18px;"></i> No signup · No logs</div>
+                <div class="hero-left">
+                    <div class="hero-badge">No signup &nbsp;·&nbsp; No logs &nbsp;·&nbsp; Chats deleted on exit</div>
 
-                <h1 class="hero-title">
-                    Talk to a stranger.<br>
-                    <span class="hero-gradient">That's it.</span>
-                </h1>
+                    <h1 class="hero-title">
+                        Talk to a stranger.<br>
+                        <span class="hero-gradient">That's it.</span>
+                    </h1>
 
-                <p class="hero-subtitle">No logins, no profiles, no algorithms. Just you and a random person.</p>
+                    <p class="hero-subtitle">No logins, no profiles, no algorithms. Just you and a random person.</p>
 
-                <!-- Setup Card -->
-                <div class="setup-card" style="margin-top: var(--sp-4);">
-
-                    <!-- Recent Connections -->
-                    <div id="recent-connections" class="setup-section" style="display: none;">
-                        <p class="setup-label">
-                            <i class="ti ti-bolt" style="font-size: 18px;"></i> Reconnect with recent matches
-                            <span id="reconnect-last-time" style="font-size: 0.7rem; color: var(--text-muted); text-transform: none; letter-spacing: normal; font-weight: normal; margin-left: 8px;"></span>
-                        </p>
-                        <div id="recent-connections-list" class="recent-list"></div>
+                    <!-- Trust Strip -->
+                    <div class="trust-strip">
+                        <div class="trust-item"><i class="ti ti-shield" style="font-size: 18px;"></i> No account required</div>
+                        <div class="trust-item"><i class="ti ti-bolt" style="font-size: 18px;"></i> Connects in seconds</div>
+                        <div class="trust-item"><i class="ti ti-trash" style="font-size: 18px;"></i> Chats deleted on exit</div>
                     </div>
-                    <div id="recent-connections-divider" class="setup-divider" style="display: none;"></div>
+                </div>
 
-                    <!-- Collapsible Trigger -->
-                    <div class="setup-section" style="padding-bottom: 0;">
-                        <button type="button" id="toggle-options-btn" class="toggle-options-btn">
-                            <span>Customize Vibe (Interests, Gender)</span>
-                            <i class="ti ti-chevron-down" style="transition: transform 0.2s ease;"></i>
+                <div class="hero-right">
+                    <!-- Setup Card -->
+                    <div class="setup-card">
+                        <!-- Recent Connections -->
+                        <div id="recent-connections" class="setup-section" style="display: none;">
+                            <p class="setup-label">
+                                <i class="ti ti-bolt" style="font-size: 18px;"></i> Reconnect with recent matches
+                                <span id="reconnect-last-time" style="font-size: 0.7rem; color: var(--text-muted); text-transform: none; letter-spacing: normal; font-weight: normal; margin-left: 8px;"></span>
+                            </p>
+                            <div id="recent-connections-list" class="recent-list"></div>
+                        </div>
+                        <div id="recent-connections-divider" class="setup-divider" style="display: none;"></div>
+
+                        <!-- Collapsible Trigger -->
+                        <div class="setup-section" style="padding-bottom: 0;">
+                            <button type="button" id="toggle-options-btn" class="toggle-options-btn">
+                                <span>Customize Vibe (Interests, Gender)</span>
+                                <i class="ti ti-chevron-down" style="transition: transform 0.2s ease;"></i>
+                            </button>
+                        </div>
+
+                        <div id="collapsible-options" class="collapsible-options collapsed">
+                            <div class="setup-divider"></div>
+
+                            <!-- Interests -->
+                            <div class="setup-section">
+                                <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
+                                <div class="interests-grid">
+                                    <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
+                                    <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
+                                    <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
+                                    <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
+                                    <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
+                                    <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
+                                    <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
+                                    <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
+                                    <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
+                                    <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
+                                </div>
+                            </div>
+
+                            <div class="setup-divider"></div>
+
+                            <!-- I Am -->
+                            <div class="setup-section">
+                                <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
+                                <div class="gender-row">
+                                    <button type="button" class="gender-pill" data-gender="male">Male</button>
+                                    <button type="button" class="gender-pill" data-gender="female">Female</button>
+                                    <button type="button" class="gender-pill" data-gender="other">Other</button>
+                                </div>
+                            </div>
+
+                            <!-- Looking For -->
+                            <div class="setup-section">
+                                <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
+                                <div class="gender-row">
+                                    <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
+                                    <button type="button" class="pref-pill" data-pref="male">Male</button>
+                                    <button type="button" class="pref-pill" data-pref="female">Female</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Age Confirmation Checkbox -->
+                        <div style="margin: var(--sp-3) 0 var(--sp-2); display: flex; justify-content: center; width: 100%;">
+                            <label class="age-checkbox">
+                                <input type="checkbox" id="age-confirm" onchange="document.getElementById('start-chat-btn').disabled = !this.checked">
+                                <span class="checkmark"></span>
+                                <span class="check-label">I confirm that I am 18 years or older</span>
+                            </label>
+                        </div>
+
+                        <!-- CTA -->
+                        <button id="start-chat-btn" class="cta-btn cta-glow" disabled>
+                            <span>Start Chatting</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </button>
-                    </div>
-
-                    <div id="collapsible-options" class="collapsible-options collapsed">
-                        <div class="setup-divider"></div>
-
-                        <!-- Interests -->
-                        <div class="setup-section">
-                            <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
-                            <div class="interests-grid">
-                                <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
-                                <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
-                                <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
-                                <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
-                                <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
-                                <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
-                                <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
-                                <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
-                                <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
-                                <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
-                            </div>
-                        </div>
-
-                        <div class="setup-divider"></div>
-
-                        <!-- I Am -->
-                        <div class="setup-section">
-                            <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
-                            <div class="gender-row">
-                                <button type="button" class="gender-pill" data-gender="male">Male</button>
-                                <button type="button" class="gender-pill" data-gender="female">Female</button>
-                                <button type="button" class="gender-pill" data-gender="other">Other</button>
-                            </div>
-                        </div>
-
-                        <!-- Looking For -->
-                        <div class="setup-section">
-                            <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
-                            <div class="gender-row">
-                                <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
-                                <button type="button" class="pref-pill" data-pref="male">Male</button>
-                                <button type="button" class="pref-pill" data-pref="female">Female</button>
-                            </div>
+                        
+                        <button id="friend-invite-btn" class="friend-invite-btn" type="button" style="margin-top: var(--sp-2);">
+                            <span><i class="ti ti-link" style="font-size: 18px;"></i> Connect with a Friend</span>
+                        </button>
+                        
+                        <div id="friend-invite-banner" class="friend-invite-banner hidden" style="margin-top: var(--sp-2); text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 500;">
+                            <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Ready to join.
                         </div>
                     </div>
-
-                    <!-- Age Confirmation Checkbox -->
-                    <div style="margin: var(--sp-3) 0 var(--sp-2); display: flex; justify-content: center; width: 100%;">
-                        <label class="age-checkbox">
-                            <input type="checkbox" id="age-confirm" onchange="document.getElementById('start-chat-btn').disabled = !this.checked">
-                            <span class="checkmark"></span>
-                            <span class="check-label">I confirm that I am 18 years or older</span>
-                        </label>
-                    </div>
-
-                    <!-- CTA -->
-                    <button id="start-chat-btn" class="cta-btn cta-glow" disabled>
-                        <span>Start Chatting</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                    </button>
-                    
-                    <button id="friend-invite-btn" class="friend-invite-btn" type="button" style="margin-top: var(--sp-2);">
-                        <span><i class="ti ti-link" style="font-size: 18px;"></i> Connect with a Friend</span>
-                    </button>
-                    
-                    <div id="friend-invite-banner" class="friend-invite-banner hidden" style="margin-top: var(--sp-2); text-align: center; font-size: 0.85rem; color: var(--accent); font-weight: 500;">
-                        <i class="ti ti-sparkles" style="font-size: 18px;"></i> Private invite active. Ready to join.
-                    </div>
-                </div>
-
-                <!-- Choose Your Vibe Section -->
-                <div class="vibe-rooms-section">
-                    <h2 class="vibe-rooms-title">Choose Your Vibe</h2>
-                    <div class="vibe-rooms-grid">
-                        <!-- 🎮 Gaming Hub -->
-                        <div class="vibe-card room-card" data-room="gaming" style="--room-color: #00ff88; --room-color-rgb: 0, 255, 136;">
-                            <div class="vibe-card-icon">🎮</div>
-                            <div class="vibe-card-info">
-                                <h3 class="vibe-card-name">Gaming Hub</h3>
-                                <p class="vibe-card-desc">Find co-op partners & gaming buddies</p>
-                            </div>
-                            <div class="vibe-card-bottom">
-                                <span class="vibe-online-counter">● 142 online</span>
-                                <button class="vibe-join-btn">Join &rarr;</button>
-                            </div>
-                        </div>
-                        <!-- 🌙 Midnight Lounge -->
-                        <div class="vibe-card room-card" data-room="lounge" style="--room-color: #a78bfa; --room-color-rgb: 167, 139, 250;">
-                            <div class="vibe-card-icon">🌙</div>
-                            <div class="vibe-card-info">
-                                <h3 class="vibe-card-name">Midnight Lounge</h3>
-                                <p class="vibe-card-desc">Deep talks & late night vibes</p>
-                            </div>
-                            <div class="vibe-card-bottom">
-                                <span class="vibe-online-counter">● 98 online</span>
-                                <button class="vibe-join-btn">Join &rarr;</button>
-                            </div>
-                        </div>
-                        <!-- ⛩️ Otaku Cafe -->
-                        <div class="vibe-card room-card" data-room="anime" style="--room-color: #ff6eb4; --room-color-rgb: 255, 110, 180;">
-                            <div class="vibe-card-icon">⛩️</div>
-                            <div class="vibe-card-info">
-                                <h3 class="vibe-card-name">Otaku Cafe</h3>
-                                <p class="vibe-card-desc">Anime, manga & pop culture</p>
-                            </div>
-                            <div class="vibe-card-bottom">
-                                <span class="vibe-online-counter">● 75 online</span>
-                                <button class="vibe-join-btn">Join &rarr;</button>
-                            </div>
-                        </div>
-                        <!-- 📚 Study Room -->
-                        <div class="vibe-card room-card" data-room="study" style="--room-color: #00e5ff; --room-color-rgb: 0, 229, 255;">
-                            <div class="vibe-card-icon">📚</div>
-                            <div class="vibe-card-info">
-                                <h3 class="vibe-card-name">Study Room</h3>
-                                <p class="vibe-card-desc">Focus, set goals, learn together</p>
-                            </div>
-                            <div class="vibe-card-bottom">
-                                <span class="vibe-online-counter">● 56 online</span>
-                                <button class="vibe-join-btn">Join &rarr;</button>
-                            </div>
-                        </div>
-                        <!-- 🌍 Global Chat -->
-                        <div class="vibe-card room-card active" data-room="general" style="--room-color: #ffaa00; --room-color-rgb: 255, 170, 0;">
-                            <div class="vibe-card-icon">🌍</div>
-                            <div class="vibe-card-info">
-                                <h3 class="vibe-card-name">Global Chat</h3>
-                                <p class="vibe-card-desc">Meet anyone, from anywhere</p>
-                            </div>
-                            <div class="vibe-card-bottom">
-                                <span class="vibe-online-counter">● 318 online</span>
-                                <button class="vibe-join-btn">Join &rarr;</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Feature Showcase Section -->
-                <div class="feature-showcase-section">
-                    <h2 class="showcase-title">Everything you need for a real connection</h2>
-                    <div class="showcase-grid">
-                        <div class="showcase-card" style="--accent-color: #00e5ff; --accent-glow: rgba(0, 229, 255, 0.15);">
-                            <div class="showcase-icon">📹</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">Video Call with Filters</h3>
-                                <p class="showcase-feature-desc">VHS, Neon, Warm, Noir, Chrome filters.</p>
-                            </div>
-                        </div>
-                        <div class="showcase-card" style="--accent-color: #a78bfa; --accent-glow: rgba(167, 139, 250, 0.15);">
-                            <div class="showcase-icon">🎲</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">In-Chat Games</h3>
-                                <p class="showcase-feature-desc">Truth or Dare, Tic-Tac-Toe, Would You Rather, Draw Together.</p>
-                            </div>
-                        </div>
-                        <div class="showcase-card" style="--accent-color: #00ff88; --accent-glow: rgba(0, 255, 136, 0.15);">
-                            <div class="showcase-icon">🎨</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">Draw Together</h3>
-                                <p class="showcase-feature-desc">Live collaborative canvas to sketch in real-time.</p>
-                            </div>
-                        </div>
-                        <div class="showcase-card" style="--accent-color: #ff6eb4; --accent-glow: rgba(255, 110, 180, 0.15);">
-                            <div class="showcase-icon">💌</div>
-                            <div class="showcase-info">
-                                <h3 class="showcase-feature-name">Secret Messages</h3>
-                                <p class="showcase-feature-desc">Anonymous one-time notes that disappear.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!-- Setup Card moved to top -->
-
-                <!-- Trust Strip -->
-                <div class="trust-strip">
-                    <div class="trust-item"><i class="ti ti-shield" style="font-size: 18px;"></i> No account required</div>
-                    <div class="trust-item"><i class="ti ti-bolt" style="font-size: 18px;"></i> Connects in seconds</div>
-                    <div class="trust-item"><i class="ti ti-trash" style="font-size: 18px;"></i> Chats deleted on exit</div>
                 </div>
             </section>
+
+            <!-- Choose Your Vibe Section -->
+            <div class="vibe-rooms-section">
+                <h2 class="vibe-rooms-title">Choose Your Vibe</h2>
+                <div class="vibe-rooms-grid">
+                    <!-- 🎮 Gaming Hub -->
+                    <div class="vibe-card room-card" data-room="gaming" style="--room-color: #00ff88; --room-color-rgb: 0, 255, 136;">
+                        <div class="vibe-card-icon">🎮</div>
+                        <div class="vibe-card-info">
+                            <h3 class="vibe-card-name">Gaming Hub</h3>
+                            <p class="vibe-card-desc">Find co-op partners & gaming buddies</p>
+                        </div>
+                        <div class="vibe-card-bottom">
+                            <span class="vibe-online-counter">● 142 online</span>
+                            <button class="vibe-join-btn">Join &rarr;</button>
+                        </div>
+                    </div>
+                    <!-- 🌙 Midnight Lounge -->
+                    <div class="vibe-card room-card" data-room="lounge" style="--room-color: #a78bfa; --room-color-rgb: 167, 139, 250;">
+                        <div class="vibe-card-icon">🌙</div>
+                        <div class="vibe-card-info">
+                            <h3 class="vibe-card-name">Midnight Lounge</h3>
+                            <p class="vibe-card-desc">Deep talks & late night vibes</p>
+                        </div>
+                        <div class="vibe-card-bottom">
+                            <span class="vibe-online-counter">● 98 online</span>
+                            <button class="vibe-join-btn">Join &rarr;</button>
+                        </div>
+                    </div>
+                    <!-- ⛩️ Otaku Cafe -->
+                    <div class="vibe-card room-card" data-room="anime" style="--room-color: #ff6eb4; --room-color-rgb: 255, 110, 180;">
+                        <div class="vibe-card-icon">⛩️</div>
+                        <div class="vibe-card-info">
+                            <h3 class="vibe-card-name">Otaku Cafe</h3>
+                            <p class="vibe-card-desc">Anime, manga & pop culture</p>
+                        </div>
+                        <div class="vibe-card-bottom">
+                            <span class="vibe-online-counter">● 75 online</span>
+                            <button class="vibe-join-btn">Join &rarr;</button>
+                        </div>
+                    </div>
+                    <!-- 📚 Study Room -->
+                    <div class="vibe-card room-card" data-room="study" style="--room-color: #00e5ff; --room-color-rgb: 0, 229, 255;">
+                        <div class="vibe-card-icon">📚</div>
+                        <div class="vibe-card-info">
+                            <h3 class="vibe-card-name">Study Room</h3>
+                            <p class="vibe-card-desc">Focus, set goals, learn together</p>
+                        </div>
+                        <div class="vibe-card-bottom">
+                            <span class="vibe-online-counter">● 56 online</span>
+                            <button class="vibe-join-btn">Join &rarr;</button>
+                        </div>
+                    </div>
+                    <!-- 🌍 Global Chat -->
+                    <div class="vibe-card room-card active" data-room="general" style="--room-color: #ffaa00; --room-color-rgb: 255, 170, 0;">
+                        <div class="vibe-card-icon">🌍</div>
+                        <div class="vibe-card-info">
+                            <h3 class="vibe-card-name">Global Chat</h3>
+                            <p class="vibe-card-desc">Meet anyone, from anywhere</p>
+                        </div>
+                        <div class="vibe-card-bottom">
+                            <span class="vibe-online-counter">● 318 online</span>
+                            <button class="vibe-join-btn">Join &rarr;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Showcase Section -->
+            <div class="feature-showcase-section">
+                <h2 class="showcase-title">What happens inside a chat</h2>
+                <div class="showcase-grid">
+                    <div class="showcase-card" style="--accent-color: #00e5ff; --accent-glow: rgba(0, 229, 255, 0.15);">
+                        <div class="showcase-icon">📹</div>
+                        <div class="showcase-info">
+                            <h3 class="showcase-feature-name">Video Call with Filters</h3>
+                            <p class="showcase-feature-desc">VHS, Neon, Warm, Noir, Chrome filters.</p>
+                        </div>
+                    </div>
+                    <div class="showcase-card" style="--accent-color: #a78bfa; --accent-glow: rgba(167, 139, 250, 0.15);">
+                        <div class="showcase-icon">🎲</div>
+                        <div class="showcase-info">
+                            <h3 class="showcase-feature-name">In-Chat Games</h3>
+                            <p class="showcase-feature-desc">Truth or Dare, Tic-Tac-Toe, Would You Rather, Draw Together.</p>
+                        </div>
+                    </div>
+                    <div class="showcase-card" style="--accent-color: #00ff88; --accent-glow: rgba(0, 255, 136, 0.15);">
+                        <div class="showcase-icon">🎨</div>
+                        <div class="showcase-info">
+                            <h3 class="showcase-feature-name">Draw Together</h3>
+                            <p class="showcase-feature-desc">Live collaborative canvas to sketch in real-time.</p>
+                        </div>
+                    </div>
+                    <div class="showcase-card" style="--accent-color: #ff6eb4; --accent-glow: rgba(255, 110, 180, 0.15);">
+                        <div class="showcase-icon">💌</div>
+                        <div class="showcase-info">
+                            <h3 class="showcase-feature-name">Secret Messages</h3>
+                            <p class="showcase-feature-desc">Anonymous one-time notes that disappear.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Footer -->
             <footer class="landing-footer">
@@ -342,7 +341,7 @@
                             }
                             .radar-ring {
                                 fill: none;
-                                stroke: #6366f1;
+                                stroke: var(--accent);
                                 stroke-dasharray: 4 4;
                                 transform-origin: center;
                                 opacity: 0;
@@ -1066,6 +1065,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script src="script.js?v=232"></script>
+    <script src="motion.js?v=1"></script>
 
     <!-- Service Worker -->
     <script>
