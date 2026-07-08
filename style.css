@@ -292,20 +292,31 @@ h3 { font-size: 1.2rem; }
 
 @media (max-width: 860px) {
   .hero {
-    grid-template-columns: 1fr;
-    gap: var(--sp-5);
-    padding: var(--sp-5) 0;
-    text-align: center;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--sp-6);
+    padding: var(--sp-4) 0 var(--sp-6);
   }
   .hero-left {
     align-items: center;
     text-align: center;
+    margin-top: var(--sp-4);
   }
   .hero-right {
+    display: flex;
     justify-content: center;
+    width: 100%;
   }
   .hero-left .trust-strip {
     justify-content: center;
+  }
+  .vibe-rooms-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+  .vibe-rooms-title {
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -2143,6 +2154,31 @@ a:focus-visible {
   .cta-btn {
     padding: var(--sp-3);
     font-size: 0.93rem;
+  }
+
+  /* Compact Mobile Nav styling */
+  #auth-btn-text,
+  #auth-optional-label {
+    display: none !important;
+  }
+
+  .auth-btn {
+    padding: 0 !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .logo-img {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .logo-text {
+    font-size: 1.25rem !important;
   }
 
   .chat-header {
