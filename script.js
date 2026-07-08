@@ -3646,104 +3646,14 @@ function endCallLocal() {
 }
 
 function startBlindDateSystem() {
-    // 1. Apply blur classes to the video elements
+    // Reveal camera feature removed. Video feeds are shown directly without blur or timer.
     const localVideo = document.getElementById('local-video');
     const remoteVideo = document.getElementById('remote-video');
-    if (localVideo) localVideo.classList.add('video-blurred');
-    if (remoteVideo) remoteVideo.classList.add('video-blurred');
+    if (localVideo) localVideo.classList.remove('video-blurred');
+    if (remoteVideo) remoteVideo.classList.remove('video-blurred');
 
-    // 2. Show the reveal panel and reset values
     const revealPanel = document.getElementById('reveal-panel');
-    const revealBtn = document.getElementById('reveal-action-btn');
-    const localDot = document.getElementById('reveal-status-local');
-    const remoteDot = document.getElementById('reveal-status-remote');
-    const timerText = document.getElementById('reveal-timer-countdown');
-
-    if (revealPanel) revealPanel.classList.remove('hidden');
-    if (revealBtn) {
-        revealBtn.disabled = false;
-        revealBtn.innerHTML = '<span class="reveal-btn-icon">🔓</span> Reveal Camera Feed';
-    }
-    if (localDot) {
-        localDot.classList.remove('ready');
-        localDot.textContent = 'You: Not Ready';
-    }
-    if (remoteDot) {
-        remoteDot.classList.remove('ready');
-        remoteDot.textContent = 'Partner: Not Ready';
-    }
-    if (timerText) timerText.textContent = '60';
-
-    let secondsLeft = 60;
-    if (state.revealInterval) clearInterval(state.revealInterval);
-    state.revealInterval = setInterval(() => {
-        secondsLeft--;
-        if (timerText) timerText.textContent = secondsLeft;
-        
-        if (secondsLeft <= 0) {
-            clearInterval(state.revealInterval);
-            state.revealInterval = null;
-            
-            // Auto hang up since time expired and not both revealed
-            console.log('WebRTC: Reveal time expired. Ending call...');
-            showToast('Reveal time expired! Call ended.');
-            hangupCall();
-        }
-    }, 1000);
-
-    // 3. Register Firebase listener for reveals
-    const revealsRef = db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/reveals`);
-    state.listeners.callReveals = revealsRef;
-    
-    revealsRef.on('value', snap => {
-        const reveals = snap.val() || {};
-        const localRevealed = !!reveals[state.userId];
-        const partnerId = state.partnerId;
-        const partnerRevealed = !!reveals[partnerId];
-
-        // Update UI status dots
-        if (localDot) {
-            localDot.classList.toggle('ready', localRevealed);
-            localDot.textContent = localRevealed ? 'You: Ready' : 'You: Not Ready';
-        }
-        if (remoteDot) {
-            remoteDot.classList.toggle('ready', partnerRevealed);
-            remoteDot.textContent = partnerRevealed ? 'Partner: Ready' : 'Partner: Not Ready';
-        }
-
-        if (localRevealed && revealBtn) {
-            revealBtn.disabled = true;
-            revealBtn.innerHTML = '<span class="reveal-btn-icon">⏳</span> Waiting for partner...';
-        }
-
-        // If both agreed, unblur video and hide panel
-        if (localRevealed && partnerRevealed) {
-            console.log('WebRTC: Both users revealed! Removing blur...');
-            if (localVideo) localVideo.classList.remove('video-blurred');
-            if (remoteVideo) remoteVideo.classList.remove('video-blurred');
-            if (revealPanel) revealPanel.classList.add('hidden');
-            
-            if (state.revealInterval) {
-                clearInterval(state.revealInterval);
-                state.revealInterval = null;
-            }
-            
-            showToast('Match revealed! Enjoy your call! 🎉');
-        }
-    });
-
-    // 4. Bind the reveal action button click event
-    if (revealBtn) {
-        // Clone button to strip existing event listeners cleanly
-        const newRevealBtn = revealBtn.cloneNode(true);
-        revealBtn.parentNode.replaceChild(newRevealBtn, revealBtn);
-        
-        newRevealBtn.addEventListener('click', () => {
-            console.log('WebRTC: User clicked reveal camera feed');
-            db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/call/reveals/${state.userId}`).set(true)
-                .catch(e => console.error('Error setting reveal state:', e));
-        });
-    }
+    if (revealPanel) revealPanel.classList.add('hidden');
 }
 
 function optimizeVideoBitrate(pc) {
