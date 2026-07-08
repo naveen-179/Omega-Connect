@@ -1311,14 +1311,14 @@ h3 { font-size: 1.2rem; }
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
+  background: #ffffff;
+  color: #0d0d0d;
   flex-shrink: 0;
   transition: all var(--duration) var(--ease);
 }
 
 .send-btn:hover:not(:disabled) {
-  background: var(--accent-hover);
+  background: rgba(255, 255, 255, 0.85);
   transform: scale(1.05);
 }
 
@@ -1506,13 +1506,13 @@ h3 { font-size: 1.2rem; }
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.9rem;
-  color: #fff;
-  background: var(--accent);
+  color: #0d0d0d;
+  background: #ffffff;
   transition: all var(--duration) var(--ease);
 }
 
 .btn-primary:hover {
-  background: var(--accent-hover);
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .btn-danger {
@@ -1829,11 +1829,12 @@ h3 { font-size: 1.2rem; }
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background: var(--accent);
+  background: #ffffff;
 }
 
 .toggle-switch input:checked + .toggle-slider::after {
   transform: translateX(20px);
+  background: #0d0d0d;
 }
 
 /* Select dropdown */
@@ -2256,10 +2257,10 @@ a:focus-visible {
 }
 
 .swipe-reply-indicator.ready {
-  color: #fff;
-  background: var(--accent);
-  border-color: var(--accent);
-  box-shadow: 0 4px 12px rgba(255, 111, 97, 0.4);
+  color: #0d0d0d;
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: none;
 }
 
 /* Glassmorphic Reaction Picker */
@@ -2988,25 +2989,25 @@ a:focus-visible {
 .reveal-action-btn {
   width: 100%;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  background: var(--accent);
-  color: #080c14;
+  background: #ffffff;
+  color: #0d0d0d;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 229, 176, 0.2);
+  box-shadow: none;
 }
 
 .reveal-action-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 229, 176, 0.3);
-  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .reveal-action-btn:disabled {
