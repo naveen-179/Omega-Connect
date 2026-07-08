@@ -293,14 +293,13 @@ h3 { font-size: 1.2rem; }
 @media (max-width: 860px) {
   .hero {
     display: flex;
-    flex-direction: column-reverse;
-    gap: var(--sp-6);
+    flex-direction: column;
+    gap: var(--sp-5);
     padding: var(--sp-4) 0 var(--sp-6);
   }
   .hero-left {
     align-items: center;
     text-align: center;
-    margin-top: var(--sp-4);
   }
   .hero-right {
     display: flex;
@@ -2156,29 +2155,25 @@ a:focus-visible {
     font-size: 0.93rem;
   }
 
-  /* Compact Mobile Nav styling */
-  #auth-btn-text,
-  #auth-optional-label {
-    display: none !important;
-  }
-
-  .auth-btn {
-    padding: 0 !important;
-    width: 38px !important;
-    height: 38px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  /* Mobile Nav styling to prevent OMEGA CONNECT wrapping */
+  .logo-text {
+    font-size: clamp(1.2rem, 4.5vw, 1.45rem) !important;
+    white-space: nowrap !important;
   }
 
   .logo-img {
-    width: 34px !important;
-    height: 34px !important;
+    width: 36px !important;
+    height: 36px !important;
   }
 
-  .logo-text {
-    font-size: 1.25rem !important;
+  #auth-optional-label {
+    display: none !important; /* Hide optional badge to save space */
+  }
+
+  .auth-btn {
+    padding: 6px 12px !important;
+    border-radius: var(--radius-pill) !important;
+    font-size: 0.8rem !important;
   }
 
   .chat-header {
