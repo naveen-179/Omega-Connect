@@ -371,9 +371,6 @@ function showModal(id) {
         if (id === 'drawing' || id === 'drawing-modal') {
             const brushModeBtn = document.getElementById('draw-mode-brush');
             if (brushModeBtn) brushModeBtn.click();
-            if (state.chatId && state.isConnected) {
-                db.ref(`activeChats/${state.chatId}/drawActive`).set(state.userId);
-            }
         }
         modal.style.display = '';
         modal.classList.add('active');
@@ -385,12 +382,6 @@ function closeModal(id) {
     if (modal) {
         modal.classList.remove('active');
         if (id === 'drawing' || id === 'drawing-modal') {
-            if (state.chatId && state.isConnected) {
-                db.ref(`activeChats/${state.chatId}/drawActive`).transaction(curr => {
-                    if (curr === state.userId) return null;
-                    return curr;
-                });
-            }
         }
     }
 }
@@ -1580,19 +1571,7 @@ function initDrawingCanvas() {
         ctx.beginPath();
         ctx.moveTo(c.x, c.y);
 
-        // Sync drawing in real-time
-        if (state.chatId && state.isConnected) {
-            db.ref(`activeChats/${state.chatId}/draw`).push({
-                fx: lastX,
-                fy: lastY,
-                tx: c.x,
-                ty: c.y,
-                sender: state.userId,
-                color: currentStyle,
-                width: currentWidth,
-                mode: isEraser ? 'erase' : 'draw'
-            });
-        }
+
 
         lastX = c.x;
         lastY = c.y;
@@ -1608,9 +1587,6 @@ function initDrawingCanvas() {
 
     clearBtn.addEventListener('click', () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (state.chatId && state.isConnected) {
-            db.ref(`activeChats/${state.chatId}/draw`).set(null);
-        }
     });
 
     sendBtn.addEventListener('click', () => {
@@ -1620,59 +1596,13 @@ function initDrawingCanvas() {
         if (!hasContent) { showToast('Draw something first!'); return; }
         sendMessage(data, 'drawing');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // Reset Firebase drawing node after sending so the next canvas starts fresh
-        if (state.chatId && state.isConnected) {
-            db.ref(`activeChats/${state.chatId}/draw`).set(null);
-        }
         closeModal('drawing-modal');
     });
 }
 
 function listenForDrawing() {
-    if (!state.chatId) return;
-
-    const canvas = document.getElementById('drawing-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    const drawRef = db.ref(`activeChats/${state.chatId}/draw`);
-    state.listeners.drawing = drawRef;
-
-    drawRef.on('value', snap => {
-        if (snap.val() === null) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-    });
-
-    drawRef.on('child_added', snap => {
-        const val = snap.val();
-        if (val && val.sender !== state.userId) {
-            ctx.save();
-            ctx.globalCompositeOperation = (val.mode === 'erase') ? 'destination-out' : 'source-over';
-            ctx.lineWidth = val.width || 3;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = val.color || '#e8edf5';
-            ctx.beginPath();
-            ctx.moveTo(val.fx, val.fy);
-            ctx.lineTo(val.tx, val.ty);
-            ctx.stroke();
-            ctx.restore();
-        }
-    });
-
-    // Listen for partner opening drawing modal
-    const drawActiveRef = db.ref(`activeChats/${state.chatId}/drawActive`);
-    state.listeners.drawActive = drawActiveRef;
-    drawActiveRef.on('value', snap => {
-        const activeUser = snap.val();
-        if (activeUser && activeUser !== state.userId) {
-            const modal = document.getElementById('drawing-modal') || document.getElementById('drawing');
-            if (modal && !modal.classList.contains('active')) {
-                showModal('drawing');
-                showToast(`${state.partnerName || 'Stranger'} started drawing! ✏️`);
-            }
-        }
-    });
+    // Drawing canvas is individual. Real-time stroke syncing and remote modal triggers are disabled.
+}
 }
 
 // --- Voice Note Recorder (10-Second Notes) ---
