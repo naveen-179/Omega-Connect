@@ -986,6 +986,13 @@ h3 { font-size: 1.2rem; }
   margin-bottom: var(--sp-1);
 }
 
+.message-image[alt="Drawing"] {
+  background-color: #121212 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 8px !important;
+  display: block !important;
+}
+
 /* Message ticks */
 .message-ticks {
   display: inline-flex;
@@ -1317,6 +1324,11 @@ h3 { font-size: 1.2rem; }
   transition: all var(--duration) var(--ease);
 }
 
+.send-btn svg {
+  fill: #0d0d0d !important;
+  color: #0d0d0d !important;
+}
+
 .send-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.85);
   transform: scale(1.05);
@@ -1325,6 +1337,11 @@ h3 { font-size: 1.2rem; }
 .send-btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+.send-btn:disabled svg {
+  fill: rgba(0, 0, 0, 0.35) !important;
+  color: rgba(0, 0, 0, 0.35) !important;
 }
 
 /* --- Chat Tools --- */
@@ -1506,13 +1523,14 @@ h3 { font-size: 1.2rem; }
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.9rem;
-  color: #0d0d0d;
-  background: #ffffff;
+  color: #0d0d0d !important;
+  background: #ffffff !important;
   transition: all var(--duration) var(--ease);
 }
 
 .btn-primary:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #0d0d0d !important;
 }
 
 .btn-danger {
@@ -1753,9 +1771,9 @@ h3 { font-size: 1.2rem; }
 }
 
 .mode-btn.active {
-  background: rgba(255, 111, 97, 0.12);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #0d0d0d !important;
 }
 
 .mode-btn i {
@@ -3328,7 +3346,8 @@ a:focus-visible {
 }
 
 .input-tool-btn#voiceBtn.active {
-  background: var(--accent, #6c5ce7);
+  background: #ffffff !important;
+  color: #0d0d0d !important;
   animation: voice-pulse 1.4s infinite;
   border-radius: 50%;
   position: relative;
