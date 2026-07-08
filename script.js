@@ -4530,14 +4530,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextPollBtn) nextPollBtn.addEventListener('click', startPollGame);
     if (backToGamesPoll) backToGamesPoll.addEventListener('click', showGameSelectionScreen);
 
-    // Draw Together selection inside Chat Games Modal
-    const gameSelectDrawBtn = document.getElementById('game-select-draw-btn');
-    if (gameSelectDrawBtn) {
-        gameSelectDrawBtn.addEventListener('click', () => {
-            closeModal('game');
-            showModal('drawing');
-        });
-    }
+
 
     // Tic-Tac-Toe board cells
     document.querySelectorAll('.ttt-cell').forEach(cell => {
