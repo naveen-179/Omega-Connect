@@ -24,8 +24,9 @@
             ".write": true
         },
         "reports": {
-            ".read": false,
-            ".write": true
+            ".read": "auth != null",
+            ".write": true,
+            ".indexOn": ["status", "reportedUser"]
         },
         "stats": {
             ".read": true,
@@ -54,6 +55,26 @@
         "moderationLogs": {
             ".read": false,
             ".write": true
+        },
+        "bannedSessions": {
+            ".read": false,
+            ".write": false
+        },
+        "verificationLogs": {
+            ".read": false,
+            ".write": false
+        },
+        "bannedUsers": {
+            "$userId": {
+                ".read": true,
+                ".write": "auth != null"
+            }
+        },
+        "warnings": {
+            "$userId": {
+                ".read": true,
+                ".write": "auth != null"
+            }
         }
     }
 }

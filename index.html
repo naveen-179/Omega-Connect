@@ -180,14 +180,7 @@
                             </div>
                         </div>
 
-                        <!-- Age Confirmation Checkbox -->
-                        <div style="margin: var(--sp-3) 0 var(--sp-2); display: flex; justify-content: center; width: 100%;">
-                            <label class="age-checkbox">
-                                <input type="checkbox" id="age-confirm" checked onchange="document.getElementById('start-chat-btn').disabled = !this.checked">
-                                <span class="checkmark"></span>
-                                <span class="check-label">I confirm that I am 18 years or older</span>
-                            </label>
-                        </div>
+
 
                         <!-- CTA -->
                         <button id="start-chat-btn" class="cta-btn cta-glow">
@@ -792,13 +785,16 @@
             <h3>Report User</h3>
             <p>Why are you reporting this user?</p>
             <div class="report-options">
+                <button class="report-option" data-reason="sexual-content">Sexual Content</button>
                 <button class="report-option" data-reason="harassment">Harassment</button>
-                <button class="report-option" data-reason="spam">Spam</button>
-                <button class="report-option" data-reason="inappropriate">Inappropriate Content</button>
-                <button class="report-option" data-reason="underage">Appears Underage</button>
-                <button class="report-option" data-reason="threats">Threats / Violence</button>
+                <button class="report-option" data-reason="underage-concern">Underage Concern</button>
+                <button class="report-option" data-reason="spam-bots">Spam / Bots</button>
                 <button class="report-option" data-reason="other">Other</button>
             </div>
+            <label style="display: flex; align-items: center; gap: 8px; margin: 16px 0; color: #a0aec0; font-size: 14px; cursor: pointer; justify-content: center;">
+                <input type="checkbox" id="attach-transcript" style="cursor: pointer;">
+                <span>Attach recent chat messages as evidence</span>
+            </label>
             <button class="btn-secondary" onclick="closeModal('report-modal')">Cancel</button>
         </div>
     </div>
@@ -916,13 +912,14 @@
                     <li><strong>No IP tracking</strong> — We do not log IP addresses</li>
                     <li><strong>Anonymous identifiers</strong> — Temporary session IDs, discarded after use</li>
                     <li><strong>Chat data</strong> — Deleted after the session ends</li>
+                    <li><strong>Verification metadata</strong> — A secure hashed verification timestamp and age bracket to prove compliance with legal regulations. Your raw date of birth is processed client-side and never stored.</li>
                 </ul>
                 <h4>3. Local Storage</h4>
                 <p>We may store minimal preferences in your browser's local storage. This never leaves your device.</p>
                 <h4>4. Third-Party Services</h4>
                 <p>We use Firebase (Google) for real-time communication.</p>
                 <h4>5. Children's Privacy</h4>
-                <p>Omega Connect is strictly for users aged 18+.</p>
+                <p>Omega Connect is strictly for users aged 18+. We verify age eligibility using a secure, server-side date-of-birth gate. Under-18 verification events trigger session lockout hashes that are retained to enforce safety guidelines.</p>
                 <h4>6. Contact</h4>
                 <p>Questions? Reach out via the Feedback section.</p>
             </div>
@@ -996,7 +993,7 @@
     </div>
 
     <!-- Age Gate Immersive Experience -->
-    <div id="age-gate-modal" class="immersive-gate" style="display: none !important;">
+    <div id="age-gate-modal" class="immersive-gate">
         <div class="immersive-gate-content">
             <h1 class="immersive-logo">Omega Connect</h1>
             <p class="immersive-tagline">Video &middot; Chat &middot; Games &middot; Draw &mdash; All Anonymous</p>
@@ -1005,8 +1002,13 @@
                 <span class="immersive-pill">🗑 Auto-Deleted</span>
                 <span class="immersive-pill">👁 Zero Tracking</span>
             </div>
-            <p class="immersive-warning">🔞 This platform is for adults only</p>
-            <button id="immersive-enter-btn" class="immersive-cta">I'm 18 or older &mdash; Enter &rarr;</button>
+            <p class="immersive-warning">🔞 Please enter your date of birth to verify your age</p>
+            <div class="dob-select-container" style="display: flex; gap: 8px; justify-content: center; margin: var(--sp-4) 0 var(--sp-2);">
+                <select id="dob-day" class="dob-select" style="padding: 10px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.1); width: 80px;" aria-label="Birth day"></select>
+                <select id="dob-month" class="dob-select" style="padding: 10px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.1); width: 120px;" aria-label="Birth month"></select>
+                <select id="dob-year" class="dob-select" style="padding: 10px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.1); width: 95px;" aria-label="Birth year"></select>
+            </div>
+            <button id="immersive-enter-btn" class="immersive-cta">Verify Age & Enter &rarr;</button>
             <p class="immersive-footer">
                 By entering you agree to our 
                 <a href="#" onclick="showModal('terms');return false">Terms</a> &middot; 
@@ -1028,7 +1030,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="firebase-config.js"></script>
-    <script src="script.js?v=234"></script>
+    <script src="script.js?v=236"></script>
     <script src="motion.js?v=1"></script>
 
     <!-- Service Worker -->

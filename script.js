@@ -755,7 +755,7 @@ function generateFriendLink() {
 }
 
 async function initChat() {
-    if (checkBanStatus()) return;
+    if (await checkBanStatus()) return;
     if (state.moderationServiceOffline && !CONFIG.MODERATION.TEST_MODE) {
         showToast('Safety moderation service is offline. Matchmaking disabled.');
         return;
@@ -1419,9 +1419,10 @@ function resetState() {
     const startBtn = document.getElementById('start-chat-btn');
     if (startBtn) {
         startBtn.innerHTML = '<span>Start Chatting</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
-        const ageCheckbox = document.getElementById('age-confirm');
-        if (ageCheckbox) {
-            startBtn.disabled = !ageCheckbox.checked;
+        if (localStorage.getItem('omega_age_locked') === 'true') {
+            startBtn.disabled = true;
+        } else {
+            startBtn.disabled = false;
         }
     }
     const banner = document.getElementById('friend-invite-banner');
@@ -1721,26 +1722,70 @@ function listenForDrawing() {
 }
 
 // --- Automated Content Moderation Helpers ---
-function checkBanStatus() {
+async function checkBanStatus() {
+    // 1. Check local storage first (instant check)
     const banInfoStr = localStorage.getItem('omega_moderation_ban');
-    if (!banInfoStr) return false;
-    try {
-        const banInfo = JSON.parse(banInfoStr);
-        if (banInfo.unlockTime === 'Infinity' || banInfo.unlockTime === Infinity) {
-            showModerationBanOverlay('violation', Infinity);
-            return true;
-        }
-        const unlockTime = parseInt(banInfo.unlockTime, 10);
-        if (Date.now() < unlockTime) {
-            showModerationBanOverlay('violation', unlockTime);
-            return true;
-        } else {
-            // Expired, clear ban
+    if (banInfoStr) {
+        try {
+            const banInfo = JSON.parse(banInfoStr);
+            const unlockTime = banInfo.unlockTime === 'Infinity' || banInfo.unlockTime === Infinity ? Infinity : parseInt(banInfo.unlockTime, 10);
+            if (Date.now() < unlockTime) {
+                showModerationBanOverlay('violation', unlockTime);
+                return true;
+            } else {
+                localStorage.removeItem('omega_moderation_ban');
+            }
+        } catch(e) {
             localStorage.removeItem('omega_moderation_ban');
         }
-    } catch(e) {
-        localStorage.removeItem('omega_moderation_ban');
     }
+
+    // 2. Query global database ban (prevents LocalStorage cookie-clearing bypasses)
+    if (state.userId && window.db) {
+        try {
+            const banSnap = await db.ref(`bannedUsers/${state.userId}`).once('value');
+            if (banSnap.exists()) {
+                const banData = banSnap.val();
+                const unlockTime = banData.unlockTime === 'Infinity' || banData.unlockTime === Infinity ? Infinity : parseInt(banData.unlockTime, 10);
+                if (Date.now() < unlockTime) {
+                    // Update local storage so they don't hit the database next time
+                    localStorage.setItem('omega_moderation_ban', JSON.stringify({
+                        unlockTime: unlockTime === Infinity ? 'Infinity' : unlockTime,
+                        timestamp: Date.now()
+                    }));
+                    showModerationBanOverlay('violation', unlockTime);
+                    return true;
+                } else {
+                    // Ban expired in DB, delete it
+                    db.ref(`bannedUsers/${state.userId}`).remove().catch(() => {});
+                }
+            }
+        } catch(e) {
+            console.error('Failed to query global bannedUsers status:', e);
+        }
+
+        // 3. Query warnings in DB
+        try {
+            const warnSnap = await db.ref(`warnings/${state.userId}`).once('value');
+            if (warnSnap.exists()) {
+                const warnings = [];
+                warnSnap.forEach(child => {
+                    warnings.push(child.val());
+                });
+                
+                // Show the warnings in a modal or toast alert
+                warnings.forEach(w => {
+                    showToast(`⚠️ Warning: You were reported for ${w.reason || 'violating community guidelines'}. Please respect others.`);
+                });
+                
+                // Clear warning from DB so it's only shown once
+                db.ref(`warnings/${state.userId}`).remove().catch(() => {});
+            }
+        } catch(e) {
+            console.error('Failed to check warnings:', e);
+        }
+    }
+
     return false;
 }
 
@@ -4420,13 +4465,33 @@ function initCallFilters() {
 // --- Report & Block ---
 function submitReport(reason) {
     if (!state.chatId || !state.partnerId) return;
+
+    const attachTranscript = document.getElementById('attach-transcript')?.checked;
+    let evidence = null;
+    if (attachTranscript && state.chatHistory.length > 0) {
+        // Capture last 10 messages for evidence
+        const recentHistory = state.chatHistory.slice(-10);
+        evidence = recentHistory.map(m => {
+            const time = m.timestamp ? formatTime(m.timestamp) : '';
+            const sender = m.senderId === state.userId ? 'You' : state.partnerName || 'Stranger';
+            return `[${time}] ${sender}: ${m.text}`;
+        });
+    }
+
     db.ref(`${CONFIG.PATHS.REPORTS}/${generateId()}`).set({
         chatId: state.chatId,
         reportedBy: state.userId,
         reportedUser: state.partnerId,
         reason: reason,
+        evidence: evidence,
+        status: 'pending',
         timestamp: firebase.database.ServerValue.TIMESTAMP
     });
+
+    // Reset opt-in check
+    const checkbox = document.getElementById('attach-transcript');
+    if (checkbox) checkbox.checked = false;
+
     closeModal('report-modal');
     showToast('Report submitted. Thank you.');
 }
@@ -4585,35 +4650,143 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Landing Page ---
 
     // Age gate & Verification Modal (Immersive Experience)
-    const ageCheckbox = document.getElementById('age-confirm');
-    const startBtn = document.getElementById('start-chat-btn');
     const ageGate = document.getElementById('age-gate-modal');
     const enterBtn = document.getElementById('immersive-enter-btn');
+    const startBtn = document.getElementById('start-chat-btn');
 
-    const isAgeGateHidden = ageGate && (window.getComputedStyle(ageGate).display === 'none' || ageGate.getAttribute('style')?.includes('none'));
-    if (sessionStorage.getItem('ageVerified') === 'true' || isAgeGateHidden) {
-        sessionStorage.setItem('ageVerified', 'true');
-        if (ageCheckbox) ageCheckbox.checked = true;
-        if (startBtn) startBtn.disabled = false;
-        if (ageGate) ageGate.remove(); // Remove immediately from DOM if verified or hidden
-    } else {
-        if (ageGate) {
-            ageGate.style.display = 'flex';
-            ageGate.classList.add('active');
+    // Populate birthdate select dropdowns
+    const dobDay = document.getElementById('dob-day');
+    const dobMonth = document.getElementById('dob-month');
+    const dobYear = document.getElementById('dob-year');
+
+    if (dobDay && dobMonth && dobYear) {
+        // Populate days 1-31
+        for (let i = 1; i <= 31; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            dobDay.appendChild(opt);
+        }
+        // Populate months
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        months.forEach((m, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx + 1;
+            opt.textContent = m;
+            dobMonth.appendChild(opt);
+        });
+        // Populate years from current year down to 1900
+        const currentYear = new Date().getFullYear();
+        for (let y = currentYear; y >= 1900; y--) {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            // Default select to ~20 years ago
+            if (y === currentYear - 20) opt.selected = true;
+            dobYear.appendChild(opt);
         }
     }
 
-    if (enterBtn) {
-        enterBtn.addEventListener('click', () => {
+    // Helper to display a permanent under-18 warning lockout overlay
+    function showUnder18Overlay() {
+        if (ageGate) {
+            ageGate.style.display = 'flex';
+            ageGate.classList.add('active');
+            ageGate.innerHTML = `
+                <div class="immersive-gate-content" style="max-width: 480px; text-align: center;">
+                    <div style="font-size: 54px; margin-bottom: 20px;">🔞</div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #ff5252; margin-bottom: 16px;">Access Denied</h1>
+                    <p style="font-size: 16px; color: #e8edf5; line-height: 1.6; margin-bottom: 24px;">
+                        We're sorry, you must be 18 years or older to use Omega Connect. Access has been locked for this session.
+                    </p>
+                </div>
+            `;
+        }
+    }
+
+    // Check if user is locked out permanently
+    if (localStorage.getItem('omega_age_locked') === 'true') {
+        showUnder18Overlay();
+        if (startBtn) startBtn.disabled = true;
+    } else {
+        const isAgeGateHidden = ageGate && (window.getComputedStyle(ageGate).display === 'none' || ageGate.getAttribute('style')?.includes('none'));
+        if (sessionStorage.getItem('ageVerified') === 'true' || isAgeGateHidden) {
             sessionStorage.setItem('ageVerified', 'true');
-            if (ageCheckbox) ageCheckbox.checked = true;
             if (startBtn) startBtn.disabled = false;
-            
+            if (ageGate) ageGate.remove();
+        } else {
             if (ageGate) {
-                ageGate.classList.add('exiting');
-                setTimeout(() => {
-                    ageGate.remove();
-                }, 400);
+                ageGate.style.display = 'flex';
+                ageGate.classList.add('active');
+            }
+        }
+    }
+
+    if (enterBtn && dobDay && dobMonth && dobYear) {
+        enterBtn.addEventListener('click', async () => {
+            enterBtn.disabled = true;
+            enterBtn.textContent = 'Verifying age...';
+
+            const day = parseInt(dobDay.value, 10);
+            const month = parseInt(dobMonth.value, 10);
+            const year = parseInt(dobYear.value, 10);
+
+            // Generate user identity if not present to ensure we have a session ID
+            if (!state.userId) {
+                initUserIdentity();
+            }
+
+            try {
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const apiUrl = isLocal 
+                    ? 'http://127.0.0.1:5001/omega-8aedf/us-central1/verifyAge'
+                    : '/api/verifyAge';
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        day,
+                        month,
+                        year,
+                        sessionId: state.userId
+                    })
+                });
+
+                if (response.status === 403) {
+                    // Under 18 session banned in DB
+                    localStorage.setItem('omega_age_locked', 'true');
+                    showUnder18Overlay();
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('VerifyAge API error');
+                }
+
+                const result = await response.json();
+                if (result.verified) {
+                    sessionStorage.setItem('ageVerified', 'true');
+                    if (startBtn) startBtn.disabled = false;
+                    if (ageGate) {
+                        ageGate.classList.add('exiting');
+                        setTimeout(() => {
+                            ageGate.remove();
+                        }, 400);
+                    }
+                    showToast('Age verified successfully! Welcome! 🎉');
+                } else {
+                    localStorage.setItem('omega_age_locked', 'true');
+                    showUnder18Overlay();
+                }
+            } catch (err) {
+                console.error('Age verification failed:', err);
+                showToast('Verification failed. Please check your network connection.');
+                enterBtn.disabled = false;
+                enterBtn.innerHTML = 'Verify Age & Enter &rarr;';
             }
         });
     }
@@ -4621,7 +4794,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (startBtn) {
         startBtn.addEventListener('click', e => {
             e.preventDefault();
-            if (ageCheckbox && ageCheckbox.checked) initChat();
+            if (localStorage.getItem('omega_age_locked') === 'true') {
+                showToast('Access blocked: You must be 18+.');
+                return;
+            }
+            initChat();
         });
     }
 
@@ -4648,17 +4825,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if the user clicked the Join button specifically
             const clickedJoin = e.target.classList.contains('vibe-join-btn') || e.target.closest('.vibe-join-btn');
             if (clickedJoin) {
-                const ageCheckbox = document.getElementById('age-confirm');
-                if (ageCheckbox && ageCheckbox.checked) {
-                    initChat();
+                if (localStorage.getItem('omega_age_locked') === 'true') {
+                    showToast("Access blocked: You must be 18+.");
                 } else {
-                    showToast("Please confirm you are 18 or older first!");
-                    const ageLabel = document.querySelector('.age-checkbox');
-                    if (ageLabel) {
-                        ageLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        ageLabel.classList.add('shake-highlight');
-                        setTimeout(() => ageLabel.classList.remove('shake-highlight'), 1000);
-                    }
+                    initChat();
                 }
             }
         });

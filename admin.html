@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omega Connect - Admin Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #07070f;
+            color: #e8edf5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #00e5ff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .auth-card {
+            max-width: 400px;
+            margin: 100px auto;
+            background: rgba(13, 20, 38, 0.6);
+            backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .auth-card h2 {
+            margin-top: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #a0aec0;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus {
+            outline: 2px solid #00e5ff;
+            border-color: transparent;
+        }
+
+        .btn-action {
+            background: var(--accent);
+            color: #0a0f1a;
+            font-weight: 700;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        .report-card {
+            background: rgba(13, 20, 38, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .report-card.high-priority {
+            border-color: #ff5252;
+            box-shadow: 0 0 15px rgba(255, 82, 82, 0.15);
+        }
+
+        .priority-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: #ff5252;
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .report-header {
+            margin-bottom: 16px;
+        }
+
+        .reported-id {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00e5ff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .report-meta {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            margin-top: 4px;
+        }
+
+        .categories-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 12px 0 20px;
+        }
+
+        .category-tag {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            color: #00e5ff;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .evidence-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            white-space: pre-wrap;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-dismiss { background: #4a5568; color: #fff; }
+        .btn-warn { background: #ecc94b; color: #1a202c; }
+        .btn-ban-temp { background: #ed8936; color: #fff; }
+        .btn-ban-perm { background: #e53e3e; color: #fff; }
+
+        .temp-duration-select {
+            padding: 9px;
+            background: #1a202c;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #a0aec0;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .signout-btn {
+            background: transparent;
+            color: #a0aec0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .signout-btn:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="auth-panel" class="auth-card" style="display: none;">
+        <h2>Moderator Login</h2>
+        <div class="input-group">
+            <label for="admin-email">Admin Email</label>
+            <input type="email" id="admin-email" placeholder="admin@omegaconnect.com">
+        </div>
+        <div class="input-group">
+            <label for="admin-password">Password</label>
+            <input type="password" id="admin-password" placeholder="••••••••">
+        </div>
+        <button class="btn-action" onclick="handleLogin()">Sign In</button>
+    </div>
+
+    <div id="dashboard-panel" class="admin-container" style="display: none;">
+        <header>
+            <div>
+                <h1>Omega Connect Review Queue</h1>
+                <div style="color: #a0aec0; margin-top: 4px;">Moderator Panel</div>
+            </div>
+            <button class="signout-btn" onclick="handleSignOut()">Sign Out</button>
+        </header>
+
+        <main id="queue-container">
+            <div class="empty-state">
+                <div class="empty-icon">⏳</div>
+                <p>Loading reports queue...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+        let db;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof firebase !== 'undefined') {
+                db = firebase.database();
+                
+                // Track Auth State
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        document.getElementById('auth-panel').style.display = 'none';
+                        document.getElementById('dashboard-panel').style.display = 'block';
+                        loadReportsQueue();
+                    } else {
+                        document.getElementById('dashboard-panel').style.display = 'none';
+                        document.getElementById('auth-panel').style.display = 'block';
+                    }
+                });
+            }
+        });
+
+        async function handleLogin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            if (!email || !password) return alert('Please enter both email and password.');
+
+            try {
+                await firebase.auth().signInWithEmailAndPassword(email, password);
+            } catch(e) {
+                alert('Authentication Failed: ' + e.message);
+            }
+        }
+
+        async function handleSignOut() {
+            try {
+                await firebase.auth().signOut();
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function loadReportsQueue() {
+            const container = document.getElementById('queue-container');
+
+            db.ref('reports').orderByChild('status').equalTo('pending').on('value', snap => {
+                const reportsData = snap.val();
+                if (!reportsData) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🎉</div>
+                            <p>No pending reports in the review queue. All clear!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Group reports by reportedUser
+                const groups = {};
+                Object.keys(reportsData).forEach(key => {
+                    const r = reportsData[key];
+                    r.id = key;
+                    if (!groups[r.reportedUser]) {
+                        groups[r.reportedUser] = {
+                            userId: r.reportedUser,
+                            reports: [],
+                            categories: {},
+                            latestTimestamp: 0,
+                            autoEscalated: false
+                        };
+                    }
+                    groups[r.reportedUser].reports.push(r);
+                    groups[r.reportedUser].categories[r.reason] = (groups[r.reportedUser].categories[r.reason] || 0) + 1;
+                    if (r.timestamp > groups[r.reportedUser].latestTimestamp) {
+                        groups[r.reportedUser].latestTimestamp = r.timestamp;
+                    }
+                });
+
+                // Apply Auto-Escalation Priority Rules
+                // Check if user has 3+ reports of the SAME category within the last 24 hours
+                const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+                const sortedGroups = Object.values(groups).map(g => {
+                    const categoryCounts = {};
+                    g.reports.forEach(r => {
+                        if (r.timestamp > oneDayAgo) {
+                            categoryCounts[r.reason] = (categoryCounts[r.reason] || 0) + 1;
+                        }
+                    });
+                    
+                    const hasHighVolume = Object.values(categoryCounts).some(count => count >= 3);
+                    g.autoEscalated = hasHighVolume;
+                    return g;
+                });
+
+                // Sort queue: Auto-Escalated first, then by total report volume descending
+                sortedGroups.sort((a, b) => {
+                    if (a.autoEscalated && !b.autoEscalated) return -1;
+                    if (!a.autoEscalated && b.autoEscalated) return 1;
+                    return b.reports.length - a.reports.length;
+                });
+
+                container.innerHTML = '';
+
+                sortedGroups.forEach(group => {
+                    const card = document.createElement('div');
+                    card.className = 'report-card' + (group.autoEscalated ? ' high-priority' : '');
+                    
+                    const categoryTags = Object.keys(group.categories).map(cat => {
+                        return `<span class="category-tag">${cat} (${group.categories[cat]})</span>`;
+                    }).join('');
+
+                    // Find transcripts
+                    const transcripts = group.reports
+                        .filter(r => r.evidence)
+                        .map(r => r.evidence.join('\n'))
+                        .join('\n\n--- Next Chat Session ---\n\n');
+
+                    card.innerHTML = `
+                        ${group.autoEscalated ? `<span class="priority-badge">🔥 High Priority (Auto-Escalated)</span>` : ''}
+                        <div class="report-header">
+                            <div class="reported-id">Reported Identifier: ${group.userId}</div>
+                            <div class="report-meta">Accumulated ${group.reports.length} report(s) · Latest: ${new Date(group.latestTimestamp).toLocaleString()}</div>
+                        </div>
+                        <div class="categories-list">
+                            ${categoryTags}
+                        </div>
+                        ${transcripts ? `
+                            <div style="font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: #a0aec0;">Attached Chat Evidence:</div>
+                            <div class="evidence-box">${transcripts}</div>
+                        ` : ''}
+                        <div class="action-bar">
+                            <button class="action-btn btn-dismiss" onclick="executeAction('${group.userId}', 'dismiss')">Dismiss</button>
+                            <button class="action-btn btn-warn" onclick="executeAction('${group.userId}', 'warn')">Warn</button>
+                            <button class="action-btn btn-ban-temp" onclick="executeAction('${group.userId}', 'temp-ban')">Temp Ban</button>
+                            <select id="temp-select-${group.userId}" class="temp-duration-select">
+                                <option value="300000">5 Minutes</option>
+                                <option value="3600000">1 Hour</option>
+                                <option value="86400000">24 Hours</option>
+                            </select>
+                            <button class="action-btn btn-ban-perm" onclick="executeAction('${group.userId}', 'perm-ban')">Permanent Ban</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        async function executeAction(reportedUser, actionType) {
+            if (!confirm(`Are you sure you want to execute '${actionType}' on user ${reportedUser}?`)) return;
+
+            try {
+                // Find all pending reports for this user
+                const snap = await db.ref('reports').orderByChild('reportedUser').equalTo(reportedUser).once('value');
+                const reports = snap.val();
+                const updates = {};
+                
+                if (reports) {
+                    Object.keys(reports).forEach(key => {
+                        if (reports[key].status === 'pending') {
+                            const newStatus = actionType === 'dismiss' ? 'dismissed' : 'actioned';
+                            updates[`reports/${key}/status`] = newStatus;
+                        }
+                    });
+                }
+
+                if (actionType === 'warn') {
+                    // Log warning
+                    const warnRef = db.ref(`warnings/${reportedUser}`).push();
+                    updates[`warnings/${reportedUser}/${warnRef.key}`] = {
+                        reason: 'Violating community guidelines',
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    };
+                } else if (actionType === 'temp-ban') {
+                    // Log temp ban
+                    const duration = parseInt(document.getElementById(`temp-select-${reportedUser}`).value, 10);
+                    const unlockTime = Date.now() + duration;
+                    updates[`bannedUsers/${reportedUser}`] = {
+                        unlockTime: unlockTime,
+                        reason: 'Temporary lockout by moderator review',
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    };
+                } else if (actionType === 'perm-ban') {
+                    // Log permanent ban
+                    updates[`bannedUsers/${reportedUser}`] = {
+                        unlockTime: 'Infinity',
+                        reason: 'Permanent ban by moderator review',
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    };
+                }
+
+                // Write batch update to database
+                await db.ref().update(updates);
+                alert('Action executed successfully.');
+            } catch(e) {
+                alert('Action failed: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>

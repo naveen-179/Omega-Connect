@@ -2,6 +2,9 @@
   "database": {
     "rules": "database.rules.json"
   },
+  "functions": {
+    "source": "functions"
+  },
   "hosting": {
     "site": "omegaconnect",
     "public": ".",
@@ -29,6 +32,12 @@
             "value": "max-age=31536000"
           }
         ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/api/verifyAge",
+        "function": "verifyAge"
       }
     ]
   }
