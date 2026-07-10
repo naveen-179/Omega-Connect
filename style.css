@@ -4143,9 +4143,7 @@ h1, h2, h3 {
   border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-#age-gate-modal {
-  display: none !important;
-}
+
 
 /* Age verification validation feedback animation */
 @keyframes shake-highlight {

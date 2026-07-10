@@ -8,6 +8,7 @@
   "hosting": {
     "site": "omegaconnect",
     "public": ".",
+    "cleanUrls": true,
     "ignore": [
       "firebase.json",
       "**/.*",

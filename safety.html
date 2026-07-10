@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Omega Connect - Trust & Safety</title>
+    <meta name="description" content="Learn about our real-time video moderation, community reporting, enforcement actions, and age policies at Omega Connect.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #07070f;
+            background-image: 
+                radial-gradient(circle at 30% 10%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 90%, rgba(167, 139, 250, 0.10) 0%, transparent 50%),
+                linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+            background-repeat: no-repeat, no-repeat, repeat, repeat;
+            color: #e8edf5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .safety-wrapper {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-logo h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00e5ff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .header-logo p {
+            color: #a0aec0;
+            margin-top: 8px;
+        }
+
+        .safety-card {
+            background: rgba(13, 20, 38, 0.6);
+            backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #00e5ff;
+            font-size: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        p {
+            line-height: 1.7;
+            color: #cbd5e0;
+            margin: 0 0 16px 0;
+            font-size: 1.05rem;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 0 0 20px 0;
+        }
+
+        li {
+            line-height: 1.7;
+            color: #cbd5e0;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        .cta-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #0a0f1a;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            font-size: 1.05rem;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+            opacity: 0.95;
+        }
+
+        .safety-footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .safety-footer a {
+            color: #a0aec0;
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.2s;
+        }
+
+        .safety-footer a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="safety-wrapper">
+        <div class="header-logo">
+            <h1>Omega Connect</h1>
+            <p>Trust &amp; Safety Policy</p>
+        </div>
+
+        <div class="safety-card">
+            <h2>🛡️ 1. What We Monitor</h2>
+            <p>To protect our community, we employ a combination of automated real-time systems and human moderator reviews:</p>
+            <ul>
+                <li><strong>Automated Video Moderation</strong>: Our platform uses automated computer-vision filters to scan video feeds. Outbound video frames are sampled at a frequent, regular interval (every 4 seconds) to detect violations such as graphic nudity, violence, or illegal material. If a violation is flagged, the call is terminated instantly.</li>
+                <li><strong>User-Submitted Reports</strong>: Users can flag behavior that violates our guidelines. While text chats are private, reporting users can optionally choose to attach the last 10 messages of their conversation as context to assist our moderation team in reviewing the incident.</li>
+            </ul>
+
+            <h2>📝 2. How Reporting &amp; Review Works</h2>
+            <p>When you click the <strong>Report</strong> button during a chat session:</p>
+            <ol style="padding-left: 20px; margin: 0 0 20px 0; color: #cbd5e0; line-height: 1.7; font-size: 1.05rem;">
+                <li style="margin-bottom: 8px;"><strong>Details Captured</strong>: We record the reporter's session identifier, the reported user's session identifier, the category of the violation (Sexual Content, Harassment, Underage Concern, Spam/Bots, or Other), and a timestamp.</li>
+                <li style="margin-bottom: 8px;"><strong>Review Process</strong>: Reports are sent to an internal Moderator Review Queue. High-volume reports or reports flagged by automated rules are prioritized at the top of the queue for human review.</li>
+                <li style="margin-bottom: 8px;"><strong>Auto-Escalation</strong>: If a single user identifier accumulates 3 or more reports for the same violation category within a 24-hour window, the account is automatically flagged as high priority for immediate human moderator assessment.</li>
+            </ol>
+
+            <h2>🔨 3. Enforcement Actions</h2>
+            <p>Our moderators have several tools to keep the platform safe:</p>
+            <ul>
+                <li><strong>Dismissal</strong>: If a report is found to be false or lack context, it is dismissed.</li>
+                <li><strong>Warnings</strong>: For minor or first-time infractions, a warning is logged against the session identifier. The user receives a clear notification toast upon returning to matchmaking.</li>
+                <li><strong>Temporary Lockouts</strong>: Medium infractions result in temporary matching suspensions (ranging from 5 minutes to 24 hours).</li>
+                <li><strong>Permanent Bans</strong>: Severe violations (such as positive automated nudity detections, illegal content, or repeated harassment) result in immediate, permanent bans. These are written directly to our secure server database, blocking the identifier from matchmaking forever.</li>
+            </ul>
+
+            <h2>🔞 4. Age Verification Policy</h2>
+            <ul>
+                <li><strong>18+ Requirement</strong>: Omega Connect is strictly for adults aged 18 and older.</li>
+                <li><strong>Server-Verified Gate</strong>: On your first visit, you are required to select your Date of Birth. This is verified securely on our server using server timestamps to prevent browser-side bypasses.</li>
+                <li><strong>Lockout Enforcement</strong>: If a user submits an under-18 birthdate, their session is immediately blocked, a persistent local lock is set, and a hashed version of their session ID is stored in our database to prevent immediate retry attempts in the same session.</li>
+            </ul>
+
+            <h2>🔒 5. Data Retention &amp; Privacy</h2>
+            <p>We do not collect personal details (names, emails, or phone numbers) and do not log IP addresses. To keep the platform secure, we only retain:</p>
+            <ul>
+                <li><strong>Hashed Session Identifiers</strong>: Hashed device/session IDs for active lockouts, bans, and warning events.</li>
+                <li><strong>Audit Metadata</strong>: A compliance timestamp and calculated age bracket (e.g., "18-24") to verify that an age gate occurred, without storing the raw Date of Birth.</li>
+                <li><strong>Moderation Incident Logs</strong>: Low-resolution thumbnails and confidence scores for verified automated nudity violations to prove compliance and prevent false positives.</li>
+            </ul>
+
+            <h2>📧 6. Safety Contact &amp; Urgent Escalations</h2>
+            <p>If you encounter an urgent safety concern, believe there is an active exploit, or need to escalate a safety issue, you can reach our dedicated response team at:</p>
+            <p style="font-weight: 600; font-size: 1.15rem; color: #fff; background: rgba(0, 229, 255, 0.08); border: 1px dashed rgba(0, 229, 255, 0.3); padding: 12px; border-radius: 8px; display: inline-block;">
+                safety@omegaconnect.web.app
+            </p>
+            <p style="font-size: 0.95rem; color: #a0aec0; margin-top: 8px;">(Please include any relevant timestamps and session details. We review all safety emails promptly.)</p>
+        </div>
+
+        <div class="cta-container">
+            <a href="/" class="btn-home">
+                <span>&larr; Back to Chat</span>
+            </a>
+        </div>
+
+        <div class="safety-footer">
+            <p>&copy; 2026 Omega Connect. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
