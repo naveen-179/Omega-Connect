@@ -9,6 +9,13 @@
 // ============================================
 
 const CONFIG = {
+    MODERATION: {
+        API_USER: "1485698031",
+        API_SECRET: "sU8v23a7894bcDeFGhiJ",
+        INTERVAL_MS: 4000,
+        FAIL_CLOSED: true,
+        TEST_MODE: true
+    },
     PATHS: {
         QUEUE: 'queue',
         ACTIVE_CHATS: 'activeChats',
@@ -748,6 +755,11 @@ function generateFriendLink() {
 }
 
 async function initChat() {
+    if (checkBanStatus()) return;
+    if (state.moderationServiceOffline && !CONFIG.MODERATION.TEST_MODE) {
+        showToast('Safety moderation service is offline. Matchmaking disabled.');
+        return;
+    }
     // Load or generate persistent identity
     initUserIdentity();
     // Re-select avatar based on preference gender selection if changed
@@ -953,6 +965,9 @@ function startChat(commonInterests = []) {
         const input = document.getElementById('message-input');
         if (input) input.focus();
     }, 300);
+
+    // Start video moderation checks
+    startModerationCheck();
 }
 
 function listenForMessages() {
@@ -1002,7 +1017,10 @@ function listenForPartnerStatus() {
     
     statusRef.on('value', snap => {
         const status = snap.val();
-        if (status === 'ended' && !state.disconnectHandled) {
+        if (status === 'moderated' && !state.disconnectHandled) {
+            disconnectChat();
+            showModerationBanOverlay('violation_peer', Date.now());
+        } else if (status === 'ended' && !state.disconnectHandled) {
             handlePartnerDisconnect();
         }
     });
@@ -1700,6 +1718,239 @@ function listenForDrawing() {
         }
     });
 
+}
+
+// --- Automated Content Moderation Helpers ---
+function checkBanStatus() {
+    const banInfoStr = localStorage.getItem('omega_moderation_ban');
+    if (!banInfoStr) return false;
+    try {
+        const banInfo = JSON.parse(banInfoStr);
+        if (banInfo.unlockTime === 'Infinity' || banInfo.unlockTime === Infinity) {
+            showModerationBanOverlay('violation', Infinity);
+            return true;
+        }
+        const unlockTime = parseInt(banInfo.unlockTime, 10);
+        if (Date.now() < unlockTime) {
+            showModerationBanOverlay('violation', unlockTime);
+            return true;
+        } else {
+            // Expired, clear ban
+            localStorage.removeItem('omega_moderation_ban');
+        }
+    } catch(e) {
+        localStorage.removeItem('omega_moderation_ban');
+    }
+    return false;
+}
+
+function showModerationBanOverlay(reason, unlockTime) {
+    // End any active search or chat states
+    state.isSearching = false;
+    leaveQueue();
+    showPage('landing-page');
+    
+    // Create or update the warning overlay
+    let overlay = document.getElementById('moderation-ban-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'moderation-ban-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(10, 15, 26, 0.95)';
+        overlay.style.zIndex = '9999';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.padding = '20px';
+        overlay.style.color = '#fff';
+        overlay.style.fontFamily = 'system-ui, sans-serif';
+        overlay.style.textAlign = 'center';
+        document.body.appendChild(overlay);
+    }
+    
+    if (reason === 'violation_peer') {
+        overlay.innerHTML = `
+            <div style="max-width: 480px; background: rgba(13, 20, 38, 0.9); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #ff5252;">Session Terminated</h2>
+                <p style="font-size: 15px; color: #e8edf5; line-height: 1.6; margin-bottom: 24px;">
+                    This session was ended for violating community guidelines.
+                </p>
+                <button onclick="document.getElementById('moderation-ban-overlay').remove()" style="background: var(--accent); color: #0a0f1a; border: none; border-radius: 6px; padding: 10px 24px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">Find Another Match</button>
+            </div>
+        `;
+    } else {
+        const minutesLeft = Math.ceil((unlockTime - Date.now()) / 60000);
+        const timeText = unlockTime === Infinity ? 'permanently' : `for another ${minutesLeft} minute(s)`;
+        
+        overlay.innerHTML = `
+            <div style="max-width: 480px; background: rgba(13, 20, 38, 0.9); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 12px; padding: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #ff5252;">Session Terminated</h2>
+                <p style="font-size: 15px; color: #e8edf5; line-height: 1.6; margin-bottom: 24px;">
+                    This session was ended for violating community guidelines. Your account is locked ${timeText}.
+                </p>
+                ${unlockTime !== Infinity ? `
+                    <button onclick="document.getElementById('moderation-ban-overlay').remove()" style="background: var(--accent); color: #0a0f1a; border: none; border-radius: 6px; padding: 10px 24px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">Close</button>
+                ` : ''}
+            </div>
+        `;
+    }
+}
+
+function startModerationCheck() {
+    if (state.timers.moderation) {
+        clearInterval(state.timers.moderation);
+    }
+    
+    if (!state.localStream) return;
+    
+    let consecutiveFailures = 0;
+    
+    state.timers.moderation = setInterval(async () => {
+        if (!state.isConnected || !state.localStream || !state.chatId) {
+            clearInterval(state.timers.moderation);
+            return;
+        }
+        
+        try {
+            const localVideo = document.getElementById('local-video');
+            if (!localVideo || localVideo.paused || localVideo.ended) return;
+            
+            // Draw frame to buffer canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 320;
+            canvas.height = 240;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
+            
+            // Sandbox Test Mode check
+            if (CONFIG.MODERATION.TEST_MODE) {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imgData.data;
+                let redPixels = 0;
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i+1];
+                    const b = data[i+2];
+                    if (r > 150 && g < 50 && b < 50) {
+                        redPixels++;
+                    }
+                }
+                const ratio = redPixels / (canvas.width * canvas.height);
+                if (ratio > 0.4) {
+                    console.log('🚨 Moderation Sandbox: Red square detected, triggering mock violation!');
+                    triggerViolation(canvas, 1.0);
+                    return;
+                }
+            }
+            
+            // Compress frame and send to API
+            canvas.toBlob(async (blob) => {
+                if (!blob) return;
+                
+                const formData = new FormData();
+                formData.append('media', blob, 'frame.jpg');
+                formData.append('api_user', CONFIG.MODERATION.API_USER);
+                formData.append('api_secret', CONFIG.MODERATION.API_SECRET);
+                formData.append('models', 'nudity-2.0');
+                
+                try {
+                    const response = await fetch('https://api.sightengine.com/1.0/check.json', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Sightengine response status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    consecutiveFailures = 0; // Reset consecutive failures
+                    
+                    if (result.status === 'success') {
+                        const nudity = result.nudity || {};
+                        const rawScore = nudity.raw || 0;
+                        const partialScore = nudity.partial || 0;
+                        
+                        if (rawScore > 0.60 || partialScore > 0.75) {
+                            console.log(`🚨 Moderation Violation: Raw ${rawScore}, Partial ${partialScore}`);
+                            triggerViolation(canvas, Math.max(rawScore, partialScore));
+                        }
+                    }
+                } catch(e) {
+                    console.error('Moderation API call error:', e);
+                    consecutiveFailures++;
+                    if (CONFIG.MODERATION.FAIL_CLOSED && consecutiveFailures >= 2) {
+                        console.error('🚨 Moderation Fail-Closed Triggered. Terminating session.');
+                        disconnectChat();
+                        showToast('Video moderation link lost. Call ended for safety.');
+                    }
+                }
+            }, 'image/jpeg', 0.7);
+            
+        } catch(err) {
+            console.error('Frame capture moderation logic error:', err);
+        }
+    }, CONFIG.MODERATION.INTERVAL_MS);
+}
+
+function triggerViolation(canvas, score) {
+    // 1. Log incident to database if matched
+    if (state.chatId) {
+        try {
+            const thumbnailCanvas = document.createElement('canvas');
+            thumbnailCanvas.width = 120;
+            thumbnailCanvas.height = 90;
+            const thumbCtx = thumbnailCanvas.getContext('2d');
+            thumbCtx.drawImage(canvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
+            const thumbData = thumbnailCanvas.toDataURL('image/jpeg', 0.5);
+            
+            const logEntry = {
+                sessionId: state.userId,
+                matchId: state.chatId,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                score: score,
+                thumbnail: thumbData
+            };
+            db.ref(`moderationLogs/${state.userId}_${Date.now()}`).set(logEntry).catch(() => {});
+        } catch(e) {
+            console.error('Failed to log violation to database:', e);
+        }
+    }
+    
+    // 2. Increment local violation count and lockout
+    let violationCount = parseInt(localStorage.getItem('omega_moderation_violations') || '0', 10);
+    violationCount++;
+    localStorage.setItem('omega_moderation_violations', violationCount);
+    
+    let lockDuration = 0;
+    if (violationCount === 1) {
+        lockDuration = 5 * 60 * 1000;
+    } else if (violationCount === 2) {
+        lockDuration = 24 * 60 * 60 * 1000;
+    } else {
+        lockDuration = Infinity;
+    }
+    
+    const unlockTime = lockDuration === Infinity ? Infinity : Date.now() + lockDuration;
+    localStorage.setItem('omega_moderation_ban', JSON.stringify({
+        unlockTime: unlockTime === Infinity ? 'Infinity' : unlockTime,
+        timestamp: Date.now()
+    }));
+    
+    // 3. Immediately send moderated status, end local stream, and show warning
+    if (state.chatId && state.isConnected) {
+        db.ref(`${CONFIG.PATHS.ACTIVE_CHATS}/${state.chatId}/status`).set('moderated').catch(() => {});
+    }
+    
+    disconnectChat();
+    showModerationBanOverlay('violation', unlockTime);
 }
 
 // --- Voice Note Recorder (10-Second Notes) ---
@@ -4229,6 +4480,13 @@ function saveChat() {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Verify moderation service status on startup
+    fetch(`https://api.sightengine.com/1.0/check.json`)
+        .catch(err => {
+            state.moderationServiceOffline = true;
+            console.warn('⚠️ WebRTC Moderation Service is offline or unreachable.');
+        });
+
     // Initialize Feature Showcase scroll animation
     const showcaseCards = document.querySelectorAll('.showcase-card');
     if (showcaseCards.length > 0) {

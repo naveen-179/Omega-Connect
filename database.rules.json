@@ -50,6 +50,10 @@
         "friendRooms": {
             ".read": true,
             ".write": true
+        },
+        "moderationLogs": {
+            ".read": false,
+            ".write": true
         }
     }
 }
