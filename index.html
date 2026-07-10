@@ -183,14 +183,14 @@
                         <!-- Age Confirmation Checkbox -->
                         <div style="margin: var(--sp-3) 0 var(--sp-2); display: flex; justify-content: center; width: 100%;">
                             <label class="age-checkbox">
-                                <input type="checkbox" id="age-confirm" onchange="document.getElementById('start-chat-btn').disabled = !this.checked">
+                                <input type="checkbox" id="age-confirm" checked onchange="document.getElementById('start-chat-btn').disabled = !this.checked">
                                 <span class="checkmark"></span>
                                 <span class="check-label">I confirm that I am 18 years or older</span>
                             </label>
                         </div>
 
                         <!-- CTA -->
-                        <button id="start-chat-btn" class="cta-btn cta-glow" disabled>
+                        <button id="start-chat-btn" class="cta-btn cta-glow">
                             <span>Start Chatting</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </button>

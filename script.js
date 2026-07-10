@@ -4194,10 +4194,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const ageGate = document.getElementById('age-gate-modal');
     const enterBtn = document.getElementById('immersive-enter-btn');
 
-    if (sessionStorage.getItem('ageVerified') === 'true') {
+    const isAgeGateHidden = ageGate && (window.getComputedStyle(ageGate).display === 'none' || ageGate.getAttribute('style')?.includes('none'));
+    if (sessionStorage.getItem('ageVerified') === 'true' || isAgeGateHidden) {
+        sessionStorage.setItem('ageVerified', 'true');
         if (ageCheckbox) ageCheckbox.checked = true;
         if (startBtn) startBtn.disabled = false;
-        if (ageGate) ageGate.remove(); // Remove immediately from DOM if verified
+        if (ageGate) ageGate.remove(); // Remove immediately from DOM if verified or hidden
     } else {
         if (ageGate) {
             ageGate.style.display = 'flex';
