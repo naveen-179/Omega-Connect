@@ -454,14 +454,14 @@
                     // Log temp ban
                     const duration = parseInt(document.getElementById(`temp-select-${reportedUser}`).value, 10);
                     const unlockTime = Date.now() + duration;
-                    updates[`bannedUsers/${reportedUser}`] = {
+                    updates[`banned_identifiers/${reportedUser}`] = {
                         unlockTime: unlockTime,
                         reason: 'Temporary lockout by moderator review',
                         timestamp: firebase.database.ServerValue.TIMESTAMP
                     };
                 } else if (actionType === 'perm-ban') {
                     // Log permanent ban
-                    updates[`bannedUsers/${reportedUser}`] = {
+                    updates[`banned_identifiers/${reportedUser}`] = {
                         unlockTime: 'Infinity',
                         reason: 'Permanent ban by moderator review',
                         timestamp: firebase.database.ServerValue.TIMESTAMP

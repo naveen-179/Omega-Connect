@@ -1743,7 +1743,7 @@ async function checkBanStatus() {
     // 2. Query global database ban (prevents LocalStorage cookie-clearing bypasses)
     if (state.userId && window.db) {
         try {
-            const banSnap = await db.ref(`bannedUsers/${state.userId}`).once('value');
+            const banSnap = await db.ref(`banned_identifiers/${state.userId}`).once('value');
             if (banSnap.exists()) {
                 const banData = banSnap.val();
                 const unlockTime = banData.unlockTime === 'Infinity' || banData.unlockTime === Infinity ? Infinity : parseInt(banData.unlockTime, 10);
@@ -1757,11 +1757,11 @@ async function checkBanStatus() {
                     return true;
                 } else {
                     // Ban expired in DB, delete it
-                    db.ref(`bannedUsers/${state.userId}`).remove().catch(() => {});
+                    db.ref(`banned_identifiers/${state.userId}`).remove().catch(() => {});
                 }
             }
         } catch(e) {
-            console.error('Failed to query global bannedUsers status:', e);
+            console.error('Failed to query global banned_identifiers status:', e);
         }
 
         // 3. Query warnings in DB

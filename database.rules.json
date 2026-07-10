@@ -64,7 +64,7 @@
             ".read": false,
             ".write": false
         },
-        "bannedUsers": {
+        "banned_identifiers": {
             "$userId": {
                 ".read": true,
                 ".write": "auth != null"
