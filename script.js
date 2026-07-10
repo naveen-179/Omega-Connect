@@ -371,9 +371,6 @@ function showModal(id) {
         if (id === 'drawing' || id === 'drawing-modal') {
             const brushModeBtn = document.getElementById('draw-mode-brush');
             if (brushModeBtn) brushModeBtn.click();
-            if (state.chatId && state.isConnected) {
-                db.ref(`activeChats/${state.chatId}/drawActive`).set(state.userId);
-            }
         }
         modal.style.display = '';
         modal.classList.add('active');
@@ -385,12 +382,6 @@ function closeModal(id) {
     if (modal) {
         modal.classList.remove('active');
         if (id === 'drawing' || id === 'drawing-modal') {
-            if (state.chatId && state.isConnected) {
-                db.ref(`activeChats/${state.chatId}/drawActive`).transaction(curr => {
-                    if (curr === state.userId) return null;
-                    return curr;
-                });
-            }
         }
     }
 }
@@ -1709,19 +1700,6 @@ function listenForDrawing() {
         }
     });
 
-    // Listen for partner opening drawing modal to sync active state
-    const drawActiveRef = db.ref(`activeChats/${state.chatId}/drawActive`);
-    state.listeners.drawActive = drawActiveRef;
-    drawActiveRef.on('value', snap => {
-        const activeUser = snap.val();
-        if (activeUser && activeUser !== state.userId) {
-            const modal = document.getElementById('drawing-modal') || document.getElementById('drawing');
-            if (modal && !modal.classList.contains('active')) {
-                showModal('drawing');
-                showToast(`${state.partnerName || 'Stranger'} started drawing! ✏️`);
-            }
-        }
-    });
 }
 
 // --- Voice Note Recorder (10-Second Notes) ---
