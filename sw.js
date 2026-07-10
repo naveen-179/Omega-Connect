@@ -1,5 +1,5 @@
 // StrangerTalk Service Worker
-const CACHE_NAME = 'strangertalk-v242';
+const CACHE_NAME = 'strangertalk-v243';
 const urlsToCache = [
     '/',
     '/index.html',
