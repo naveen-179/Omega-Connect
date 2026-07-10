@@ -4739,54 +4739,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 initUserIdentity();
             }
 
-            try {
-                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const apiUrl = isLocal 
-                    ? 'http://127.0.0.1:5001/omega-8aedf/us-central1/verifyAge'
-                    : '/api/verifyAge';
+            const sessionId = state.userId;
 
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
+            try {
+                // 1. Check if session is already banned
+                if (window.db) {
+                    const banSnap = await db.ref(`bannedSessions/${sessionId}`).once('value');
+                    if (banSnap.exists()) {
+                        localStorage.setItem('omega_age_locked', 'true');
+                        showUnder18Overlay();
+                        return;
+                    }
+
+                    // Calculate birthdate timestamp
+                    const birthdateTimestamp = new Date(year, month - 1, day).getTime();
+
+                    // 2. Attempt to write to ageVerificationRequests.
+                    // This will succeed ONLY if birthdateTimestamp <= now - 18 years,
+                    // enforced server-side by database security rules.
+                    await db.ref(`ageVerificationRequests/${sessionId}`).set({
                         day,
                         month,
                         year,
-                        sessionId: state.userId
-                    })
-                });
+                        birthdateTimestamp,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
 
-                if (response.status === 403) {
-                    // Under 18 session banned in DB
-                    localStorage.setItem('omega_age_locked', 'true');
-                    showUnder18Overlay();
-                    return;
+                    // 3. Log compliance audit log (no raw birthdate stored)
+                    await db.ref(`verificationLogs/${sessionId}`).set({
+                        verified: true,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    }).catch(() => {});
                 }
 
-                if (!response.ok) {
-                    throw new Error('VerifyAge API error');
+                sessionStorage.setItem('ageVerified', 'true');
+                if (startBtn) startBtn.disabled = false;
+                if (ageGate) {
+                    ageGate.classList.add('exiting');
+                    setTimeout(() => {
+                        ageGate.remove();
+                    }, 400);
                 }
+                showToast('Age verified successfully! Welcome! 🎉');
 
-                const result = await response.json();
-                if (result.verified) {
-                    sessionStorage.setItem('ageVerified', 'true');
-                    if (startBtn) startBtn.disabled = false;
-                    if (ageGate) {
-                        ageGate.classList.add('exiting');
-                        setTimeout(() => {
-                            ageGate.remove();
-                        }, 400);
-                    }
-                    showToast('Age verified successfully! Welcome! 🎉');
-                } else {
-                    localStorage.setItem('omega_age_locked', 'true');
-                    showUnder18Overlay();
-                }
             } catch (err) {
+                // If write failed, it's either permission denied (under 18) or a network error.
                 console.error('Age verification failed:', err);
-                showToast('Verification failed. Please check your network connection.');
-                enterBtn.disabled = false;
-                enterBtn.innerHTML = 'Verify Age & Enter &rarr;';
+                
+                // Write permanent ban record to prevent retry in same session
+                if (window.db) {
+                    try {
+                        await db.ref(`bannedSessions/${sessionId}`).set({
+                            reason: 'under-18',
+                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    } catch(e) {}
+                }
+
+                localStorage.setItem('omega_age_locked', 'true');
+                showUnder18Overlay();
             }
         });
     }

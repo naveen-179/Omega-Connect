@@ -57,12 +57,22 @@
             ".write": true
         },
         "bannedSessions": {
-            ".read": false,
-            ".write": false
+            "$userId": {
+                ".read": true,
+                ".write": "!data.exists() && newData.exists() && newData.child('reason').val() === 'under-18'"
+            }
         },
         "verificationLogs": {
-            ".read": false,
-            ".write": false
+            "$userId": {
+                ".read": "auth != null",
+                ".write": "newData.child('verified').val() === true && root.child('ageVerificationRequests/' + $userId).exists()"
+            }
+        },
+        "ageVerificationRequests": {
+            "$userId": {
+                ".read": true,
+                ".write": "newData.child('birthdateTimestamp').val() <= now - 567648000000"
+            }
         },
         "banned_identifiers": {
             "$userId": {
