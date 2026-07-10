@@ -182,6 +182,18 @@ h3 { font-size: 1.2rem; }
 }
 
 /* ----- 4. Page System ----- */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    will-change: opacity, transform;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .page {
   display: none;
   width: 100%;
@@ -191,6 +203,15 @@ h3 { font-size: 1.2rem; }
 .page.active {
   display: flex;
   flex-direction: column;
+  animation: pageFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Focus outlines for keyboard accessibility (a11y) */
+button:focus-visible,
+input:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 .hidden {
@@ -361,8 +382,10 @@ h3 { font-size: 1.2rem; }
 .setup-card {
   width: 100%;
   max-width: 480px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
+  background: rgba(13, 20, 38, 0.6);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   border-radius: var(--radius-lg);
   padding: var(--sp-5);
   display: flex;
@@ -2543,8 +2566,10 @@ a:focus-visible {
 }
 
 .vibe-card.room-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border);
+  background-color: rgba(13, 20, 38, 0.6);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-md);
   padding: var(--sp-4);
   display: flex;
@@ -2564,9 +2589,9 @@ a:focus-visible {
 }
 
 .vibe-card.room-card.active {
-  border-color: #ffffff !important;
-  background-color: var(--bg-elevated) !important;
-  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: 0 0 16px 0 rgba(var(--room-color-rgb), 0.15) !important;
 }
 
 .vibe-card.room-card:hover {
@@ -3784,8 +3809,10 @@ h1, h2, h3 {
 }
 
 .showcase-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
+  background: rgba(13, 20, 38, 0.6);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-md);
   padding: 16px var(--sp-4);
   position: relative;
@@ -3801,7 +3828,8 @@ h1, h2, h3 {
   transform: translateY(12px);
   transition: opacity 0.4s var(--ease-out-expo),
               transform 0.4s var(--ease-out-expo),
-              border-color 0.2s ease;
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
 }
 
 .showcase-card.visible {
@@ -3811,6 +3839,7 @@ h1, h2, h3 {
 
 .showcase-card:hover {
   border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 16px 0 var(--accent-glow);
 }
 
 .showcase-icon {

@@ -55,7 +55,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-    <link rel="stylesheet" href="style.css?v=424">
+    <link rel="stylesheet" href="style.css?v=425">
 </head>
 
 <body>
@@ -143,17 +143,17 @@
                             <!-- Interests -->
                             <div class="setup-section">
                                 <p class="setup-label"><i class="ti ti-target" style="font-size: 18px;"></i> Pick your interests <span class="optional-tag">optional</span></p>
-                                <div class="interests-grid">
-                                    <button type="button" class="interest-chip" data-interest="music"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
-                                    <button type="button" class="interest-chip" data-interest="gaming"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
-                                    <button type="button" class="interest-chip" data-interest="movies"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
-                                    <button type="button" class="interest-chip" data-interest="sports"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
-                                    <button type="button" class="interest-chip" data-interest="tech"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
-                                    <button type="button" class="interest-chip" data-interest="art"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
-                                    <button type="button" class="interest-chip" data-interest="travel"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
-                                    <button type="button" class="interest-chip" data-interest="anime"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
-                                    <button type="button" class="interest-chip" data-interest="food"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
-                                    <button type="button" class="interest-chip" data-interest="fitness"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
+                                <div class="interests-grid" role="group" aria-label="Select interests">
+                                    <button type="button" class="interest-chip" data-interest="music" role="button" aria-pressed="false"><i class="ti ti-music" style="font-size: 18px;"></i> Music</button>
+                                    <button type="button" class="interest-chip" data-interest="gaming" role="button" aria-pressed="false"><i class="ti ti-device-gamepad-2" style="font-size: 18px;"></i> Gaming</button>
+                                    <button type="button" class="interest-chip" data-interest="movies" role="button" aria-pressed="false"><i class="ti ti-movie" style="font-size: 18px;"></i> Movies</button>
+                                    <button type="button" class="interest-chip" data-interest="sports" role="button" aria-pressed="false"><i class="ti ti-ball-football" style="font-size: 18px;"></i> Sports</button>
+                                    <button type="button" class="interest-chip" data-interest="tech" role="button" aria-pressed="false"><i class="ti ti-device-laptop" style="font-size: 18px;"></i> Tech</button>
+                                    <button type="button" class="interest-chip" data-interest="art" role="button" aria-pressed="false"><i class="ti ti-palette" style="font-size: 18px;"></i> Art</button>
+                                    <button type="button" class="interest-chip" data-interest="travel" role="button" aria-pressed="false"><i class="ti ti-plane" style="font-size: 18px;"></i> Travel</button>
+                                    <button type="button" class="interest-chip" data-interest="anime" role="button" aria-pressed="false"><i class="ti ti-flower" style="font-size: 18px;"></i> Anime</button>
+                                    <button type="button" class="interest-chip" data-interest="food" role="button" aria-pressed="false"><i class="ti ti-soup" style="font-size: 18px;"></i> Food</button>
+                                    <button type="button" class="interest-chip" data-interest="fitness" role="button" aria-pressed="false"><i class="ti ti-barbell" style="font-size: 18px;"></i> Fitness</button>
                                 </div>
                             </div>
 
@@ -162,20 +162,20 @@
                             <!-- I Am -->
                             <div class="setup-section">
                                 <p class="setup-label"><i class="ti ti-user" style="font-size: 18px;"></i> I am <span class="optional-tag">optional</span></p>
-                                <div class="gender-row">
-                                    <button type="button" class="gender-pill" data-gender="male">Male</button>
-                                    <button type="button" class="gender-pill" data-gender="female">Female</button>
-                                    <button type="button" class="gender-pill" data-gender="other">Other</button>
+                                <div class="gender-row" role="group" aria-label="Select your gender">
+                                    <button type="button" class="gender-pill" data-gender="male" role="button" aria-pressed="false">Male</button>
+                                    <button type="button" class="gender-pill" data-gender="female" role="button" aria-pressed="false">Female</button>
+                                    <button type="button" class="gender-pill" data-gender="other" role="button" aria-pressed="false">Other</button>
                                 </div>
                             </div>
 
                             <!-- Looking For -->
                             <div class="setup-section">
                                 <p class="setup-label"><i class="ti ti-search" style="font-size: 18px;"></i> Looking for <span class="optional-tag">optional</span></p>
-                                <div class="gender-row">
-                                    <button type="button" class="pref-pill active" data-pref="any">Anyone</button>
-                                    <button type="button" class="pref-pill" data-pref="male">Male</button>
-                                    <button type="button" class="pref-pill" data-pref="female">Female</button>
+                                <div class="gender-row" role="group" aria-label="Select preference">
+                                    <button type="button" class="pref-pill active" data-pref="any" role="button" aria-pressed="true">Anyone</button>
+                                    <button type="button" class="pref-pill" data-pref="male" role="button" aria-pressed="false">Male</button>
+                                    <button type="button" class="pref-pill" data-pref="female" role="button" aria-pressed="false">Female</button>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +219,7 @@
                         </div>
                         <div class="vibe-card-bottom">
                             <span class="vibe-online-counter">● 142 online</span>
-                            <button class="vibe-join-btn">Join &rarr;</button>
+                            <button class="vibe-join-btn" role="button" aria-label="Join Gaming Hub Room">Join &rarr;</button>
                         </div>
                     </div>
                     <!-- 🌙 Midnight Lounge -->
@@ -231,7 +231,7 @@
                         </div>
                         <div class="vibe-card-bottom">
                             <span class="vibe-online-counter">● 98 online</span>
-                            <button class="vibe-join-btn">Join &rarr;</button>
+                            <button class="vibe-join-btn" role="button" aria-label="Join Midnight Lounge Room">Join &rarr;</button>
                         </div>
                     </div>
                     <!-- ⛩️ Otaku Cafe -->
@@ -243,7 +243,7 @@
                         </div>
                         <div class="vibe-card-bottom">
                             <span class="vibe-online-counter">● 75 online</span>
-                            <button class="vibe-join-btn">Join &rarr;</button>
+                            <button class="vibe-join-btn" role="button" aria-label="Join Otaku Cafe Room">Join &rarr;</button>
                         </div>
                     </div>
                     <!-- 📚 Study Room -->
@@ -255,7 +255,7 @@
                         </div>
                         <div class="vibe-card-bottom">
                             <span class="vibe-online-counter">● 56 online</span>
-                            <button class="vibe-join-btn">Join &rarr;</button>
+                            <button class="vibe-join-btn" role="button" aria-label="Join Study Room Room">Join &rarr;</button>
                         </div>
                     </div>
                     <!-- 🌍 Global Chat -->
@@ -267,7 +267,7 @@
                         </div>
                         <div class="vibe-card-bottom">
                             <span class="vibe-online-counter">● 318 online</span>
-                            <button class="vibe-join-btn">Join &rarr;</button>
+                            <button class="vibe-join-btn" role="button" aria-label="Join Global Chat Room">Join &rarr;</button>
                         </div>
                     </div>
                 </div>

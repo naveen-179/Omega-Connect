@@ -371,6 +371,9 @@ function showModal(id) {
         if (id === 'drawing' || id === 'drawing-modal') {
             const brushModeBtn = document.getElementById('draw-mode-brush');
             if (brushModeBtn) brushModeBtn.click();
+            if (state.chatId && state.isConnected) {
+                db.ref(`activeChats/${state.chatId}/drawActive`).set(state.userId);
+            }
         }
         modal.style.display = '';
         modal.classList.add('active');
@@ -382,6 +385,12 @@ function closeModal(id) {
     if (modal) {
         modal.classList.remove('active');
         if (id === 'drawing' || id === 'drawing-modal') {
+            if (state.chatId && state.isConnected) {
+                db.ref(`activeChats/${state.chatId}/drawActive`).transaction(curr => {
+                    if (curr === state.userId) return null;
+                    return curr;
+                });
+            }
         }
     }
 }
@@ -1521,6 +1530,7 @@ function initDrawingCanvas() {
     let drawing = false;
     let lastX = 0;
     let lastY = 0;
+    let points = [];
 
     const brushModeBtn = document.getElementById('draw-mode-brush');
     const eraserModeBtn = document.getElementById('draw-mode-eraser');
@@ -1553,12 +1563,16 @@ function initDrawingCanvas() {
         const c = getCoords(e);
         lastX = c.x;
         lastY = c.y;
+        points = [c];
         ctx.beginPath();
         ctx.moveTo(c.x, c.y);
     }
+
     function draw(e) {
         if (!drawing) return;
         const c = getCoords(e);
+        points.push(c);
+
         const currentWidth = isEraser ? 16 : 3;
         const currentStyle = '#e8edf5';
 
@@ -1566,17 +1580,69 @@ function initDrawingCanvas() {
         ctx.lineWidth = currentWidth;
         ctx.lineCap = 'round';
         ctx.strokeStyle = currentStyle;
-        ctx.lineTo(c.x, c.y);
-        ctx.stroke();
+
+        if (points.length < 3) {
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(c.x, c.y);
+            ctx.stroke();
+
+            // Sync drawing in real-time
+            if (state.chatId && state.isConnected) {
+                db.ref(`activeChats/${state.chatId}/draw`).push({
+                    fx: lastX,
+                    fy: lastY,
+                    tx: c.x,
+                    ty: c.y,
+                    sender: state.userId,
+                    color: currentStyle,
+                    width: currentWidth,
+                    mode: isEraser ? 'erase' : 'draw',
+                    curve: false
+                });
+            }
+
+            lastX = c.x;
+            lastY = c.y;
+            return;
+        }
+
+        const p1 = points[points.length - 3];
+        const p2 = points[points.length - 2];
+        const p3 = points[points.length - 1];
+
+        const xc = (p2.x + p3.x) / 2;
+        const yc = (p2.y + p3.y) / 2;
+        const prevMidX = (p1.x + p2.x) / 2;
+        const prevMidY = (p1.y + p2.y) / 2;
+
         ctx.beginPath();
-        ctx.moveTo(c.x, c.y);
+        ctx.moveTo(prevMidX, prevMidY);
+        ctx.quadraticCurveTo(p2.x, p2.y, xc, yc);
+        ctx.stroke();
 
+        // Sync drawing in real-time with Bezier curve coordinates
+        if (state.chatId && state.isConnected) {
+            db.ref(`activeChats/${state.chatId}/draw`).push({
+                fx: prevMidX,
+                fy: prevMidY,
+                cx: p2.x,
+                cy: p2.y,
+                tx: xc,
+                ty: yc,
+                sender: state.userId,
+                color: currentStyle,
+                width: currentWidth,
+                mode: isEraser ? 'erase' : 'draw',
+                curve: true
+            });
+        }
 
-
-        lastX = c.x;
-        lastY = c.y;
+        lastX = xc;
+        lastY = yc;
     }
-    function stopDraw() { drawing = false; ctx.beginPath(); }
+
+    function stopDraw() { drawing = false; points = []; ctx.beginPath(); }
 
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', draw);
@@ -1587,6 +1653,9 @@ function initDrawingCanvas() {
 
     clearBtn.addEventListener('click', () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (state.chatId && state.isConnected) {
+            db.ref(`activeChats/${state.chatId}/draw`).set(null);
+        }
     });
 
     sendBtn.addEventListener('click', () => {
@@ -1596,13 +1665,63 @@ function initDrawingCanvas() {
         if (!hasContent) { showToast('Draw something first!'); return; }
         sendMessage(data, 'drawing');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (state.chatId && state.isConnected) {
+            db.ref(`activeChats/${state.chatId}/draw`).set(null);
+        }
         closeModal('drawing-modal');
     });
 }
 
 function listenForDrawing() {
-    // Drawing canvas is individual. Real-time stroke syncing and remote modal triggers are disabled.
-}
+    if (!state.chatId) return;
+
+    const canvas = document.getElementById('drawing-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const drawRef = db.ref(`activeChats/${state.chatId}/draw`);
+    state.listeners.drawing = drawRef;
+
+    drawRef.on('value', snap => {
+        if (snap.val() === null) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    });
+
+    drawRef.on('child_added', snap => {
+        const val = snap.val();
+        if (val && val.sender !== state.userId) {
+            ctx.save();
+            ctx.globalCompositeOperation = (val.mode === 'erase') ? 'destination-out' : 'source-over';
+            ctx.lineWidth = val.width || 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = val.color || '#e8edf5';
+            ctx.beginPath();
+            if (val.curve) {
+                ctx.moveTo(val.fx, val.fy);
+                ctx.quadraticCurveTo(val.cx, val.cy, val.tx, val.ty);
+            } else {
+                ctx.moveTo(val.fx, val.fy);
+                ctx.lineTo(val.tx, val.ty);
+            }
+            ctx.stroke();
+            ctx.restore();
+        }
+    });
+
+    // Listen for partner opening drawing modal to sync active state
+    const drawActiveRef = db.ref(`activeChats/${state.chatId}/drawActive`);
+    state.listeners.drawActive = drawActiveRef;
+    drawActiveRef.on('value', snap => {
+        const activeUser = snap.val();
+        if (activeUser && activeUser !== state.userId) {
+            const modal = document.getElementById('drawing-modal') || document.getElementById('drawing');
+            if (modal && !modal.classList.contains('active')) {
+                showModal('drawing');
+                showToast(`${state.partnerName || 'Stranger'} started drawing! ✏️`);
+            }
+        }
+    });
 }
 
 // --- Voice Note Recorder (10-Second Notes) ---
@@ -3591,7 +3710,27 @@ function optimizeVideoBitrate(pc) {
     try {
         const senders = pc.getSenders();
         const videoSender = senders.find(sender => sender.track && sender.track.kind === 'video');
-        if (videoSender) {
+        if (!videoSender) return;
+
+        // Perform asynchronous WebRTC stats analysis
+        pc.getStats(null).then(stats => {
+            let packetsLost = 0;
+            let packetsSent = 0;
+            let packetLossRatio = 0;
+
+            stats.forEach(report => {
+                if (report.type === 'outbound-rtp' && report.kind === 'video') {
+                    packetsSent = report.packetsSent || 0;
+                }
+                if (report.type === 'remote-inbound-rtp' && report.kind === 'video') {
+                    packetsLost = report.packetsLost || 0;
+                }
+            });
+
+            if (packetsSent > 0) {
+                packetLossRatio = packetsLost / (packetsSent + packetsLost);
+            }
+
             const parameters = videoSender.getParameters();
             if (!parameters.encodings) {
                 parameters.encodings = [{}];
@@ -3599,30 +3738,51 @@ function optimizeVideoBitrate(pc) {
             if (parameters.encodings.length === 0) {
                 parameters.encodings.push({});
             }
-            // Increase to 4.0 Mbps for crystal-clear Ultra HD video quality
-            parameters.encodings[0].maxBitrate = 4000000;
-            // Disable downscaling to guarantee 720p/1080p is sent
-            parameters.encodings[0].scaleResolutionDownBy = 1.0;
-            // Tell the browser to prioritize resolution/clarity over framerate under bad network conditions
-            parameters.degradationPreference = 'maintain-resolution';
+
+            let maxBitrate = 4000000; // 4.0 Mbps default
+            let scaleDown = 1.0;
+            let degPref = 'maintain-resolution';
+
+            if (packetLossRatio > 0.08) {
+                // High loss: robust low-bandwidth mode
+                maxBitrate = 500000; // 500 Kbps
+                scaleDown = 2.0; // Half resolution
+                degPref = 'maintain-framerate';
+                console.log(`⚠️ WebRTC: Bad Network detected (Loss: ${(packetLossRatio * 100).toFixed(1)}%). Switching to Low-Bandwidth Mode.`);
+            } else if (packetLossRatio > 0.02) {
+                // Medium loss: balanced mode
+                maxBitrate = 1500000; // 1.5 Mbps
+                scaleDown = 1.5;
+                degPref = 'balanced';
+                console.log(`ℹ️ WebRTC: Moderate Network detected (Loss: ${(packetLossRatio * 100).toFixed(1)}%). Adjusting to Balanced Mode.`);
+            }
+
+            parameters.encodings[0].maxBitrate = maxBitrate;
+            parameters.encodings[0].scaleResolutionDownBy = scaleDown;
+            parameters.degradationPreference = degPref;
 
             videoSender.setParameters(parameters)
-                .then(() => console.log('✅ WebRTC: Optimized video bitrate (4.0 Mbps) and degradation preference (maintain-resolution)'))
                 .catch(e => {
-                    console.error('Error setting max bitrate parameters:', e);
-                    // Fallback without degradationPreference
+                    // Fallback parameters if degradationPreference isn't supported
                     try {
                         const fallbackParams = videoSender.getParameters();
                         if (fallbackParams && fallbackParams.encodings && fallbackParams.encodings.length > 0) {
-                            fallbackParams.encodings[0].maxBitrate = 4000000;
-                            fallbackParams.encodings[0].scaleResolutionDownBy = 1.0;
-                            videoSender.setParameters(fallbackParams).catch(err => console.error('Fallback setParameters failed:', err));
+                            fallbackParams.encodings[0].maxBitrate = maxBitrate;
+                            fallbackParams.encodings[0].scaleResolutionDownBy = scaleDown;
+                            videoSender.setParameters(fallbackParams).catch(() => {});
                         }
-                    } catch(ex) {
-                        console.error('Inner fallback failed:', ex);
-                    }
+                    } catch(ex) {}
                 });
-        }
+        }).catch(err => {
+            // Default optimization fallback if getStats fails
+            const parameters = videoSender.getParameters();
+            if (parameters && parameters.encodings && parameters.encodings.length > 0) {
+                parameters.encodings[0].maxBitrate = 4000000;
+                parameters.encodings[0].scaleResolutionDownBy = 1.0;
+                parameters.degradationPreference = 'maintain-resolution';
+                videoSender.setParameters(parameters).catch(() => {});
+            }
+        });
     } catch(e) {
         console.error('Error optimizing video bitrate:', e);
     }
@@ -4321,9 +4481,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const interest = chip.dataset.interest;
             if (chip.classList.contains('selected')) {
                 chip.classList.remove('selected');
+                chip.setAttribute('aria-pressed', 'false');
                 state.interests = state.interests.filter(i => i !== interest);
             } else if (state.interests.length < CONFIG.MAX_INTERESTS) {
                 chip.classList.add('selected');
+                chip.setAttribute('aria-pressed', 'true');
                 state.interests.push(interest);
             }
             // Disable unselected when max reached
@@ -4336,8 +4498,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gender pills ("I am")
     document.querySelectorAll('.gender-pill').forEach(pill => {
         pill.addEventListener('click', () => {
-            document.querySelectorAll('.gender-pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.gender-pill').forEach(p => {
+                p.classList.remove('active');
+                p.setAttribute('aria-pressed', 'false');
+            });
             pill.classList.add('active');
+            pill.setAttribute('aria-pressed', 'true');
             state.gender = pill.dataset.gender;
         });
     });
@@ -4345,8 +4511,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Preference pills ("Looking for")
     document.querySelectorAll('.pref-pill').forEach(pill => {
         pill.addEventListener('click', () => {
-            document.querySelectorAll('.pref-pill').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.pref-pill').forEach(p => {
+                p.classList.remove('active');
+                p.setAttribute('aria-pressed', 'false');
+            });
             pill.classList.add('active');
+            pill.setAttribute('aria-pressed', 'true');
             state.genderPref = pill.dataset.pref;
         });
     });
